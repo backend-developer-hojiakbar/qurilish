@@ -93,17 +93,34 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onStartAnalysis, c
         // If we have cases, show case selector to save the audio file
         if (cases.length > 0) {
             setShowCaseSelector(true);
-            // In a real implementation, we would show a modal to select a case
-            // For now, we'll just log the file
-            console.log('Audio recorded:', audioFile);
+            setSelectedCase(audioFile);
         }
     };
 
     // Handle saving audio file to a specific case
     const handleSaveAudioToCase = async (caseItem: Case) => {
-        // In a real implementation, we would convert the audioFile to a proper File object
-        // and upload it to the backend using the uploadCaseFile API
-        console.log('Saving audio to case:', caseItem.id);
+        if (selectedCase) {
+            try {
+                // Convert the audio file to a proper File object
+                const response = await fetch(selectedCase.content);
+                const blob = await response.blob();
+                const file = new File([blob], selectedCase.name, { type: selectedCase.type });
+                
+                // Upload to backend
+                await uploadCaseFile(caseItem.id, file, {
+                    name: selectedCase.name,
+                    type: selectedCase.type,
+                    extractedText: selectedCase.extractedText,
+                    documentType: selectedCase.documentType
+                });
+                
+                console.log('Audio memo saved to case:', caseItem.id);
+                alert(t('voice_memo_saved_success'));
+            } catch (error) {
+                console.error('Error saving voice memo to case:', error);
+                alert(t('error_generic_title'));
+            }
+        }
         setShowCaseSelector(false);
         setSelectedCase(null);
     };

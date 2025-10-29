@@ -26,6 +26,7 @@ export const DocumentGeneratorView: React.FC<DocumentGeneratorViewProps> = ({ ca
     const [generatedText, setGeneratedText] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     const [copied, setCopied] = useState(false);
+    const [history, setHistory] = useState<{template: string, text: string, timestamp: Date}[]>([]);
 
     const handleGenerate = async () => {
         if (!selectedTemplate || !caseData) return;
@@ -34,6 +35,8 @@ export const DocumentGeneratorView: React.FC<DocumentGeneratorViewProps> = ({ ca
         try {
             const text = await generateDocument(selectedTemplate, caseData, t);
             setGeneratedText(text);
+            // Add to history
+            setHistory(prev => [...prev, {template: selectedTemplate, text, timestamp: new Date()}]);
         } catch (error) {
             console.error("Document generation failed:", error);
             setGeneratedText(t('error_doc_generation'));
@@ -62,6 +65,11 @@ export const DocumentGeneratorView: React.FC<DocumentGeneratorViewProps> = ({ ca
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
+    };
+
+    const loadFromHistory = (item: {template: string, text: string, timestamp: Date}) => {
+        setSelectedTemplate(item.template);
+        setGeneratedText(item.text);
     };
 
     if (!caseData) {
@@ -111,6 +119,24 @@ export const DocumentGeneratorView: React.FC<DocumentGeneratorViewProps> = ({ ca
                         )}
                     </button>
                 </div>
+                
+                {/* Document History */}
+                {history.length > 0 && (
+                    <div className="mt-4">
+                        <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-2">{t('doc_generator_history')}</h4>
+                        <div className="flex flex-wrap gap-2">
+                            {history.slice(-5).map((item, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => loadFromHistory(item)}
+                                    className="text-xs bg-[var(--bg-secondary)] hover:bg-[var(--bg-pane)] text-[var(--text-secondary)] hover:text-white px-2 py-1 rounded"
+                                >
+                                    {t(`doc_template_${item.template.toLowerCase().replace(/ /g, '_').replace(/'/g, "")}`)} - {item.timestamp.toLocaleTimeString()}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
 
             {generatedText && (

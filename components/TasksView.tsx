@@ -12,6 +12,8 @@ interface TasksViewProps {
 export const TasksView: React.FC<TasksViewProps> = ({ tasks, onUpdateTasks, t }) => {
     const [newTaskText, setNewTaskText] = useState('');
     const [isPrioritizing, setIsPrioritizing] = useState(false);
+    const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+    const [editingTaskText, setEditingTaskText] = useState('');
 
     const handleAddTask = () => {
         if (newTaskText.trim()) {
@@ -61,6 +63,27 @@ export const TasksView: React.FC<TasksViewProps> = ({ tasks, onUpdateTasks, t })
         } finally {
             setIsPrioritizing(false);
         }
+    };
+
+    const startEditingTask = (task: Task) => {
+        setEditingTaskId(task.id);
+        setEditingTaskText(task.text);
+    };
+
+    const saveEditedTask = (id: string) => {
+        if (editingTaskText.trim()) {
+            const updatedTasks = tasks.map(task =>
+                task.id === id ? { ...task, text: editingTaskText.trim() } : task
+            );
+            onUpdateTasks(updatedTasks);
+        }
+        setEditingTaskId(null);
+        setEditingTaskText('');
+    };
+
+    const cancelEditing = () => {
+        setEditingTaskId(null);
+        setEditingTaskText('');
     };
 
     const completedTasks = tasks.filter(t => t.completed);
@@ -113,10 +136,45 @@ export const TasksView: React.FC<TasksViewProps> = ({ tasks, onUpdateTasks, t })
                                 onChange={() => handleToggleTask(task.id)}
                                 className="h-5 w-5 rounded bg-[var(--bg-secondary)] border-[var(--border-color)] text-[var(--accent-primary)] focus:ring-[var(--accent-primary)] cursor-pointer"
                             />
-                            <p className="flex-1 text-slate-300">{task.text}</p>
-                            <button onClick={() => handleDeleteTask(task.id)} className="text-slate-500 hover:text-red-400">
-                                <TrashIcon className="h-5 w-5" />
-                            </button>
+                            {editingTaskId === task.id ? (
+                                <div className="flex-1 flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={editingTaskText}
+                                        onChange={(e) => setEditingTaskText(e.target.value)}
+                                        onKeyPress={(e) => e.key === 'Enter' && saveEditedTask(task.id)}
+                                        className="flex-1 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] px-2 py-1"
+                                        autoFocus
+                                    />
+                                    <button 
+                                        onClick={() => saveEditedTask(task.id)}
+                                        className="text-green-500 hover:text-green-400"
+                                    >
+                                        <CheckBadgeIcon className="h-5 w-5" />
+                                    </button>
+                                    <button 
+                                        onClick={cancelEditing}
+                                        className="text-red-500 hover:text-red-400"
+                                    >
+                                        <TrashIcon className="h-5 w-5" />
+                                    </button>
+                                </div>
+                            ) : (
+                                <>
+                                    <p className="flex-1 text-slate-300">{task.text}</p>
+                                    <button 
+                                        onClick={() => startEditingTask(task)}
+                                        className="text-slate-500 hover:text-white"
+                                    >
+                                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                    </button>
+                                    <button onClick={() => handleDeleteTask(task.id)} className="text-slate-500 hover:text-red-400">
+                                        <TrashIcon className="h-5 w-5" />
+                                    </button>
+                                </>
+                            )}
                         </div>
                     ))}
                     {pendingTasks.length === 0 && (

@@ -20,6 +20,11 @@ export const BillingView: React.FC<BillingViewProps> = ({ caseData, onUpdateBill
     const [hours, setHours] = useState('');
     const [description, setDescription] = useState('');
     const [rate, setRate] = useState('100'); // Default rate, stored as string for input
+    const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
+    const [editingDate, setEditingDate] = useState('');
+    const [editingHours, setEditingHours] = useState('');
+    const [editingDescription, setEditingDescription] = useState('');
+    const [editingRate, setEditingRate] = useState('');
 
     const billing = caseData?.billing || [];
 
@@ -118,6 +123,36 @@ export const BillingView: React.FC<BillingViewProps> = ({ caseData, onUpdateBill
         doc.save(`Invoice_${caseData.title.replace(/\s/g, '_')}.pdf`);
     };
 
+    const startEditingEntry = (entry: BillingEntry) => {
+        setEditingEntryId(entry.id);
+        setEditingDate(entry.date);
+        setEditingHours(entry.hours.toString());
+        setEditingDescription(entry.description);
+        setEditingRate(entry.rate.toString());
+    };
+
+    const saveEditedEntry = (id: string) => {
+        const hoursNum = parseFloat(editingHours);
+        const rateNum = parseFloat(editingRate);
+
+        if (!editingDate || !editingHours || !editingDescription || !editingRate || hoursNum <= 0 || rateNum < 0) return;
+
+        const updatedBilling = billing.map(entry =>
+            entry.id === id ? { 
+                ...entry, 
+                date: editingDate,
+                hours: hoursNum,
+                description: editingDescription,
+                rate: rateNum
+            } : entry
+        );
+        onUpdateBilling(updatedBilling);
+        setEditingEntryId(null);
+    };
+
+    const cancelEditing = () => {
+        setEditingEntryId(null);
+    };
 
     const totalHours = billing.reduce((acc, curr) => acc + curr.hours, 0);
     const totalAmount = billing.reduce((acc, curr) => acc + (curr.hours * curr.rate), 0);
@@ -177,18 +212,92 @@ export const BillingView: React.FC<BillingViewProps> = ({ caseData, onUpdateBill
                         </thead>
                         <tbody>
                             {billing.length > 0 ? billing.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map(entry => (
-                                <tr key={entry.id} className="border-t border-[var(--border-color)]">
-                                    <td className="p-3 whitespace-nowrap">{new Date(entry.date).toLocaleDateString()}</td>
-                                    <td className="p-3 text-slate-300">{entry.description}</td>
-                                    <td className="p-3 text-right font-mono">{entry.hours.toFixed(1)}</td>
-                                    <td className="p-3 text-right font-mono">${entry.rate.toFixed(2)}</td>
-                                    <td className="p-3 text-right font-mono">${(entry.hours * entry.rate).toFixed(2)}</td>
-                                    <td className="p-3 text-right">
-                                        <button onClick={() => handleDeleteEntry(entry.id)} className="text-slate-500 hover:text-red-400">
-                                            <TrashIcon className="h-4 w-4" />
-                                        </button>
-                                    </td>
-                                </tr>
+                                editingEntryId === entry.id ? (
+                                    <tr key={entry.id} className="border-t border-[var(--border-color)]">
+                                        <td className="p-3">
+                                            <input 
+                                                type="date" 
+                                                value={editingDate} 
+                                                onChange={e => setEditingDate(e.target.value)} 
+                                                className="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg p-1 text-xs"
+                                            />
+                                        </td>
+                                        <td className="p-3">
+                                            <input 
+                                                type="text" 
+                                                value={editingDescription} 
+                                                onChange={e => setEditingDescription(e.target.value)} 
+                                                className="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg p-1 text-xs"
+                                            />
+                                        </td>
+                                        <td className="p-3 text-right">
+                                            <input 
+                                                type="number" 
+                                                value={editingHours} 
+                                                onChange={e => setEditingHours(e.target.value)} 
+                                                step="0.1" 
+                                                min="0.1" 
+                                                className="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg p-1 text-xs text-right"
+                                            />
+                                        </td>
+                                        <td className="p-3 text-right">
+                                            <input 
+                                                type="number" 
+                                                value={editingRate} 
+                                                onChange={e => setEditingRate(e.target.value)} 
+                                                step="1" 
+                                                min="0" 
+                                                className="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg p-1 text-xs text-right"
+                                            />
+                                        </td>
+                                        <td className="p-3 text-right font-mono">
+                                            ${(parseFloat(editingHours) * parseFloat(editingRate)).toFixed(2)}
+                                        </td>
+                                        <td className="p-3 text-right">
+                                            <div className="flex gap-1">
+                                                <button 
+                                                    onClick={() => saveEditedEntry(entry.id)}
+                                                    className="text-green-500 hover:text-green-400 p-1"
+                                                >
+                                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                </button>
+                                                <button 
+                                                    onClick={cancelEditing}
+                                                    className="text-red-500 hover:text-red-400 p-1"
+                                                >
+                                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    <tr key={entry.id} className="border-t border-[var(--border-color)]">
+                                        <td className="p-3 whitespace-nowrap">{new Date(entry.date).toLocaleDateString()}</td>
+                                        <td className="p-3 text-slate-300">{entry.description}</td>
+                                        <td className="p-3 text-right font-mono">{entry.hours.toFixed(1)}</td>
+                                        <td className="p-3 text-right font-mono">${entry.rate.toFixed(2)}</td>
+                                        <td className="p-3 text-right font-mono">${(entry.hours * entry.rate).toFixed(2)}</td>
+                                        <td className="p-3 text-right">
+                                            <div className="flex gap-1">
+                                                <button 
+                                                    onClick={() => startEditingEntry(entry)}
+                                                    className="text-slate-500 hover:text-white p-1"
+                                                >
+                                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                    </svg>
+                                                </button>
+                                                <button onClick={() => handleDeleteEntry(entry.id)} className="text-slate-500 hover:text-red-400 p-1">
+                                                    <TrashIcon className="h-4 w-4" />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
                             )) : (
                                 <tr>
                                     <td colSpan={6} className="text-center p-8 text-slate-500">{t('billing_no_entries')}</td>

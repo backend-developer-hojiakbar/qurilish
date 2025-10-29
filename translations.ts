@@ -244,6 +244,8 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     empty_state_simulation_unavailable_message: "Sud zali simulyatori faqat sud bosqichidagi ishlar uchun mavjud. Tergov bosqichida bu funksiya ishlamaydi.",
     simulation_generate_prompt_title: "Simulyatsiyani Yaratish",
     simulation_generate_prompt_message: "Sud jarayoni ssenariysi, kesishgan so'roq savollari va yakuniy nutqlarni yaratish uchun tugmani bosing.",
+    simulation_investigation_generate_prompt_title: "Tergov Simulyatsiyasini Yaratish",
+    simulation_investigation_generate_prompt_message: "Tergov jarayonining ehtimoliy rivojlanishi, guvohlarning so'roqlari va yakuniy xulosalarni yaratish uchun tugmani bosing.",
 
     // History
     history_delete_modal_title: "Ishni O'chirish",
@@ -347,7 +349,22 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     voice_memo_processing: "Tahlil qilinmoqda...",
     voice_memo_record_again: "Qayta yozish",
     voice_memo_no_speech: "Nutq aniqlanmadi.",
-    
+    voice_memo_select_case: "Ishni tanlang",
+    voice_memo_select_case_desc: "Ovozli eslatmani saqlash uchun ishni tanlang.",
+    voice_memo_saved_success: "Ovozli eslatma muvaffaqiyatli saqlandi!",
+    voice_memo_recorded_success: "Ovozli eslatma yozib olindi.",
+    voice_memo_seconds: "soniya",
+    voice_memo_manager_title: "Ovozli Eslatma Menejeri",
+    voice_memo_recordings: "Yozuvlar",
+    voice_memo_title: "Ovozli Eslatma",
+    voice_memo_play: "Ijro etish",
+    voice_memo_pause: "Pauza",
+    voice_memo_download: "Yuklab olish",
+    voice_memo_save_to_case: "Ishga saqlash",
+    voice_memo_delete: "O'chirish",
+    voice_memo_copy: "Nusxalash",
+    voice_memo_case_required: "Ovozli eslatmani saqlash uchun ish tanlanishi kerak.",
+
     // Settings
     settings_profile_title: "Profil",
     settings_profile_name: "To'liq Ism",
@@ -404,6 +421,16 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     kb_sol_title: "Da'vo Muddati",
     kb_key_evidence: "Asosiy Dalillar",
     kb_potential_charges: "Mumkin Bo'lgan Ayblovlar",
+    investigation_suspects_title: "Gumonlanuvchilar",
+    investigation_actions_title: "Tergov Harakatlari Rejasi",
+    investigation_procedural_issues_title: "Protsessual Muammolar",
+    investigation_evidence_label: "Dalillar",
+    investigation_no_suspects: "Hozircha gumonlanuvchilar aniqlanmadi.",
+    investigation_action_collect_evidence: "Dalillarni yig'ish",
+    investigation_action_interview_witnesses: "Guvohlarni so'roq qilish",
+    investigation_action_analyze_documents: "Hujjatlarni tahlil qilish",
+    investigation_action_check_procedural_compliance: "Protsessual qonuniylikni tekshirish",
+    kb_no_evidence_specified: "Hech qanday dalil ko'rsatilmagan",
     sol_status_OK: "Muddati o'tmagan",
     sol_status_Muddati_otgan: "Muddati o'tgan",
     sol_status_Xavf_ostida: "Xavf ostida",
@@ -457,6 +484,7 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     
     // Document Generator
     doc_generator_template_label: "Hujjat shablonini tanlang",
+    doc_generator_history: "Hujjatlar tarixi",
     empty_state_documents_title: "Hujjatlar Yaratilmagan",
     empty_state_documents_message: "Hujjat generatoridan foydalanish uchun mavjud ishni tanlang.",
     error_doc_generation: "Hujjat yaratishda xatolik yuz berdi. Iltimos, keyinroq qayta urinib ko'ring.",
@@ -473,7 +501,13 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     timeline_generate_button: "Xronologiyani Yaratish",
     timeline_generating: "Yaratilmoqda...",
     timeline_empty: "Ish uchun xronologiya hali yaratilmagan.",
-    
+    timeline_add_event: "Voqea qo'shish",
+    timeline_add_event_title: "Yangi voqea qo'shish",
+    timeline_event_date: "Sana",
+    timeline_event_description: "Tavsif",
+    timeline_event_description_placeholder: "Voqea tavsifi...",
+    timeline_add_first_event: "Birinchi voqeani qo'shish",
+
     // Evidence
     evidence_upload_prompt: "Dalillarni yuklash (PDF, Rasm, Video)",
     evidence_uploaded_title: "Yuklangan Dalillar",
@@ -484,6 +518,9 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     evidence_qa_placeholder: "Hujjat haqida savol bering...",
     evidence_button_summarize: "Mazmunini yaratish",
     evidence_button_ask: "So'rash",
+    evidence_uploading: "Yuklanmoqda...",
+    evidence_supported_formats: "PDF, DOC, DOCX, TXT, JPG, PNG, MP4, MOV",
+    evidence_upload_first: "Birinchi dalilni yuklash",
 
     // Billing
     billing_add_entry: "Yangi yozuv qo'shish",
@@ -1131,6 +1168,21 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
     voice_memo_processing: "Таҳлил қилинмоқда...",
     voice_memo_record_again: "Қайта ёзиш",
     voice_memo_no_speech: "Нутқ аниқланмади.",
+    voice_memo_select_case: "Ишни танланг",
+    voice_memo_select_case_desc: "Овозли эслатмани сақлаш учун ишни танланг.",
+    voice_memo_saved_success: "Овозли эслатма муваффақиятли сақланди!",
+    voice_memo_recorded_success: "Овозли эслатма ёзиб олинди.",
+    voice_memo_seconds: "сония",
+    voice_memo_manager_title: "Овозли Эслатма Менежери",
+    voice_memo_recordings: "Ёзувлар",
+    voice_memo_title: "Овозли Эслатма",
+    voice_memo_play: "Ижро этиш",
+    voice_memo_pause: "Пауза",
+    voice_memo_download: "Юклаб олиш",
+    voice_memo_save_to_case: "Ишга сақлаш",
+    voice_memo_delete: "Ўчириш",
+    voice_memo_copy: "Нусха олиш",
+    voice_memo_case_required: "Овозли эслатмани сақлаш учун иш танланиши керак.",
 
     // Settings
     settings_profile_title: "Профил",
@@ -1188,6 +1240,16 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
     kb_sol_title: "Даъво Муддати",
     kb_key_evidence: "Асосий Далиллар",
     kb_potential_charges: "Мумкин Бўлган Айбловлар",
+    investigation_suspects_title: "Гумонланувчилар",
+    investigation_actions_title: "Тергов Ҳаракатлари Режаси",
+    investigation_procedural_issues_title: "Процессуал Муаммолар",
+    investigation_evidence_label: "Далиллар",
+    investigation_no_suspects: "Ҳозирча гумонланувчилар аниқланмади.",
+    investigation_action_collect_evidence: "Далилларни йиғиш",
+    investigation_action_interview_witnesses: "Гувоҳларни сўроқ қилиш",
+    investigation_action_analyze_documents: "Ҳужжатларни таҳлил қилиш",
+    investigation_action_check_procedural_compliance: "Процессуал қонунийликни текшириш",
+    kb_no_evidence_specified: "Ҳеч қандай далил кўрсатилмаган",
     sol_status_OK: "Муддати ўтмаган",
     sol_status_Muddati_otgan: "Муддати ўтган",
     sol_status_Xavf_ostida: "Хавф остида",
@@ -1241,6 +1303,7 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
 
     // Document Generator
     doc_generator_template_label: "Ҳужжат шаблонини танланг",
+    doc_generator_history: "Ҳужжатлар тарихи",
     empty_state_documents_title: "Ҳужжатлар Яратилмаган",
     empty_state_documents_message: "Ҳужжат генераторидан фойдаланиш учун мавжуд ишни танланг.",
     error_doc_generation: "Ҳужжат яратишда хатолик юз берди. Илтимос, кейинроқ қайта уриниб кўринг.",
@@ -1257,6 +1320,12 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
     timeline_generate_button: "Хронологияни Яратиш",
     timeline_generating: "Яратилмоқда...",
     timeline_empty: "Иш учун хронология ҳали яратилмаган.",
+    timeline_add_event: "Воқеа қўшиш",
+    timeline_add_event_title: "Янги воқеа қўшиш",
+    timeline_event_date: "Сана",
+    timeline_event_description: "Тавсиф",
+    timeline_event_description_placeholder: "Воқеа тавсифи...",
+    timeline_add_first_event: "Биринчи воқеани қўшиш",
 
     // Evidence
     evidence_upload_prompt: "Далилларни юклаш (PDF, Расм, Видео)",
@@ -1267,8 +1336,11 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
     evidence_qa_title: "Ҳужжат бўйича савол-жавоб",
     evidence_qa_placeholder: "Ҳужжат ҳақида савол беринг...",
     evidence_button_summarize: "Мазмунини яратиш",
-    evidence_button_ask: "Сўраш",
-    
+    evidence_button_ask: "Ask",
+    evidence_uploading: "Uploading...",
+    evidence_supported_formats: "PDF, DOC, DOCX, TXT, JPG, PNG, MP4, MOV",
+    evidence_upload_first: "Upload first evidence",
+
     // Billing
     billing_add_entry: "Янги ёзув қўшиш",
     billing_description: "Тавсиф",
@@ -1560,6 +1632,8 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
     empty_state_simulation_unavailable_message: "Симулятор судебного зала доступен только для дел на стадии суда. На стадии следствия эта функция не работает.",
     simulation_generate_prompt_title: "Создать Симуляцию",
     simulation_generate_prompt_message: "Нажмите кнопку, чтобы создать сценарий судебного заседания, вопросы для перекрестного допроса и заключительные речи.",
+    simulation_investigation_generate_prompt_title: "Создать Симуляцию Следствия",
+    simulation_investigation_generate_prompt_message: "Нажмите кнопку, чтобы создать возможный сценарий следствия, вопросы для допроса свидетелей и заключительные выводы.",
     
     // History
     history_delete_modal_title: "Удалить Дело",
@@ -1663,6 +1737,11 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
     voice_memo_processing: "Обработка...",
     voice_memo_record_again: "Записать снова",
     voice_memo_no_speech: "Речь не распознана.",
+    voice_memo_select_case: "Выберите дело",
+    voice_memo_select_case_desc: "Выберите дело для сохранения голосовой заметки.",
+    voice_memo_saved_success: "Голосовая заметка успешно сохранена!",
+    voice_memo_recorded_success: "Голосовая заметка записана.",
+    voice_memo_seconds: "секунд",
 
     // Settings
     settings_profile_title: "Профиль",
@@ -1720,6 +1799,16 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
     kb_sol_title: "Срок Исковой Давности",
     kb_key_evidence: "Ключевые Доказательства",
     kb_potential_charges: "Возможные Обвинения",
+    investigation_suspects_title: "Подозреваемые",
+    investigation_actions_title: "План Следственных Действий",
+    investigation_procedural_issues_title: "Процессуальные Проблемы",
+    investigation_evidence_label: "Доказательства",
+    investigation_no_suspects: "Подозреваемые пока не определены.",
+    investigation_action_collect_evidence: "Сбор доказательств",
+    investigation_action_interview_witnesses: "Допрос свидетелей",
+    investigation_action_analyze_documents: "Анализ документов",
+    investigation_action_check_procedural_compliance: "Проверка процессуального законодательства",
+    kb_no_evidence_specified: "Доказательства не указаны",
     sol_status_OK: "Срок не истек",
     sol_status_Muddati_otgan: "Срок истек",
     sol_status_Xavf_ostida: "Под угрозой",
@@ -2093,6 +2182,8 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
     empty_state_simulation_unavailable_message: "The courtroom simulator is only available for cases in the court stage. This feature is disabled during the investigation stage.",
     simulation_generate_prompt_title: "Generate Simulation",
     simulation_generate_prompt_message: "Press the button to generate the courtroom scenario, cross-examination questions, and closing arguments.",
+    simulation_investigation_generate_prompt_title: "Generate Investigation Simulation",
+    simulation_investigation_generate_prompt_message: "Press the button to generate the investigation scenario, witness questioning, and final conclusions.",
     
     // History
     history_delete_modal_title: "Delete Case",
@@ -2196,6 +2287,11 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
     voice_memo_processing: "Processing...",
     voice_memo_record_again: "Record Again",
     voice_memo_no_speech: "No speech was detected.",
+    voice_memo_select_case: "Select Case",
+    voice_memo_select_case_desc: "Select a case to save the voice memo to.",
+    voice_memo_saved_success: "Voice memo successfully saved!",
+    voice_memo_recorded_success: "Voice memo recorded.",
+    voice_memo_seconds: "seconds",
 
     // Settings
     settings_profile_title: "Profile",
@@ -2253,6 +2349,16 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
     kb_sol_title: "Statute of Limitations",
     kb_key_evidence: "Key Evidence",
     kb_potential_charges: "Potential Charges",
+    investigation_suspects_title: "Suspects",
+    investigation_actions_title: "Investigation Action Plan",
+    investigation_procedural_issues_title: "Procedural Issues",
+    investigation_evidence_label: "Evidence",
+    investigation_no_suspects: "No suspects identified yet.",
+    investigation_action_collect_evidence: "Collect evidence",
+    investigation_action_interview_witnesses: "Interview witnesses",
+    investigation_action_analyze_documents: "Analyze documents",
+    investigation_action_check_procedural_compliance: "Check procedural compliance",
+    kb_no_evidence_specified: "No evidence specified",
     sol_status_OK: "Not expired",
     sol_status_Muddati_otgan: "Expired",
     sol_status_Xavf_ostida: "At Risk",
@@ -2306,6 +2412,7 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
     
     // Document Generator
     doc_generator_template_label: "Select document template",
+    doc_generator_history: "Document history",
     empty_state_documents_title: "No Documents Generated",
     empty_state_documents_message: "Select an existing case to use the document generator.",
     error_doc_generation: "An error occurred while generating the document. Please try again later.",
@@ -2322,7 +2429,13 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
     timeline_generate_button: "Generate Timeline",
     timeline_generating: "Generating...",
     timeline_empty: "No timeline has been generated for this case yet.",
-    
+    timeline_add_event: "Add Event",
+    timeline_add_event_title: "Add New Event",
+    timeline_event_date: "Date",
+    timeline_event_description: "Description",
+    timeline_event_description_placeholder: "Event description...",
+    timeline_add_first_event: "Add first event",
+
     // Evidence
     evidence_upload_prompt: "Upload Evidence (PDF, Image, Video)",
     evidence_uploaded_title: "Uploaded Evidence",

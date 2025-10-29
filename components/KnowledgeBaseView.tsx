@@ -25,6 +25,13 @@ interface KnowledgeBaseViewProps {
   t: (key: string, replacements?: { [key: string]: string }) => string;
 }
 
+// Add new interface for investigation-specific data
+interface InvestigationData {
+  suspects: { name: string; role: string; evidence: string }[];
+  investigationActions: string[];
+  proceduralIssues: string[];
+}
+
 const renderMarkdown = (text: string) => {
   const lines = text.split('\n');
   const elements: React.ReactNode[] = [];
@@ -108,6 +115,29 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({ caseData, 
 
   const { knowledgeBase, deepDiveAnalysis, winProbability, probabilityJustification, positiveFactors, negativeFactors } = result;
   const sol = knowledgeBase.statuteOfLimitations;
+
+  // For investigation stage, extract specialized data
+  const investigationData: InvestigationData | null = isInvestigationStage ? {
+    suspects: caseData?.participants
+      .filter(p => p.role === t('client_role_sudlanuvchi') || p.role === 'Судланувчи' || p.role === 'Подсудимый' || p.role === 'Accused')
+      .map(p => ({ 
+        name: p.name, 
+        role: p.role, 
+        evidence: knowledgeBase.keyFacts
+          .filter(fact => fact.relevance.toLowerCase().includes('dalil') || fact.relevance.toLowerCase().includes('evidence') || fact.relevance.toLowerCase().includes('доказательство'))
+          .map(fact => fact.fact)
+          .join(', ') || t('kb_no_evidence_specified')
+      })) || [],
+    investigationActions: [
+      t('investigation_action_collect_evidence'),
+      t('investigation_action_interview_witnesses'),
+      t('investigation_action_analyze_documents'),
+      t('investigation_action_check_procedural_compliance')
+    ],
+    proceduralIssues: knowledgeBase.weaknesses
+      .filter(weakness => weakness.toLowerCase().includes('protsess') || weakness.toLowerCase().includes('process') || weakness.toLowerCase().includes('процесс'))
+      .map(weakness => weakness) || []
+  } : null;
 
   const handleUpdate = (additionalDetails: string, newFiles: CaseFile[]) => {
       if (caseData) {
@@ -202,111 +232,190 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({ caseData, 
 
         <CaseUpdateForm onUpdate={handleUpdate} isLoading={isUpdating} t={t} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Specialized view for investigation stage */}
+        {isInvestigationStage && investigationData && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Suspects Section */}
             <SectionCard 
-                title={isInvestigationStage ? t('kb_key_evidence') : t('kb_key_facts')}
-                icon={<DocumentTextIcon/>}
+              title={t('investigation_suspects_title')}
+              icon={<UsersIcon />}
             >
-                <ul className="list-disc list-inside space-y-2 pl-9">
-                    {knowledgeBase.keyFacts.map((item, index) => <li key={index}><strong>{item.fact}:</strong> {item.relevance}</li>)}
+              {investigationData.suspects.length > 0 ? (
+                <ul className="space-y-3">
+                  {investigationData.suspects.map((suspect, index) => (
+                    <li key={index} className="border-b border-[var(--border-color)] pb-3 last:border-0 last:pb-0">
+                      <div className="font-semibold text-slate-200">{suspect.name}</div>
+                      <div className="text-sm text-[var(--text-secondary)]">{suspect.role}</div>
+                      <div className="text-sm text-slate-400 mt-1">
+                        <span className="font-medium">{t('investigation_evidence_label')}:</span> {suspect.evidence || t('kb_no_evidence_specified')}
+                      </div>
+                    </li>
+                  ))}
                 </ul>
+              ) : (
+                <p className="text-slate-500 text-sm">{t('investigation_no_suspects')}</p>
+              )}
             </SectionCard>
+
+            {/* Investigation Actions */}
             <SectionCard 
-                title={t('kb_participants_title')} 
-                icon={<UsersIcon />}
+              title={t('investigation_actions_title')}
+              icon={<ChartBarIcon />}
             >
-                 <ul className="list-disc list-inside space-y-2 pl-9">
-                    {caseData.participants.map((p, index) => (
-                        <li key={index}>
-                            <strong>{p.name}</strong> - <span className="text-[var(--text-secondary)]">{p.role}</span>
-                            {p.name === caseData.clientName && <span className="ml-2 text-xs font-bold px-2 py-0.5 rounded-full bg-[var(--accent-primary)]/20 text-[var(--accent-primary)]">{t('kb_client_tag')}</span>}
-                        </li>
-                    ))}
-                </ul>
+              <ul className="space-y-2">
+                {investigationData.investigationActions.map((action, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <span className="text-[var(--accent-primary)] mt-1">•</span>
+                    <span className="text-slate-300">{action}</span>
+                  </li>
+                ))}
+              </ul>
             </SectionCard>
-            {sol && (
-                <SectionCard
-                    title={t('kb_sol_title')}
-                    icon={
-                        sol.status === 'OK' ? <CheckCircleIcon className="text-green-400" /> :
-                        sol.status === 'Xavf ostida' ? <ExclamationIcon className="text-yellow-400" /> :
-                        <ShieldExclamationIcon className="text-red-400" />
-                    }
-                >
-                    <div className="pl-9">
-                        <p className={`font-bold ${
-                            sol.status === 'OK' ? 'text-green-400' :
-                            sol.status === 'Xavf ostida' ? 'text-yellow-400' :
-                            'text-red-400'
-                        }`}>{t(`sol_status_${sol.status.replace(/ /g, '_').replace("'", "")}`)}</p>
-                        <p className="text-slate-400 mt-1 text-xs">{sol.summary}</p>
-                    </div>
-                </SectionCard>
+
+            {/* Procedural Issues */}
+            {investigationData.proceduralIssues.length > 0 && (
+              <SectionCard 
+                title={t('investigation_procedural_issues_title')}
+                icon={<ShieldExclamationIcon className="text-red-400" />}
+              >
+                <ul className="space-y-2">
+                  {investigationData.proceduralIssues.map((issue, index) => (
+                    <li key={index} className="flex items-start gap-2">
+                      <ExclamationIcon className="h-4 w-4 text-red-400 mt-0.5 flex-shrink-0" />
+                      <span className="text-slate-300">{issue}</span>
+                    </li>
+                  ))}
+                </ul>
+              </SectionCard>
             )}
-             <SectionCard 
-                title={isInvestigationStage ? t('kb_potential_charges') : t('kb_applicable_laws')}
-                icon={<ChartBarIcon/>}
-            >
-                <ul className="space-y-1 -mx-2">
-                    {knowledgeBase.applicableLaws.map((item, index) => (
-                        <li key={index} className="rounded-md hover:bg-[var(--bg-secondary)] transition-all group transform hover:scale-[1.02]">
-                           <div className="p-2 flex items-start gap-3">
-                                <ResearchIcon className="h-4 w-4 text-[var(--accent-primary)] mt-1 flex-shrink-0" />
-                                <div>
-                                    <div className="flex items-center flex-wrap gap-2">
-                                        <button
-                                            onClick={() => onArticleSelect(item.article)}
-                                            className="text-left font-semibold text-[var(--accent-primary)] group-hover:underline"
-                                            title={t('case_input_research_article_tooltip', { article: item.article })}
-                                        >
-                                            {item.article}
-                                        </button>
-                                        {item.url && (
-                                            <a 
-                                                href={item.url} 
-                                                target="_blank" 
-                                                rel="noopener noreferrer"
-                                                className="text-xs font-mono px-1.5 py-0.5 rounded bg-cyan-900/50 text-cyan-400 hover:text-cyan-300 hover:bg-cyan-900"
-                                            >
-                                                URL
-                                            </a>
-                                        )}
-                                    </div>
-                                    <p className="text-slate-400 text-xs mt-1">{item.summary}</p>
-                                </div>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            </SectionCard>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                 <SectionCard 
-                    title={t('kb_strengths')} 
-                    icon={<CheckCircleIcon className="text-green-400"/>}
-                >
-                    <ul className="list-disc list-inside space-y-1 pl-9">
-                        {knowledgeBase.strengths.map((item, index) => <li key={index}>{item}</li>)}
-                    </ul>
-                </SectionCard>
-                 <SectionCard 
-                    title={t('kb_weaknesses')} 
-                    icon={<ShieldExclamationIcon className="text-red-400"/>}
-                >
-                    <ul className="list-disc list-inside space-y-1 pl-9">
-                        {knowledgeBase.weaknesses.map((item, index) => <li key={index}>{item}</li>)}
-                    </ul>
-                </SectionCard>
-            </div>
-             <SectionCard 
-                title={t('kb_legal_issues')} 
-                icon={<LightBulbIcon/>}
-            >
-                 <ul className="list-disc list-inside space-y-1 pl-9">
-                    {knowledgeBase.legalIssues.map((item, index) => <li key={index}>{item}</li>)}
-                </ul>
-            </SectionCard>
+          </div>
+        )}
+
+        {/* Standard view for non-investigation stages */}
+        {!isInvestigationStage && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* ... existing standard sections ... */}
+          </div>
+        )}
+
+        {/* Common sections for both stages */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Evidence/Facts Section */}
+          <SectionCard 
+              title={isInvestigationStage ? t('kb_key_evidence') : t('kb_key_facts')}
+              icon={<DocumentTextIcon/>}
+          >
+              <ul className="list-disc list-inside space-y-2 pl-9">
+                  {knowledgeBase.keyFacts.map((item, index) => <li key={index}><strong>{item.fact}:</strong> {item.relevance}</li>)}
+              </ul>
+          </SectionCard>
+          
+          {/* Participants Section */}
+          <SectionCard 
+              title={t('kb_participants_title')} 
+              icon={<UsersIcon />}
+          >
+               <ul className="list-disc list-inside space-y-2 pl-9">
+                  {caseData.participants.map((p, index) => (
+                      <li key={index}>
+                          <strong>{p.name}</strong> - <span className="text-[var(--text-secondary)]">{p.role}</span>
+                          {p.name === caseData.clientName && <span className="ml-2 text-xs font-bold px-2 py-0.5 rounded-full bg-[var(--accent-primary)]/20 text-[var(--accent-primary)]">{t('kb_client_tag')}</span>}
+                      </li>
+                  ))}
+              </ul>
+          </SectionCard>
+          
+          {/* Statute of Limitations */}
+          {sol && (
+              <SectionCard
+                  title={t('kb_sol_title')}
+                  icon={
+                      sol.status === 'OK' ? <CheckCircleIcon className="text-green-400" /> :
+                      sol.status === 'Xavf ostida' ? <ExclamationIcon className="text-yellow-400" /> :
+                      <ShieldExclamationIcon className="text-red-400" />
+                  }
+              >
+                  <div className="pl-9">
+                      <p className={`font-bold ${
+                          sol.status === 'OK' ? 'text-green-400' :
+                          sol.status === 'Xavf ostida' ? 'text-yellow-400' :
+                          'text-red-400'
+                      }`}>{t(`sol_status_${sol.status.replace(/ /g, '_').replace("'", "")}`)}</p>
+                      <p className="text-slate-400 mt-1 text-xs">{sol.summary}</p>
+                  </div>
+              </SectionCard>
+          )}
+          
+          {/* Laws/Charges Section */}
+           <SectionCard 
+              title={isInvestigationStage ? t('kb_potential_charges') : t('kb_applicable_laws')}
+              icon={<ChartBarIcon/>}
+          >
+              <ul className="space-y-1 -mx-2">
+                  {knowledgeBase.applicableLaws.map((item, index) => (
+                      <li key={index} className="rounded-md hover:bg-[var(--bg-secondary)] transition-all group transform hover:scale-[1.02]">
+                         <div className="p-2 flex items-start gap-3">
+                              <ResearchIcon className="h-4 w-4 text-[var(--accent-primary)] mt-1 flex-shrink-0" />
+                              <div>
+                                  <div className="flex items-center flex-wrap gap-2">
+                                      <button
+                                          onClick={() => onArticleSelect(item.article)}
+                                          className="text-left font-semibold text-[var(--accent-primary)] group-hover:underline"
+                                          title={t('case_input_research_article_tooltip', { article: item.article })}
+                                      >
+                                          {item.article}
+                                      </button>
+                                      {item.url && (
+                                          <a 
+                                              href={item.url} 
+                                              target="_blank" 
+                                              rel="noopener noreferrer"
+                                              className="text-xs font-mono px-1.5 py-0.5 rounded bg-cyan-900/50 text-cyan-400 hover:text-cyan-300 hover:bg-cyan-900"
+                                          >
+                                              URL
+                                          </a>
+                                      )}
+                                  </div>
+                                  <p className="text-slate-400 text-xs mt-1">{item.summary}</p>
+                              </div>
+                          </div>
+                      </li>
+                  ))}
+              </ul>
+          </SectionCard>
+          
+          {/* Strengths/Weaknesses */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+               <SectionCard 
+                  title={t('kb_strengths')} 
+                  icon={<CheckCircleIcon className="text-green-400"/>}
+              >
+                  <ul className="list-disc list-inside space-y-1 pl-9">
+                      {knowledgeBase.strengths.map((item, index) => <li key={index}>{item}</li>)}
+                  </ul>
+              </SectionCard>
+               <SectionCard 
+                  title={t('kb_weaknesses')} 
+                  icon={<ShieldExclamationIcon className="text-red-400"/>}
+              >
+                  <ul className="list-disc list-inside space-y-1 pl-9">
+                      {knowledgeBase.weaknesses.map((item, index) => <li key={index}>{item}</li>)}
+                  </ul>
+              </SectionCard>
+          </div>
+          
+          {/* Legal Issues */}
+           <SectionCard 
+              title={t('kb_legal_issues')} 
+              icon={<LightBulbIcon/>}
+          >
+               <ul className="list-disc list-inside space-y-1 pl-9">
+                  {knowledgeBase.legalIssues.map((item, index) => <li key={index}>{item}</li>)}
+              </ul>
+          </SectionCard>
         </div>
 
+        {/* Deep Dive Section */}
         <div className="polished-pane p-6">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-4">

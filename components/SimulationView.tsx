@@ -65,16 +65,8 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ caseData, onNewA
 
   const isInvestigationStage = caseData?.courtStage === t('court_stage_tergov_raw');
 
-  if (isInvestigationStage) {
-    return (
-        <EmptyState 
-            icon={<TheaterIcon />}
-            title={t('empty_state_simulation_unavailable_title')}
-            message={t('empty_state_simulation_unavailable_message')}
-            t={t}
-        />
-    )
-  }
+  // For investigation stage, we'll show a specialized view instead of blocking the feature
+  const isInvestigationSpecializedView = isInvestigationStage;
 
   const handleUserAnswerChange = (index: number, value: string) => {
     setUserAnswers(prev => ({ ...prev, [index]: value }));
@@ -166,11 +158,20 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ caseData, onNewA
           // The global spinner from App.tsx is active, so we return null to avoid flashing content.
           return null; 
       }
+      
+      // For investigation stage, show specialized prompt
+      const promptTitle = isInvestigationStage 
+        ? t('simulation_investigation_generate_prompt_title') 
+        : t('simulation_generate_prompt_title');
+      const promptMessage = isInvestigationStage 
+        ? t('simulation_investigation_generate_prompt_message') 
+        : t('simulation_generate_prompt_message');
+      
       return (
           <EmptyState
               icon={<TheaterIcon />}
-              title={t('simulation_generate_prompt_title')}
-              message={t('simulation_generate_prompt_message')}
+              title={promptTitle}
+              message={promptMessage}
               t={t}
           >
               <button
