@@ -41,14 +41,14 @@ export const CaseNavigation: React.FC<CaseNavigationProps> = ({ activeView, setA
         { id: 'notes', label: t('nav_notes'), icon: <PencilSquareIcon /> },
         { id: 'billing', label: t('nav_billing'), icon: <CurrencyDollarIcon /> },
         { id: 'debate', label: isInvestigationStage ? t('nav_investigation_debate') : t('nav_debate'), icon: <DebateIcon /> },
-        { id: 'simulation', label: t('nav_simulation'), icon: <TheaterIcon />, condition: !isInvestigationStage },
+        { id: 'simulation', label: t('nav_simulation'), icon: <TheaterIcon /> },
         { id: 'summary', label: isInvestigationStage ? t('nav_investigation_summary') : t('nav_summary'), icon: <StrategyIcon /> },
     ];
 
     return (
         <div className="mt-8 border-b border-[var(--border-color)]">
             <nav className="flex items-center justify-center flex-wrap -mb-px" aria-label="Tabs">
-                {views.filter(v => v.condition !== false).map((view) => (
+                {views.map((view) => (
                     <NavItem
                         key={view.id}
                         label={view.label}
