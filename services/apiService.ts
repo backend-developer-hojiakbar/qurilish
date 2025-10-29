@@ -4,7 +4,7 @@ import type {
 } from '../types';
 
 // API base URL - in production this should be configurable
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'https://adolatai.pythonanywhere.com/api';
 
 // Auth token management
 let authToken: string | null = null;
