@@ -172,7 +172,7 @@ const responseSchema = {
 };
 
 
-export const getLegalStrategy = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string): Promise<DebateResult> => {
+export const getLegalStrategy = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<DebateResult> => {
   try {
     const fullText = aggregateText(caseDetails, files);
     const participantsList = formatParticipantsForPrompt(participants, clientName, (key) => t(key));
@@ -222,6 +222,8 @@ export const getLegalStrategy = async (caseDetails: string, files: CaseFile[], c
         responseSchema: responseSchema,
         temperature: 0.5,
         thinkingConfig: { thinkingBudget: 0 },
+        // Add language configuration
+        systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
       },
     });
 
@@ -263,7 +265,7 @@ const preliminaryResponseSchema = {
     required: ["winProbability", "probabilityJustification", "positiveFactors", "negativeFactors"]
 };
 
-export const getPreliminaryVerdict = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string): Promise<PreliminaryVerdict> => {
+export const getPreliminaryVerdict = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<PreliminaryVerdict> => {
   try {
     const fullText = aggregateText(caseDetails, files);
     const participantsList = formatParticipantsForPrompt(participants, clientName, (key) => t(key));
@@ -310,7 +312,9 @@ export const getPreliminaryVerdict = async (caseDetails: string, files: CaseFile
         responseMimeType: "application/json",
         responseSchema: preliminaryResponseSchema,
         temperature: 0.3,
-        thinkingConfig: { thinkingBudget: 0 }
+        thinkingConfig: { thinkingBudget: 0 },
+        // Add language configuration
+        systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
       },
     });
 
@@ -353,7 +357,7 @@ interface ParticipantsResponse {
     participants: SuggestedParticipant[];
 }
 
-export const getCaseParticipants = async (caseDetails: string, files: CaseFile[], t: (key: string, replacements?: { [key: string]: string }) => string): Promise<SuggestedParticipant[]> => {
+export const getCaseParticipants = async (caseDetails: string, files: CaseFile[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<SuggestedParticipant[]> => {
     try {
         const fullText = aggregateText(caseDetails, files);
         const fullPrompt = t('prompt_participants', { caseDetailsWithFiles: fullText });
@@ -371,10 +375,15 @@ export const getCaseParticipants = async (caseDetails: string, files: CaseFile[]
             }
             const [, base64Data] = file.content.split(',');
             if (!base64Data) {
-              console.warn(`Could not parse data URL for file: ${file.name}`);
-              return null;
+                console.warn(`Could not parse data URL for file: ${file.name}`);
+                return null;
             }
-            return { inlineData: { mimeType: file.type, data: base64Data } };
+            return {
+                inlineData: {
+                    mimeType: file.type,
+                    data: base64Data,
+                },
+            };
         }).filter((part): part is { inlineData: { mimeType: string; data: string; } } => part !== null);
 
         const response = await ai.models.generateContent({
@@ -384,7 +393,9 @@ export const getCaseParticipants = async (caseDetails: string, files: CaseFile[]
                 responseMimeType: "application/json",
                 responseSchema: participantsResponseSchema,
                 temperature: 0.1,
-                thinkingConfig: { thinkingBudget: 0 }
+                thinkingConfig: { thinkingBudget: 0 },
+                // Add language configuration
+                systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
             },
         });
         
@@ -401,7 +412,7 @@ export const getCaseParticipants = async (caseDetails: string, files: CaseFile[]
     }
 };
 
-export const getArticleSummary = async (article: string, t: (key: string, replacements?: { [key: string]: string }) => string): Promise<string> => {
+export const getArticleSummary = async (article: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
     try {
         const fullPrompt = t('prompt_article_summary', { article });
         const response = await ai.models.generateContent({
@@ -409,7 +420,9 @@ export const getArticleSummary = async (article: string, t: (key: string, replac
             contents: { parts: [{ text: fullPrompt }] },
             config: {
                 temperature: 0.2,
-                thinkingConfig: { thinkingBudget: 0 }
+                thinkingConfig: { thinkingBudget: 0 },
+                // Add language configuration
+                systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
             },
         });
         return response.text;
@@ -436,11 +449,11 @@ interface DocumentTypeResponse {
     documentType: string;
 }
 
-export const getDocumentType = async (file: CaseFile, t: (key: string, replacements?: { [key: string]: string }) => string): Promise<string> => {
+export const getDocumentType = async (file: CaseFile, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
     try {
         let promptText = t('prompt_doc_type');
         const fileParts: { inlineData: { mimeType: string; data: string; } }[] = [];
-
+        
         // For DOCX and TXT, use extracted text, not raw file.
         if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || file.type.startsWith('text/')) {
             if (!file.extractedText) {
@@ -479,7 +492,9 @@ export const getDocumentType = async (file: CaseFile, t: (key: string, replaceme
                 responseMimeType: "application/json",
                 responseSchema: docTypeResponseSchema,
                 temperature: 0,
-                thinkingConfig: { thinkingBudget: 0 }
+                thinkingConfig: { thinkingBudget: 0 },
+                // Add language configuration
+                systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
             },
         });
 
@@ -537,7 +552,7 @@ export const sendResearchMessage = async (message: string, t: (key: string, repl
 };
 
 
-export const getDeepDiveAnalysis = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string): Promise<string> => {
+export const getDeepDiveAnalysis = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
     try {
         const fullText = aggregateText(caseDetails, files);
         const translatedCourtStage = t(`court_stage_${courtStage.replace(/ /g, '_').toLowerCase()}`);
@@ -568,17 +583,24 @@ export const getDeepDiveAnalysis = async (caseDetails: string, files: CaseFile[]
             console.warn(`Could not parse data URL for file: ${file.name}`);
             return null;
           }
-          return { inlineData: { mimeType: file.type, data: base64Data } };
+          return {
+            inlineData: {
+              mimeType: file.type,
+              data: base64Data,
+            },
+          };
         }).filter((part): part is { inlineData: { mimeType: string; data: string; } } => part !== null);
 
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: { parts: [textPart, ...fileParts] },
-            config: {
-                temperature: 0.5,
+            config: { 
+                temperature: 0.7,
+                // Add language configuration
+                systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
             },
         });
-
+        
         return response.text;
     } catch (error) {
         throw parseGeminiError(error);
@@ -587,7 +609,7 @@ export const getDeepDiveAnalysis = async (caseDetails: string, files: CaseFile[]
 
 // --- NEW SIMULATOR SERVICES ---
 
-export const getCourtroomScenario = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string): Promise<string> => {
+export const getCourtroomScenario = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
     try {
         const fullText = aggregateText(caseDetails, files);
         const translatedCourtStage = t(`court_stage_${courtStage.replace(/ /g, '_').toLowerCase()}`);
@@ -604,7 +626,11 @@ export const getCourtroomScenario = async (caseDetails: string, files: CaseFile[
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: { parts: [{ text: fullPrompt }] },
-            config: { temperature: 0.6 },
+            config: { 
+                temperature: 0.6,
+                // Add language configuration
+                systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
+            },
         });
         return response.text;
     } catch (error) {
@@ -630,7 +656,7 @@ const crossExaminationSchema = {
     required: ["questions"]
 };
 
-export const getCrossExaminationQuestions = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string): Promise<CrossExaminationQuestion[]> => {
+export const getCrossExaminationQuestions = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<CrossExaminationQuestion[]> => {
     try {
         const fullText = aggregateText(caseDetails, files);
         const participantsList = formatParticipantsForPrompt(participants, clientName, (key) => t(key));
@@ -648,6 +674,8 @@ export const getCrossExaminationQuestions = async (caseDetails: string, files: C
                 responseMimeType: "application/json",
                 responseSchema: crossExaminationSchema,
                 temperature: 0.8,
+                // Add language configuration
+                systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
             },
         });
         const result = JSON.parse(response.text.trim());
@@ -661,7 +689,7 @@ export const getCrossExaminationQuestions = async (caseDetails: string, files: C
     }
 };
 
-export const getClosingArgument = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], persona: 'lead' | 'defender', t: (key: string, replacements?: { [key: string]: string }) => string): Promise<string> => {
+export const getClosingArgument = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], persona: 'lead' | 'defender', t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
     try {
         const fullText = aggregateText(caseDetails, files);
         const participantsList = formatParticipantsForPrompt(participants, clientName, (key) => t(key));
@@ -676,7 +704,11 @@ export const getClosingArgument = async (caseDetails: string, files: CaseFile[],
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: { parts: [{ text: fullPrompt }] },
-            config: { temperature: 0.7 },
+            config: { 
+                temperature: 0.7,
+                // Add language configuration
+                systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
+            },
         });
         return response.text;
     } catch (error) {
@@ -688,7 +720,8 @@ export const getClosingArgument = async (caseDetails: string, files: CaseFile[],
 export const generateDocument = async (
     docType: string,
     caseData: Case,
-    t: (key: string, replacements?: { [key: string]: string }) => string
+    t: (key: string, replacements?: { [key: string]: string }) => string,
+    language: string = 'uz-lat'
 ): Promise<string> => {
     try {
         const fullText = aggregateText(caseData.caseDetails, caseData.files.map(f => ({ ...f, content: '', extractedText: f.name })));
@@ -709,6 +742,8 @@ export const generateDocument = async (
             contents: { parts: [{ text: prompt }] },
             config: {
                 temperature: 0.6,
+                // Add language configuration
+                systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
             },
         });
         return response.text;
@@ -718,14 +753,17 @@ export const generateDocument = async (
 };
 
 // --- NEW CLIENT SUMMARY SERVICE ---
-export const generateClientSummary = async (summary: string, t: (key: string, replacements?: { [key: string]: string }) => string): Promise<string> => {
+export const generateClientSummary = async (summary: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
     try {
-        const prompt = t('prompt_generate_client_summary', { summary });
+        const fullPrompt = t('prompt_generate_client_summary', { summary });
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: { parts: [{ text: prompt }] },
+            contents: { parts: [{ text: fullPrompt }] },
             config: {
-                temperature: 0.4,
+                temperature: 0.7,
+                thinkingConfig: { thinkingBudget: 0 },
+                // Add language configuration
+                systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
             },
         });
         return response.text;
@@ -751,18 +789,22 @@ interface PrioritizedTasksResponse {
     prioritizedTasks: string[];
 }
 
-export const prioritizeTasks = async (tasks: string[], t: (key: string, replacements?: { [key: string]: string }) => string): Promise<string[]> => {
+export const prioritizeTasks = async (tasks: string[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string[]> => {
     try {
-        const tasksList = tasks.map(task => `- ${task}`).join('\n');
-        const prompt = t('prompt_prioritize_tasks', { tasksList });
+        const tasksList = tasks.map((task, i) => `${i + 1}. ${task}`).join('\n');
+        const fullPrompt = t('prompt_prioritize_tasks', { tasksList });
+        const textPart = { text: fullPrompt };
 
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: { parts: [{ text: prompt }] },
+            contents: { parts: [textPart] },
             config: {
                 responseMimeType: "application/json",
                 responseSchema: prioritizeTasksSchema,
-                temperature: 0.2,
+                temperature: 0.1,
+                thinkingConfig: { thinkingBudget: 0 },
+                // Add language configuration
+                systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
             },
         });
 
@@ -802,22 +844,50 @@ interface TimelineResponse {
     events: TimelineEvent[];
 }
 
-export const generateTimeline = async (caseDetails: string, files: CaseFile[], t: (key: string, replacements?: { [key: string]: string }) => string): Promise<TimelineEvent[]> => {
+export const getTimeline = async (caseDetails: string, files: CaseFile[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<TimelineEvent[]> => {
     try {
-        const caseDetailsWithFiles = aggregateText(caseDetails, files);
-        const prompt = t('prompt_generate_timeline', { caseDetailsWithFiles });
-        
+        const fullText = aggregateText(caseDetails, files);
+        const fullPrompt = t('prompt_generate_timeline', { caseDetailsWithFiles: fullText });
+        const textPart = { text: fullPrompt };
+
+        const fileParts = files.map(file => {
+          if (!file.content) return null;
+          // Skip unsupported/redundant file types for the main analysis call.
+          // Text content from these is already in the main prompt via aggregateText.
+          if (
+            file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+            file.type.startsWith('text/')
+          ) {
+              return null;
+          }
+          const [, base64Data] = file.content.split(',');
+          if (!base64Data) {
+            console.warn(`Could not parse data URL for file: ${file.name}`);
+            return null;
+          }
+          return {
+            inlineData: {
+              mimeType: file.type,
+              data: base64Data,
+            },
+          };
+        }).filter((part): part is { inlineData: { mimeType: string; data: string; } } => part !== null);
+
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: { parts: [{ text: prompt }] },
+            contents: { parts: [textPart, ...fileParts] },
             config: {
                 responseMimeType: "application/json",
                 responseSchema: timelineSchema,
-                temperature: 0.1,
+                temperature: 0.3,
+                thinkingConfig: { thinkingBudget: 0 },
+                // Add language configuration
+                systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
             },
         });
-        
-        const result = JSON.parse(response.text.trim()) as TimelineResponse;
+
+        const jsonText = response.text.trim();
+        const result = JSON.parse(jsonText) as TimelineResponse;
         if (!result.events || !Array.isArray(result.events)) {
             throw new Error("Invalid structure for timeline events received from API.");
         }
@@ -967,4 +1037,172 @@ export const transcribeAudioMemo = async (durationSeconds: number, t: (key: stri
             resolve(t('voice_memo_recorded_success'));
         }
     });
+};
+
+export const getResearchResponse = async (query: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<ChatMessage> => {
+    try {
+        const systemPrompt = t('prompt_research_system');
+        const fullPrompt = `${systemPrompt}\n\n${query}`;
+
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: { parts: [{ text: fullPrompt }] },
+            config: {
+                temperature: 0.4,
+                thinkingConfig: { thinkingBudget: 0 },
+                // Add language configuration
+                systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
+            },
+        });
+
+        const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks
+            ?.map(chunk => chunk.web)
+            .filter((web): web is { uri: string; title: string; } => !!web?.uri) || [];
+
+        return {
+            id: new Date().toISOString(),
+            role: 'model',
+            text: response.text,
+            sources,
+        };
+    } catch (error) {
+        throw parseGeminiError(error);
+    }
+};
+
+export const summarizeDocument = async (documentText: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
+    try {
+        const fullPrompt = t('prompt_summarize_document', { documentText });
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: { parts: [{ text: fullPrompt }] },
+            config: {
+                temperature: 0.3,
+                thinkingConfig: { thinkingBudget: 0 },
+                // Add language configuration
+                systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
+            },
+        });
+        return response.text;
+    } catch (error) {
+        throw parseGeminiError(error);
+    }
+};
+
+export const answerDocumentQuestion = async (documentText: string, question: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
+    try {
+        const fullPrompt = t('prompt_answer_document_question', { documentText, question });
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: { parts: [{ text: fullPrompt }] },
+            config: {
+                temperature: 0.3,
+                thinkingConfig: { thinkingBudget: 0 },
+                // Add language configuration
+                systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
+            },
+        });
+        return response.text;
+    } catch (error) {
+        throw parseGeminiError(error);
+    }
+};
+
+const witnessPrepSchema = {
+    type: Type.OBJECT,
+    properties: {
+        direct: {
+            type: Type.ARRAY,
+            items: { type: Type.STRING }
+        },
+        cross: {
+            type: Type.ARRAY,
+            items: {
+                type: Type.OBJECT,
+                properties: {
+                    question: { type: Type.STRING },
+                    strategy: { type: Type.STRING }
+                },
+                required: ["question", "strategy"]
+            }
+        }
+    },
+    required: ["direct", "cross"]
+};
+
+export const generateWitnessPrep = async (caseDetails: string, files: CaseFile[], clientRole: string, clientName: string, participantName: string, participantRole: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<CrossExaminationQuestion[]> => {
+    try {
+        const fullText = aggregateText(caseDetails, files);
+        const fullPrompt = t('prompt_generate_witness_prep', {
+            clientName,
+            clientRole,
+            participantName,
+            participantRole,
+            caseDetailsWithFiles: fullText,
+        });
+        const textPart = { text: fullPrompt };
+
+        const fileParts = files.map(file => {
+          if (!file.content) return null;
+          // Skip unsupported/redundant file types for the main analysis call.
+          // Text content from these is already in the main prompt via aggregateText.
+          if (
+            file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+            file.type.startsWith('text/')
+          ) {
+              return null;
+          }
+          const [, base64Data] = file.content.split(',');
+          if (!base64Data) {
+            console.warn(`Could not parse data URL for file: ${file.name}`);
+            return null;
+          }
+          return {
+            inlineData: {
+              mimeType: file.type,
+              data: base64Data,
+            },
+          };
+        }).filter((part): part is { inlineData: { mimeType: string; data: string; } } => part !== null);
+
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: { parts: [textPart, ...fileParts] },
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: witnessPrepSchema,
+                temperature: 0.6,
+                thinkingConfig: { thinkingBudget: 0 },
+                // Add language configuration
+                systemInstruction: `Please respond in ${getAiLanguageCode(language)}. All generated content should be in this language.`
+            },
+        });
+
+        const jsonText = response.text.trim();
+        const result = JSON.parse(jsonText) as { direct: string[], cross: { question: string, strategy: string }[] };
+
+        if (!result || !result.direct || !Array.isArray(result.direct) || !result.cross || !Array.isArray(result.cross)) {
+            throw new Error("Invalid structure for witness prep questions received from API.");
+        }
+        
+        // Convert to CrossExaminationQuestion[] format
+        return result.cross.map(item => ({
+            question: item.question,
+            suggestedAnswer: item.strategy
+        }));
+
+    } catch (error) {
+        throw parseGeminiError(error);
+    }
+};
+
+// Helper to get language code for AI model
+const getAiLanguageCode = (language: string): string => {
+  switch (language) {
+    case 'uz-lat': return 'uz-Latn'; // Uzbek in Latin script
+    case 'uz-cyr': return 'uz-Cyrl'; // Uzbek in Cyrillic script
+    case 'ru': return 'ru'; // Russian
+    case 'en': return 'en'; // English
+    default: return 'uz-Latn';
+  }
 };

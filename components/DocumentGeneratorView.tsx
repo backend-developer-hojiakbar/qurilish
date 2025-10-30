@@ -8,6 +8,7 @@ interface DocumentGeneratorViewProps {
     caseData: Case | null | undefined;
     onNewAnalysis: () => void;
     t: (key: string, replacements?: { [key: string]: string }) => string;
+    language: string;
 }
 
 const DOCUMENT_TEMPLATES = [
@@ -21,7 +22,7 @@ const DOCUMENT_TEMPLATES = [
     "Dalillarni qabul qilish to'g'risida ariza",
 ];
 
-export const DocumentGeneratorView: React.FC<DocumentGeneratorViewProps> = ({ caseData, onNewAnalysis, t }) => {
+export const DocumentGeneratorView: React.FC<DocumentGeneratorViewProps> = ({ caseData, onNewAnalysis, t, language }) => {
     const [selectedTemplate, setSelectedTemplate] = useState<string>('');
     const [generatedText, setGeneratedText] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +34,7 @@ export const DocumentGeneratorView: React.FC<DocumentGeneratorViewProps> = ({ ca
         setIsLoading(true);
         setGeneratedText('');
         try {
-            const text = await generateDocument(selectedTemplate, caseData, t);
+            const text = await generateDocument(selectedTemplate, caseData, t, language);
             setGeneratedText(text);
             // Add to history
             setHistory(prev => [...prev, {template: selectedTemplate, text, timestamp: new Date()}]);

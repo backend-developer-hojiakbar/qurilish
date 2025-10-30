@@ -7,9 +7,10 @@ interface TasksViewProps {
     tasks: Task[];
     onUpdateTasks: (newTasks: Task[]) => void;
     t: (key: string) => string;
+    language: string;
 }
 
-export const TasksView: React.FC<TasksViewProps> = ({ tasks, onUpdateTasks, t }) => {
+export const TasksView: React.FC<TasksViewProps> = ({ tasks, onUpdateTasks, t, language }) => {
     const [newTaskText, setNewTaskText] = useState('');
     const [isPrioritizing, setIsPrioritizing] = useState(false);
     const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
@@ -44,7 +45,7 @@ export const TasksView: React.FC<TasksViewProps> = ({ tasks, onUpdateTasks, t })
 
         setIsPrioritizing(true);
         try {
-            const prioritizedTaskTexts = await prioritizeTasks(pendingTasks.map(t => t.text), t);
+            const prioritizedTaskTexts = await prioritizeTasks(pendingTasks.map(t => t.text), t, language);
             
             // Create a map for quick lookup of original tasks by their text
             const taskMap = new Map(pendingTasks.map(t => [t.text, t]));

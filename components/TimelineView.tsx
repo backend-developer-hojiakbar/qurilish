@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { Case, TimelineEvent } from '../types';
 import { HistoryIcon, PlusIcon, TrashIcon } from './icons';
-import { generateTimeline } from '../services/geminiService';
+import { getTimeline } from '../services/geminiService';
 
 interface TimelineViewProps {
     caseData: Case | null;
@@ -26,7 +26,7 @@ export const TimelineView: React.FC<TimelineViewProps> = ({ caseData, onUpdateTi
         if (!caseData) return;
         setIsLoading(true);
         try {
-            const newEvents = await generateTimeline(caseData.caseDetails, caseData.files, t);
+            const newEvents = await getTimeline(caseData.caseDetails, caseData.files, t);
             // Combine with existing events and remove duplicates
             const combined = [...caseData.timeline];
             newEvents.forEach(newEvent => {

@@ -9,6 +9,7 @@ interface AiLawyerCardProps {
   onRate: (rating: 'up' | 'down') => void;
   t: (key: string, replacements?: { [key: string]: string }) => string;
   isInvestigationStage: boolean;
+  language: string;
 }
 
 const LegalCodeTooltip: React.FC<{
@@ -54,7 +55,7 @@ const LegalCodeTooltip: React.FC<{
 };
 
 
-export const AiLawyerCard: React.FC<AiLawyerCardProps> = ({ response, onRate, t, isInvestigationStage }) => {
+export const AiLawyerCard: React.FC<AiLawyerCardProps> = ({ response, onRate, t, isInvestigationStage, language }) => {
   const personas = isInvestigationStage ? AI_INVESTIGATORS : AI_LAWYERS;
   const persona = personas.find(p => p.name === response.lawyerName);
 
@@ -79,7 +80,7 @@ export const AiLawyerCard: React.FC<AiLawyerCardProps> = ({ response, onRate, t,
     if (!tooltipContent[code]) {
         setLoadingCode(code);
         try {
-            const summary = await getArticleSummary(code, t);
+            const summary = await getArticleSummary(code, t, language);
             setTooltipContent(prev => ({ ...prev, [code]: summary }));
         } catch (error) {
             console.error("Failed to get article summary:", error);

@@ -203,7 +203,8 @@ const App: React.FC = () => {
                 caseToRegenerate.clientRole,
                 caseToRegenerate.clientName,
                 caseToRegenerate.participants,
-                t
+                t,
+                language
             );
 
             // Update the case with new AI-generated content
@@ -216,7 +217,7 @@ const App: React.FC = () => {
             updateCaseInHistory(updatedCase);
             setCurrentCase(updatedCase);
         } catch (error: any) {
-            alert(t(error.message) || t('error_full_analysis'));
+
         } finally {
             setIsLoading(false);
             setIsRegenerating(false);
@@ -380,7 +381,7 @@ const App: React.FC = () => {
     const handleAnalyze = useCallback(async (courtType: string, caseDetails: string, files: CaseFile[], courtStage: string) => {
         setIsLoading(true);
         try {
-            const participants = await getCaseParticipants(caseDetails, files, t);
+            const participants = await getCaseParticipants(caseDetails, files, t, language);
             const suggestedParticipants = participants.map(p => ({ name: p.name, role: p.suggestedRole }));
             setPendingCaseData({ caseDetails, files, courtType, courtStage, participants: suggestedParticipants, clientRole: '', clientName: '' });
             setIsLoading(false);
@@ -401,7 +402,7 @@ const App: React.FC = () => {
 
             const result = await getLegalStrategy(
                 caseDetails, files, courtType, 
-                courtStage, clientRole, clientName, participants, t
+                courtStage, clientRole, clientName, participants, t, language
             );
             
             let newTitle = '';
@@ -522,7 +523,7 @@ const App: React.FC = () => {
         if (!currentCase) return;
         setIsDeepDiveLoading(true);
         try {
-            const analysis = await getDeepDiveAnalysis(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t);
+            const analysis = await getDeepDiveAnalysis(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t, language);
             const updatedCase = { 
                 ...currentCase, 
                 result: { ...currentCase.result, deepDiveAnalysis: analysis },
@@ -543,7 +544,7 @@ const App: React.FC = () => {
         const combinedFiles = [...currentCase.files, ...newFiles];
 
         try {
-            const result = await getLegalStrategy(combinedDetails, combinedFiles, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t);
+            const result = await getLegalStrategy(combinedDetails, combinedFiles, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t, language);
             const updatedCase: Case = {
                 ...currentCase,
                 caseDetails: combinedDetails,
@@ -565,10 +566,10 @@ const App: React.FC = () => {
         setIsSimulating(true);
         try {
             const [scenario, questions, closingLead, closingDefender] = await Promise.all([
-                getCourtroomScenario(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t),
-                getCrossExaminationQuestions(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t),
-                getClosingArgument(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, 'lead', t),
-                getClosingArgument(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, 'defender', t),
+                getCourtroomScenario(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t, language),
+                getCrossExaminationQuestions(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t, language),
+                getClosingArgument(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, 'lead', t, language),
+                getClosingArgument(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, 'defender', t, language),
             ]);
             const updatedCase = { 
                 ...currentCase, 
@@ -737,22 +738,23 @@ const App: React.FC = () => {
         const viewToRender = currentCase ? activeCaseView : activeView;
         switch (viewToRender) {
             case 'dashboard': return <DashboardView onStartAnalysis={handleNewAnalysis} cases={history} onNavigate={handleNavigate} onSelectCase={handleSelectCase} t={t} language={language} />;
-            case 'analyze': return <CaseInputForm onAnalyze={handleAnalyze} isLoading={isLoading} t={t} />;
+            case 'analyze': return <CaseInputForm onAnalyze={handleAnalyze} isLoading={isLoading} t={t} language={language} />;
             case 'history': return <HistoryView history={history} onSelect={handleSelectCase} onDelete={handleDeleteCase} onSetFolder={handleSetCaseFolder} t={t} language={language} />;
             case 'research': return <ResearchView initialQuery={initialResearchQuery} onQueryHandled={() => setInitialResearchQuery(null)} t={t} language={language} />;
             case 'calendar': return <CalendarView t={t} />;
             case 'settings': return <SettingsView t={t} deviceId={deviceId} deviceList={deviceList} onRemoveDevice={handleRemoveDevice} />;
             // Case-specific views
-            case 'knowledge_base': return <KnowledgeBaseView caseData={currentCase} onNewAnalysis={handleNewAnalysis} onUpdateCase={handleUpdateCase} isUpdating={isUpdating} onGetDeepDive={handleGetDeepDive} isDeepDiveLoading={isDeepDiveLoading} onArticleSelect={handleArticleSelect} onOpenFeedback={() => setShowFeedbackModal(true)} t={t} />;
+            case 'knowledge_base': return <KnowledgeBaseView caseData={currentCase} onNewAnalysis={handleNewAnalysis} onUpdateCase={handleUpdateCase} isUpdating={isUpdating} onGetDeepDive={handleGetDeepDive} isDeepDiveLoading={isDeepDiveLoading} onArticleSelect={handleArticleSelect} onOpenFeedback={() => setShowFeedbackModal(true)} t={t} language={language} />;
             case 'timeline': return <TimelineView caseData={currentCase} onUpdateTimeline={handleUpdateTimeline} t={t} />;
             case 'evidence': return <EvidenceView caseData={currentCase} onUpdateEvidence={handleUpdateEvidence} t={t} />;
-            case 'tasks': return <TasksView tasks={currentCase?.tasks || []} onUpdateTasks={handleUpdateTasks} t={t} />;
-            case 'documents': return <DocumentGeneratorView caseData={currentCase} onNewAnalysis={handleNewAnalysis} t={t} />;
+            case 'tasks': return <TasksView tasks={currentCase?.tasks || []} onUpdateTasks={handleUpdateTasks} t={t} language={language} />;
+            case 'documents': return <DocumentGeneratorView caseData={currentCase} onNewAnalysis={handleNewAnalysis} t={t} language={language} />;
             case 'notes': return <NotesView caseData={currentCase} onUpdateNotes={handleUpdateNotes} t={t} />;
             case 'billing': return <BillingView caseData={currentCase} onUpdateBilling={handleUpdateBilling} t={t} />;
-            case 'debate': return <AiDebateView caseData={currentCase} onNewAnalysis={handleNewAnalysis} onRate={handleRateDebate} t={t} />;
+            case 'debate': return <AiDebateView caseData={currentCase} onNewAnalysis={handleNewAnalysis} onRate={handleRateDebate} t={t} language={language} />;
             case 'simulation': return <SimulationView caseData={currentCase} onNewAnalysis={handleNewAnalysis} isLoading={isSimulating} onGenerateSimulation={handleSimulation} onOpenFeedback={() => setShowFeedbackModal(true)} t={t} />;
-            case 'summary': return <SummaryView caseData={currentCase} onNewAnalysis={handleNewAnalysis} onOpenFeedback={() => setShowFeedbackModal(true)} onUpdateCase={updateCaseInHistory} t={t} />;
+            case 'summary': return <SummaryView caseData={currentCase} onNewAnalysis={handleNewAnalysis} onOpenFeedback={() => setShowFeedbackModal(true)} onUpdateCase={updateCaseInHistory} t={t} language={language} />;
+
             default: return <DashboardView onStartAnalysis={handleNewAnalysis} cases={history} onNavigate={handleNavigate} onSelectCase={handleSelectCase} t={t} language={language}/>;
         }
     };

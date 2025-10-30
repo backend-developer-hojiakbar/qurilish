@@ -19,6 +19,7 @@ interface SummaryViewProps {
   onOpenFeedback: () => void;
   onUpdateCase: (updatedCase: Case) => void;
   t: (key: string, replacements?: { [key: string]: string }) => string;
+  language: string;
 }
 
 const RiskMatrix: React.FC<{ matrix: RiskMatrixEntry[], t: (key: string) => string }> = ({ matrix, t }) => {
@@ -125,7 +126,7 @@ export const WinProbabilityGauge: React.FC<{ probability: number, justification:
                         <svg className="w-full h-full" viewBox="0 0 140 140">
                             <circle cx="70" cy="70" r="50" fill="none" stroke="rgba(0, 245, 255, 0.1)" strokeWidth="1" />
                             <circle cx="70" cy="70" r="50" fill="none" stroke="var(--accent-secondary)" strokeWidth="1" strokeDasharray="10 20" className="animate-spin" style={{ animationDuration: '10s' }}/>
-                            <circle strokeWidth="10" stroke="var(--bg-secondary)" fill="transparent" r={radius} cx="70" cy="70" />
+                            <circle strokeWidth="10" strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round" stroke={color} fill="transparent" r={radius} cx="70" cy="70" />
                             <circle
                                 strokeWidth="10"
                                 strokeDasharray={circumference}
@@ -196,7 +197,7 @@ export const WinProbabilityGauge: React.FC<{ probability: number, justification:
 };
 
 
-export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysis, onOpenFeedback, onUpdateCase, t }) => {
+export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysis, onOpenFeedback, onUpdateCase, t, language }) => {
   const [copied, setCopied] = useState(false);
   const [exportingType, setExportingType] = useState<'word' | null>(null);
   const [showClientSummary, setShowClientSummary] = useState(false);
@@ -280,7 +281,7 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
     if (!caseData || !summary) return;
     setIsGeneratingClientSummary(true);
     try {
-        const clientSummaryText = await generateClientSummary(summary, t);
+        const clientSummaryText = await generateClientSummary(summary, t, language);
         const updatedCase = {
             ...caseData,
             result: { ...caseData.result, clientSummary: clientSummaryText },

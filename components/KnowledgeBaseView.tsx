@@ -23,6 +23,7 @@ interface KnowledgeBaseViewProps {
   onArticleSelect: (article: string) => void;
   onOpenFeedback: () => void;
   t: (key: string, replacements?: { [key: string]: string }) => string;
+  language: string;
 }
 
 // Add new interface for investigation-specific data
@@ -90,7 +91,7 @@ const SectionCard: React.FC<{
     </div>
 );
 
-export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({ caseData, onNewAnalysis, onUpdateCase, isUpdating, onGetDeepDive, isDeepDiveLoading, onArticleSelect, onOpenFeedback, t }) => {
+export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({ caseData, onNewAnalysis, onUpdateCase, isUpdating, onGetDeepDive, isDeepDiveLoading, onArticleSelect, onOpenFeedback, t, language }) => {
   const [exportingType, setExportingType] = useState<'word' | null>(null);
   const result = caseData?.result;
   const isInvestigationStage = caseData?.courtStage === t('court_stage_tergov_raw');
@@ -230,7 +231,12 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({ caseData, 
             t={t}
         />
 
-        <CaseUpdateForm onUpdate={handleUpdate} isLoading={isUpdating} t={t} />
+        <CaseUpdateForm 
+            onUpdate={handleUpdate} 
+            isLoading={isUpdating} 
+            t={t}
+            language={language}
+        />
 
         {/* Specialized view for investigation stage */}
         {isInvestigationStage && investigationData && (

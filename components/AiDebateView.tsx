@@ -10,9 +10,10 @@ interface AiDebateViewProps {
   onNewAnalysis: () => void;
   onRate: (debateIndex: number, rating: 'up' | 'down') => void;
   t: (key: string, replacements?: { [key: string]: string }) => string;
+  language: string;
 }
 
-export const AiDebateView: React.FC<AiDebateViewProps> = ({ caseData, onNewAnalysis, onRate, t }) => {
+export const AiDebateView: React.FC<AiDebateViewProps> = ({ caseData, onNewAnalysis, onRate, t, language }) => {
   const [selectedLawyerName, setSelectedLawyerName] = useState<string | null>(null);
   const debate = caseData?.result?.debate;
   const isInvestigationStage = caseData?.courtStage === t('court_stage_tergov_raw');
@@ -94,6 +95,7 @@ export const AiDebateView: React.FC<AiDebateViewProps> = ({ caseData, onNewAnaly
             onRate={(rating) => onRate(selectedResponseIndex, rating)}
             t={t}
             isInvestigationStage={isInvestigationStage}
+            language={language}
           />
         )}
       </div>

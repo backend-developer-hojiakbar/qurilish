@@ -55,6 +55,7 @@ interface CaseInputFormProps {
   onAnalyze: (courtType: string, caseDetails: string, files: CaseFile[], courtStage: string) => void;
   isLoading: boolean;
   t: (key: string, replacements?: { [key: string]: string }) => string;
+  language: string;
 }
 
 const courtTypes = ["Fuqarolik", "Jinoyat", "Ma'muriy", "Iqtisodiy"];
@@ -75,7 +76,7 @@ const SpinnerIcon: React.FC = () => (
 );
 
 
-export const CaseInputForm: React.FC<CaseInputFormProps> = ({ onAnalyze, isLoading, t }) => {
+export const CaseInputForm: React.FC<CaseInputFormProps> = ({ onAnalyze, isLoading, t, language }) => {
   const [courtType, setCourtType] = useState('');
   const [courtStage, setCourtStage] = useState('');
   const [caseDetails, setCaseDetails] = useState('');
@@ -124,7 +125,7 @@ export const CaseInputForm: React.FC<CaseInputFormProps> = ({ onAnalyze, isLoadi
               
               // Step 2: Call Gemini API to detect document type
               const fileWithData = { ...placeholder, content, extractedText };
-              const detectedType = await getDocumentType(fileWithData, t);
+              const detectedType = await getDocumentType(fileWithData, t, language);
               const finalStatusText = detectedType === "Boshqa" ? t('file_status_ready') : detectedType;
 
               // Update UI with final status for the file

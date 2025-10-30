@@ -47,9 +47,10 @@ interface CaseUpdateFormProps {
   onUpdate: (additionalDetails: string, newFiles: CaseFile[]) => void;
   isLoading: boolean;
   t: (key: string) => string;
+  language: string;
 }
 
-export const CaseUpdateForm: React.FC<CaseUpdateFormProps> = ({ onUpdate, isLoading, t }) => {
+export const CaseUpdateForm: React.FC<CaseUpdateFormProps> = ({ onUpdate, isLoading, t, language }) => {
   const [additionalDetails, setAdditionalDetails] = useState('');
   const [newFiles, setNewFiles] = useState<CaseFile[]>([]);
 
@@ -77,7 +78,7 @@ export const CaseUpdateForm: React.FC<CaseUpdateFormProps> = ({ onUpdate, isLoad
             extractTextFromFile(file)
           ]);
           const fileWithData: CaseFile = { ...placeholder, content, extractedText };
-          const detectedType = await getDocumentType(fileWithData, t);
+          const detectedType = await getDocumentType(fileWithData, t, language);
           const finalType = detectedType === "Boshqa" ? t('file_status_ready') : detectedType;
           return { ...fileWithData, documentType: finalType };
         } catch (error) {
