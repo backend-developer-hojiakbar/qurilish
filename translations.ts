@@ -176,6 +176,7 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     login_error_device_limit: "Qurilmalar chegarasi (2 ta) to'lgan. Boshqa qurilmadan kirish uchun avval ulardan biridan tizimdan chiqing.",
     error_mic_permission: "Mikrofondan foydalanish uchun ruxsat berilmadi. Brauzer sozlamalarini tekshiring.",
     error_transcription: "Ovozni matnga o'girishda xatolik yuz berdi.",
+    language_change_confirmation: "Til o'zgardi. AI tahlilini yangi tilga moslab qayta yaratishni xohlaysizmi?",
     
     // Case Input
     case_input_section1_title: "Ish Tafsilotlari",
@@ -997,6 +998,7 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
     login_error_device_limit: "Қурилмалар чегараси (2 та) тўлган. Бошқа қурилмадан кириш учун аввал улардан биридан тизимдан чиқинг.",
     error_mic_permission: "Микрофондан фойдаланиш учун рухсат берилмади. Браузер созламаларини текширинг.",
     error_transcription: "Овозни матнга ўгиришда хатолик юз берди.",
+    language_change_confirmation: "Тил ўзгарди. АI тахлилини янги тилга мослаб қайта яратишни хоҳлайсизми?",
     
     // Case Input
     case_input_section1_title: "Иш Тафсилотлари",
@@ -1564,6 +1566,7 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
     login_error_device_limit: "Достигнут лимит устройств (2). Чтобы войти с нового устройства, сначала выйдите из системы на одном из старых.",
     error_mic_permission: "Нет доступа к микрофону. Проверьте настройки браузера.",
     error_transcription: "Произошла ошибка при преобразовании речи в текст.",
+    language_change_confirmation: "Язык изменился. Хотите заново создать анализ ИИ на новом языке?",
     
     // Case Input
     case_input_section1_title: "Детали Дела",
@@ -2114,6 +2117,7 @@ JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAY
     login_error_device_limit: "Device limit (2) reached. To log in from a new device, please log out from one of the old ones first.",
     error_mic_permission: "Microphone access was denied. Please check your browser settings.",
     error_transcription: "An error occurred during speech-to-text conversion.",
+    language_change_confirmation: "Language changed. Do you want to regenerate the AI analysis in the new language?",
     
     // Case Input
     case_input_section1_title: "Case Details",

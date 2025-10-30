@@ -142,6 +142,7 @@ export interface Case {
   tags: string[];
   folder: string | null;
   timestamp: string;
+  language?: string; // Add language field to track the language used for AI generation
 }
 
 // Replaces the simple CaseHistoryItem

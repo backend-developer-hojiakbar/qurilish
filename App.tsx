@@ -131,6 +131,10 @@ const App: React.FC = () => {
     const [loginError, setLoginError] = useState<string | null>(null);
     const [isBackendConnected, setIsBackendConnected] = useState(false);
 
+    // Store the previous language to detect changes
+    const [previousLanguage, setPreviousLanguage] = useState<string>(language);
+    const [isRegenerating, setIsRegenerating] = useState(false);
+
     // Initial load effect
     useEffect(() => {
         const token = localStorage.getItem('authToken');
@@ -171,6 +175,7 @@ const App: React.FC = () => {
                         tags: backendCase.tags || [],
                         folder: backendCase.folder,
                         timestamp: backendCase.timestamp,
+                        language: backendCase.language || 'uz-lat', // Default to uz-lat if not set
                     }));
                     setHistory(convertedCases);
                     setIsBackendConnected(true);
@@ -183,6 +188,40 @@ const App: React.FC = () => {
 
         loadCasesFromBackend();
     }, [authToken]);
+
+    // Function to regenerate AI content for a case in the current language
+    const handleRegenerateAiContent = async (caseToRegenerate: Case) => {
+        setIsRegenerating(true);
+        setIsLoading(true);
+        try {
+            // Regenerate the main legal strategy
+            const result = await getLegalStrategy(
+                caseToRegenerate.caseDetails,
+                caseToRegenerate.files,
+                caseToRegenerate.tags[0], // courtType
+                caseToRegenerate.courtStage,
+                caseToRegenerate.clientRole,
+                caseToRegenerate.clientName,
+                caseToRegenerate.participants,
+                t
+            );
+
+            // Update the case with new AI-generated content
+            const updatedCase: Case = {
+                ...caseToRegenerate,
+                result: { ...caseToRegenerate.result, ...result },
+                language: language // Update the language
+            };
+
+            updateCaseInHistory(updatedCase);
+            setCurrentCase(updatedCase);
+        } catch (error: any) {
+            alert(t(error.message) || t('error_full_analysis'));
+        } finally {
+            setIsLoading(false);
+            setIsRegenerating(false);
+        }
+    };
 
     const [activeView, setActiveView] = useState<View>('dashboard');
     const [activeCaseView, setActiveCaseView] = useState<View>('knowledge_base');
@@ -209,6 +248,28 @@ const App: React.FC = () => {
     useEffect(() => {
         localStorage.setItem('caseHistory', JSON.stringify(history));
     }, [history]);
+
+    // Detect language changes and handle AI content regeneration
+    useEffect(() => {
+        // Only process if language actually changed and we're not already regenerating
+        if (language !== previousLanguage && !isRegenerating) {
+            // Language has changed, we need to update the current case if it exists
+            if (currentCase) {
+                // Show a notification or confirmation dialog to the user
+                const shouldRegenerate = window.confirm(
+                    t('language_change_confirmation')
+                );
+                
+                if (shouldRegenerate) {
+                    // Regenerate AI content for the current case in the new language
+                    handleRegenerateAiContent(currentCase);
+                }
+            }
+            
+            // Update previous language
+            setPreviousLanguage(language);
+        }
+    }, [language, previousLanguage, currentCase, t, isRegenerating]);
 
     const handleNavigate = useCallback((view: View) => {
         const globalViews: View[] = ['dashboard', 'analyze', 'history', 'research', 'settings', 'calendar'];
@@ -374,7 +435,8 @@ const App: React.FC = () => {
                 notes: [],
                 tags: [courtType, courtStage],
                 folder: null,
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                language: language // Store the language used for this case
             };
 
             // Save to backend if connected
@@ -397,7 +459,7 @@ const App: React.FC = () => {
             setIsLoading(false);
             setPendingCaseData(null);
         }
-    }, [pendingCaseData, t, isBackendConnected]);
+    }, [pendingCaseData, t, isBackendConnected, language]);
 
     const handleSelectCase = useCallback((selectedCase: Case) => {
         setCurrentCase(selectedCase);
@@ -406,12 +468,18 @@ const App: React.FC = () => {
     }, []);
     
     const updateCaseInHistory = (updatedCase: Case) => {
-        setCurrentCase(updatedCase);
-        setHistory(prev => prev.map(c => c.id === updatedCase.id ? updatedCase : c));
+        // Ensure the language is preserved when updating a case
+        const caseWithLanguage: Case = {
+            ...updatedCase,
+            language: updatedCase.language || language
+        };
+        
+        setCurrentCase(caseWithLanguage);
+        setHistory(prev => prev.map(c => c.id === caseWithLanguage.id ? caseWithLanguage : c));
         
         // Update in backend if connected
         if (isBackendConnected) {
-            updateCase(updatedCase.id, updatedCase).catch(error => {
+            updateCase(caseWithLanguage.id, caseWithLanguage).catch(error => {
                 console.error("Failed to update case in backend:", error);
             });
         }
@@ -455,15 +523,19 @@ const App: React.FC = () => {
         setIsDeepDiveLoading(true);
         try {
             const analysis = await getDeepDiveAnalysis(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t);
-            const updatedCase = { ...currentCase, result: { ...currentCase.result, deepDiveAnalysis: analysis } };
+            const updatedCase = { 
+                ...currentCase, 
+                result: { ...currentCase.result, deepDiveAnalysis: analysis },
+                language: language // Update the language when regenerating deep dive
+            };
             updateCaseInHistory(updatedCase);
         } catch (error: any) {
             alert(t(error.message) || t('error_full_analysis'));
         } finally {
             setIsDeepDiveLoading(false);
         }
-    }, [currentCase, t]);
-    
+    }, [currentCase, t, language]);
+
     const handleUpdateCase = useCallback(async (caseId: string, additionalDetails: string, newFiles: CaseFile[]) => {
         if (!currentCase || currentCase.id !== caseId) return;
         setIsUpdating(true);
@@ -478,6 +550,7 @@ const App: React.FC = () => {
                 files: combinedFiles.map(({ content, ...rest }) => rest),
                 result: { ...currentCase.result, ...result },
                 timestamp: new Date().toISOString(),
+                language: language // Update the language when updating case
             };
             updateCaseInHistory(updatedCase);
         } catch (error: any) {
@@ -485,7 +558,7 @@ const App: React.FC = () => {
         } finally {
             setIsUpdating(false);
         }
-    }, [currentCase, t]);
+    }, [currentCase, t, language]);
 
     const handleSimulation = useCallback(async () => {
         if (!currentCase) return;
@@ -497,14 +570,24 @@ const App: React.FC = () => {
                 getClosingArgument(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, 'lead', t),
                 getClosingArgument(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, 'defender', t),
             ]);
-            const updatedCase = { ...currentCase, result: { ...currentCase.result, courtroomScenario: scenario, crossExaminationQuestions: questions, closingArgumentLead: closingLead, closingArgumentDefender: closingDefender }};
+            const updatedCase = { 
+                ...currentCase, 
+                result: { 
+                    ...currentCase.result, 
+                    courtroomScenario: scenario, 
+                    crossExaminationQuestions: questions, 
+                    closingArgumentLead: closingLead, 
+                    closingArgumentDefender: closingDefender 
+                },
+                language: language // Update the language when regenerating simulation
+            };
             updateCaseInHistory(updatedCase);
         } catch (error: any) {
             alert(t(error.message) || t('error_simulation_analysis'));
         } finally {
             setIsSimulating(false);
         }
-    }, [currentCase, t]);
+    }, [currentCase, t, language]);
 
     const handleUpdateTasks = async (newTasks: Task[]) => {
         if (!currentCase) return;
