@@ -194,6 +194,9 @@ const App: React.FC = () => {
         setIsRegenerating(true);
         setIsLoading(true);
         try {
+            // Use the case's original language if available, otherwise fallback to current UI language
+            const caseLanguage = caseToRegenerate.language || language;
+            
             // Regenerate the main legal strategy
             const result = await getLegalStrategy(
                 caseToRegenerate.caseDetails,
@@ -204,14 +207,14 @@ const App: React.FC = () => {
                 caseToRegenerate.clientName,
                 caseToRegenerate.participants,
                 t,
-                language
+                caseLanguage
             );
 
             // Update the case with new AI-generated content
             const updatedCase: Case = {
                 ...caseToRegenerate,
                 result: { ...caseToRegenerate.result, ...result },
-                language: language // Update the language
+                language: caseLanguage // Update the language
             };
 
             updateCaseInHistory(updatedCase);
@@ -262,8 +265,8 @@ const App: React.FC = () => {
                 );
                 
                 if (shouldRegenerate) {
-                    // Regenerate AI content for the current case in the new language
-                    handleRegenerateAiContent(currentCase);
+                    // Regenerate AI content for the current case in the NEW language (not the case's original language)
+                    handleRegenerateAiContent({...currentCase, language});
                 }
             }
             
@@ -523,11 +526,13 @@ const App: React.FC = () => {
         if (!currentCase) return;
         setIsDeepDiveLoading(true);
         try {
-            const analysis = await getDeepDiveAnalysis(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t, language);
+            // Use the case's original language if available, otherwise fallback to current UI language
+            const caseLanguage = currentCase.language || language;
+            const analysis = await getDeepDiveAnalysis(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t, caseLanguage);
             const updatedCase = { 
                 ...currentCase, 
                 result: { ...currentCase.result, deepDiveAnalysis: analysis },
-                language: language // Update the language when regenerating deep dive
+                language: caseLanguage // Update the language when regenerating deep dive
             };
             updateCaseInHistory(updatedCase);
         } catch (error: any) {
@@ -544,14 +549,16 @@ const App: React.FC = () => {
         const combinedFiles = [...currentCase.files, ...newFiles];
 
         try {
-            const result = await getLegalStrategy(combinedDetails, combinedFiles, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t, language);
+            // Use the case's original language if available, otherwise fallback to current UI language
+            const caseLanguage = currentCase.language || language;
+            const result = await getLegalStrategy(combinedDetails, combinedFiles, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t, caseLanguage);
             const updatedCase: Case = {
                 ...currentCase,
                 caseDetails: combinedDetails,
                 files: combinedFiles.map(({ content, ...rest }) => rest),
                 result: { ...currentCase.result, ...result },
                 timestamp: new Date().toISOString(),
-                language: language // Update the language when updating case
+                language: caseLanguage // Update the language when updating case
             };
             updateCaseInHistory(updatedCase);
         } catch (error: any) {
@@ -565,11 +572,13 @@ const App: React.FC = () => {
         if (!currentCase) return;
         setIsSimulating(true);
         try {
+            // Use the case's original language if available, otherwise fallback to current UI language
+            const caseLanguage = currentCase.language || language;
             const [scenario, questions, closingLead, closingDefender] = await Promise.all([
-                getCourtroomScenario(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t, language),
-                getCrossExaminationQuestions(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t, language),
-                getClosingArgument(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, 'lead', t, language),
-                getClosingArgument(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, 'defender', t, language),
+                getCourtroomScenario(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t, caseLanguage),
+                getCrossExaminationQuestions(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, t, caseLanguage),
+                getClosingArgument(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, 'lead', t, caseLanguage),
+                getClosingArgument(currentCase.caseDetails, currentCase.files, currentCase.tags[0], currentCase.courtStage, currentCase.clientRole, currentCase.clientName, currentCase.participants, 'defender', t, caseLanguage),
             ]);
             const updatedCase = { 
                 ...currentCase, 
@@ -580,7 +589,7 @@ const App: React.FC = () => {
                     closingArgumentLead: closingLead, 
                     closingArgumentDefender: closingDefender 
                 },
-                language: language // Update the language when regenerating simulation
+                language: caseLanguage // Update the language when regenerating simulation
             };
             updateCaseInHistory(updatedCase);
         } catch (error: any) {
@@ -752,7 +761,7 @@ const App: React.FC = () => {
             case 'notes': return <NotesView caseData={currentCase} onUpdateNotes={handleUpdateNotes} t={t} />;
             case 'billing': return <BillingView caseData={currentCase} onUpdateBilling={handleUpdateBilling} t={t} />;
             case 'debate': return <AiDebateView caseData={currentCase} onNewAnalysis={handleNewAnalysis} onRate={handleRateDebate} t={t} language={language} />;
-            case 'simulation': return <SimulationView caseData={currentCase} onNewAnalysis={handleNewAnalysis} isLoading={isSimulating} onGenerateSimulation={handleSimulation} onOpenFeedback={() => setShowFeedbackModal(true)} t={t} />;
+            case 'simulation': return <SimulationView caseData={currentCase} onNewAnalysis={handleNewAnalysis} isLoading={isSimulating} onGenerateSimulation={handleSimulation} onOpenFeedback={() => setShowFeedbackModal(true)} t={t} language={language} />;
             case 'summary': return <SummaryView caseData={currentCase} onNewAnalysis={handleNewAnalysis} onOpenFeedback={() => setShowFeedbackModal(true)} onUpdateCase={updateCaseInHistory} t={t} language={language} />;
 
             default: return <DashboardView onStartAnalysis={handleNewAnalysis} cases={history} onNavigate={handleNavigate} onSelectCase={handleSelectCase} t={t} language={language}/>;

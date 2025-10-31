@@ -11,6 +11,7 @@ interface SimulationViewProps {
   onGenerateSimulation: () => void;
   onOpenFeedback: () => void;
   t: (key: string, replacements?: { [key: string]: string }) => string;
+  language: string;
 }
 
 const renderMarkdown = (text: string | undefined) => {
