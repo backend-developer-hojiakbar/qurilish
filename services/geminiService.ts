@@ -12,6 +12,11 @@ const parseGeminiError = (error: any): Error => {
     const message = error.message || 'Unknown error';
     console.error("Gemini API Error:", error);
 
+    // Network error handling
+    if (message.includes('Failed to fetch') || message.includes('ERR_NETWORK_CHANGED') || message.includes('net::ERR_NETWORK_CHANGED')) {
+        return new Error('error_network_connection');
+    }
+
     if (message.includes('[429]')) {
         return new Error('error_api_rate_limit');
     }

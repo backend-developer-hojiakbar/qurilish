@@ -45,8 +45,14 @@ class AudioService {
       this.startTime = Date.now();
       this.mediaRecorder.start();
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error starting audio recording:', error);
+      
+      // Network error handling
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        throw new Error('error_network_connection');
+      }
+      
       throw new Error('Failed to access microphone. Please check your browser permissions.');
     }
   }

@@ -389,7 +389,7 @@ const App: React.FC = () => {
             setPendingCaseData({ caseDetails, files, courtType, courtStage, participants: suggestedParticipants, clientRole: '', clientName: '' });
             setIsLoading(false);
         } catch (error: any) {
-            alert(t(error.message) || t('error_participant_analysis'));
+            alert(t(error.message) || t('error_network_connection') || t('error_participant_analysis'));
             setIsLoading(false);
         }
     }, [t]);
@@ -536,7 +536,7 @@ const App: React.FC = () => {
             };
             updateCaseInHistory(updatedCase);
         } catch (error: any) {
-            alert(t(error.message) || t('error_full_analysis'));
+            alert(t(error.message) || t('error_network_connection') || t('error_full_analysis'));
         } finally {
             setIsDeepDiveLoading(false);
         }
@@ -562,7 +562,7 @@ const App: React.FC = () => {
             };
             updateCaseInHistory(updatedCase);
         } catch (error: any) {
-            alert(t(error.message) || t('error_update_analysis'));
+            alert(t(error.message) || t('error_network_connection') || t('error_update_analysis'));
         } finally {
             setIsUpdating(false);
         }
@@ -593,7 +593,7 @@ const App: React.FC = () => {
             };
             updateCaseInHistory(updatedCase);
         } catch (error: any) {
-            alert(t(error.message) || t('error_simulation_analysis'));
+            alert(t(error.message) || t('error_network_connection') || t('error_simulation_analysis'));
         } finally {
             setIsSimulating(false);
         }

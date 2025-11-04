@@ -171,6 +171,7 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     error_api_key_invalid: "API kaliti yaroqsiz. Administrator bilan bog'laning.",
     error_api_safety: "So'rov xavfsizlik filtrlari tomonidan bloklandi.",
     error_api_unknown: "Server bilan bog'lanishda noma'lum xatolik.",
+    error_network_connection: "Tarmoq ulanishida muammo yuz berdi. Internet aloqangizni tekshiring va qayta urinib ko'ring.",
     error_no_client_selected: "Iltimos, himoya uchun bitta mijozni tanlang.",
     error_empty_name: "Ishtirokchi ismi bo'sh bo'lishi mumkin emas.",
     login_error_device_limit: "Qurilmalar chegarasi (2 ta) to'lgan. Boshqa qurilmadan kirish uchun avval ulardan biridan tizimdan chiqing.",

@@ -49,8 +49,14 @@ const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
     }
     
     return await response.json();
-  } catch (error) {
+  } catch (error: any) {
     console.error(`API request failed for ${url}:`, error);
+    
+    // Network error handling
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      throw new Error('error_network_connection');
+    }
+    
     throw error;
   }
 };
