@@ -1,58 +1,882 @@
 export const translations: { [key: string]: { [key: string]: string } } = {
   'uz-cyrl': {
-    app_name: "Адолат АИ",
+    app_name: "Adolat AI",
+    app_subtitle: "Advokatlar uchun intellektual platforma",
+    footer_rights: "Barcha huquqlar himoyalangan.",
+    footer_supporter: "Qo'llab-quvvatlovchi:",
+    
+    // Views
+    view_dashboard_title: "Boshqaruv Paneli",
+    view_dashboard_description: "Ishlar, muddatlar va vositalarni bir joyda ko'ring.",
+    view_analyze_title: "Yangi Tahlil",
+    view_analyze_description: "Yangi ishni tahlil qilib, huquqiy strategiya oling.",
+    view_debate_title: "AI Munozarasi",
+    view_debate_description: "AI huquqshunoslarning ish bo'yicha tahliliy bahsi.",
+    view_investigation_debate_title: "Tergov Munozarasi",
+    view_investigation_debate_description: "AI tergovchilarning ish bo'yicha tahliliy bahsi.",
+    view_summary_title: "Yakuniy Strategiya",
+    view_summary_description: "Munozara yakunlari bo'yicha tayyor harakatlar rejasi.",
+    view_knowledge_base_title: "Bilimlar Bazasi",
+    view_knowledge_base_description: "Ishning tuzilgan ma'lumotlari va chuqur tahlili.",
+    view_simulation_title: "Sud Zali Simulyatori",
+    view_simulation_description: "Sud jarayoniga tayyorgarlik ko'ring va kutilmagan savollarga tayyorlaning.",
+    view_history_title: "Ishlar Arxivi",
+    view_history_description: "Barcha saqlangan ishlaringizni ko'rib chiqing.",
+    view_research_title: "Huquqiy Tadqiqotchi",
+    view_research_description: "O'zbekiston qonunchiligini AI yordamida o'rganing.",
+    view_settings_title: "Sozlamalar",
+    view_settings_description: "Profilingiz va platforma sozlamalarini boshqaring.",
+    view_investigation_materials_title: "Tergov Materiallari",
+    view_investigation_materials_description: "Tergov dalillari, gumonlanuvchilar va harakatlar rejasi.",
+    view_investigation_summary_title: "Tergov Xulosasi",
+    view_investigation_summary_description: "Tergov natijalari va keyingi qadamlar bo'yicha yakuniy hisobot.",
+    view_tasks_title: "Vazifalar",
+    view_tasks_description: "Ish bo'yicha vazifalarni boshqaring.",
+    view_documents_title: "Hujjatlar Generatori",
+    view_documents_description: "AI yordamida protsessual hujjatlarni yarating.",
+    view_timeline_title: "Xronologiya",
+    view_timeline_description: "Ishning asosiy voqealari va sanalarini kuzatib boring.",
+    view_evidence_title: "Dalillar",
+    view_evidence_description: "Ishga oid barcha dalillarni bir joyda boshqaring.",
+    view_billing_title: "Hisob-kitob",
+    view_billing_description: "Sarflangan vaqt va xarajatlarni qayd eting.",
+    view_notes_title: "Qaydlar",
+    view_notes_description: "Shaxsiy eslatmalar va fikrlarni yozib boring.",
+    view_calendar_title: "Taqvim",
+    view_calendar_description: "Barcha ishlar bo'yicha muddatlarni rejalashtiring.",
+    view_overview_title: "Umumiy ko'rinish",
+    view_overview_description: "Ishning asosiy ko'rsatkichlari va tezkor ma'lumotlar.",
+    view_witness_prep_title: "Guvohlarni Tayyorlash",
+    view_witness_prep_description: "To'g'ridan-to'g'ri va kesishgan so'roqqa tayyorgarlik ko'ring.",
+
+    // Navigation
+    nav_dashboard: "Boshqaruv Paneli",
+    nav_analyze: "Yangi Tahlil",
+    nav_debate: "AI Munozara",
+    nav_investigation_debate: "Tergov Munozarasi",
+    nav_summary: "Strategiya",
+    nav_knowledge_base: "Baza",
+    nav_simulation: "Simulyator",
+    nav_history: "Ishlar",
+    nav_research: "Tadqiqotchi",
+    nav_settings: "Sozlamalar",
+    nav_logout: "Chiqish",
+    nav_investigation_materials: "Tergov Materiallari",
+    nav_investigation_summary: "Tergov Xulosasi",
+    nav_tasks: "Vazifalar",
+    nav_documents: "Hujjatlar",
+    nav_timeline: "Xronologiya",
+    nav_evidence: "Dalillar",
+    nav_billing: "Hisob-kitob",
+    nav_notes: "Qaydlar",
+    nav_calendar: "Taqvim",
+    nav_overview: "Umumiy ko'rinish",
+    nav_witness_prep: "Guvohlar",
+
+    // Buttons
+    button_cancel: "Bekor qilish",
+    button_confirm: "Tasdiqlash",
+    button_delete: "O'chirish",
+    button_save: "Saqlash",
+    button_change: "O'zgartirish",
+    button_view: "Ko'rish",
+    button_open: "Ochish",
+    button_copy: "Nusxalash",
+    button_copied: "Nusxalandi!",
+    button_retry: "Qayta urinish",
+    button_go_back: "Ortga Qaytish",
+    button_start_new_analysis: "Yangi Tahlil Boshlash",
+    button_folders: "Jildlar",
+    button_tags: "Teglar",
+    button_analyze_strategy: "Tahlilni Boshlash",
+    button_preliminary_analysis: "Dastlabki tahlil",
+    button_view_full_analysis: "To'liq Tahlil",
+    button_analysis_starting: "Tahlil boshlanmoqda...",
+    button_deep_dive: "Chuqur Tahlil",
+    button_rate_up: "Ijobiy baho",
+    button_rate_down: "Salbiy baho",
+    button_create_document: "Hujjat yaratish",
+    button_client_report: "Mijoz hisoboti",
+    button_export: "Eksport",
+    button_defend_this_person: "Ushbu shaxsni himoya qilish",
+    button_show_details: "Batafsil ko'rish",
+    button_hide_details: "Yashirish",
+    button_generate: "Yaratish",
+    button_generating: "Yaratilmoqda...",
+    button_reveal_answer: "Javobni ko'rsatish",
+    button_export_deep_dive_pdf: "Chuqur Tahlilni PDF yuklab olish",
+    button_proceed_to_analysis: "Tahlilga o'tish",
+    button_export_investigation_report: "Tergov Hisobotini Yuklash",
+    button_export_word_summary: "Strategiyani Word (.doc) yuklash",
+    button_export_word_kb: "Hisobotni Word (.doc) yuklash",
+    button_export_pdf_summary: "Strategiyani PDF (.pdf) yuklash",
+    button_export_pdf_kb: "Hisobotni PDF (.pdf) yuklash",
+    button_feedback: "Fikr bildirish",
+    button_submit_feedback: "Fikrni Yuborish",
+    button_remove_device: "O'chirish",
+    button_generate_simulation: "Simulyatsiyani Yaratish",
+    button_add: "Qo'shish",
+    button_generate_client_summary: "Mijoz uchun xulosa",
+    button_analyze: "Tahlil qilish",
+    button_add_note: "Qayd qo'shish",
+    button_export_invoice: "Hisob-fakturani eksport qilish",
+
+    // Auth & Pricing
+    login_title: "Platformaga Kirish",
+    login_phone_label: "Telefon raqami",
+    login_token_label: "Maxfiy token",
+    login_terms_agree: "ga roziman",
+    terms_of_service: "Foydalanish shartlari",
+    login_button: "Kirish",
+    login_buy_plan: "Sotib olish",
+    auth_welcome_desc: "O'zbekiston advokatlari uchun yaratilgan intellektual platforma. Ishlaringizni tahlil qiling, g'alaba strategiyalarini yarating va sud jarayonlariga to'liq tayyor bo'ling.",
+    auth_button_login: "Kirish / Boshlash",
+    pricing_title: "Ta'riflar",
+    pricing_subtitle: "O'z ehtojlaringizga mos keladigan eng yaxshi ta'rifni tanlang va Adolat AI'ning to'liq imkoniyatlaridan foydalanishni boshlang.",
+    pricing_select_plan_title: "Ta'rifni tanlang",
+    pricing_plan_one_time: "Bir martalik",
+    pricing_price_one_time: "$10",
+    pricing_plan_1_month: "1 Oylik",
+    pricing_price_1_month: "$50",
+    pricing_plan_3_month: "3 Oylik",
+    pricing_price_3_month: "$120",
+    pricing_plan_6_month: "6 Oylik",
+    pricing_price_6_month: "$200",
+    pricing_plan_12_month: "12 Oylik",
+    pricing_price_12_month: "$350",
+    plan_duration_1_oylik: "1 oy",
+    plan_duration_3_oylik: "3 oy",
+    plan_duration_6_oylik: "6 oy",
+    plan_duration_12_oylik: "12 oy",
+    pricing_recommended: "Tavsiya etiladi",
+    pricing_price_per_month: "/oyiga",
+    pricing_button_select: "Tanlash",
+    pricing_feature_unlimited_analysis: "Cheksiz ish tahlili",
+    pricing_feature_ai_debate: "AI Huquqshunoslar munozarasi",
+    pricing_feature_simulation: "Sud zali simulyatori",
+    pricing_feature_research: "Huquqiy tadqiqotchi",
+    pricing_feature_storage: "Xavfsiz bulutli saqlash",
+    pricing_feature_support: "Premium qo'llab-quvvatlash",
+    device_id_label: "Qurilma IDsi",
+    feature_coming_soon: "Tez kunda",
+    feature_coming_soon_long: "Ushbu funksiya hozirda ishlab chiqilmoqda va tez orada taqdim etiladi.",
+
+    // Errors
+    error_generic_title: "Xatolik yuz berdi",
+    error_no_input_provided: "Ish tafsilotlarini kiriting yoki fayl yuklang.",
+    error_preliminary_analysis: "Dastlabki tahlilda xatolik. Qayta urinib ko'ring.",
+    error_participant_analysis: "Ish ishtiroqchilarini aniqlashda xatolik. Qayta urinib ko'ring.",
+    error_full_analysis: "To'liq tahlilda xatolik. Qayta urinib ko'ring.",
+    error_update_analysis: "Ishni yangilashda xatolik. Qayta urinib ko'ring.",
+    error_simulation_analysis: "Simulyatsiya ma'lumotlarini olishda xatolik.",
+    error_api_rate_limit: "API so'rovlari chegarasi oshdi. Birozdan so'ng qayta urining.",
+    error_api_key_invalid: "API kaliti yaroqsiz. Administrator bilan bog'laning.",
+    error_api_safety: "So'rov xavfsizlik filtrlari tomonidan bloklandi.",
+    error_api_unknown: "Server bilan bog'lanishda noma'lum xatolik.",
+    error_network_connection: "Tarmoq ulanishida muammo yuz berdi. Internet aloqangizni tekshiring va qayta urinib ko'ring.",
+    error_no_client_selected: "Iltimos, himoya uchun bitta mijozni tanlang.",
+    error_empty_name: "Ishtirokchi ismi bo'sh bo'lishi mumkin emas.",
+    login_error_device_limit: "Qurilmalar chegarasi (2 ta) to'lgan. Boshqa qurilmadan kirish uchun avval ulardan biridan tizimdan chiqing.",
+    error_mic_permission: "Mikrofondan foydalanish uchun ruxsat berilmadi. Brauzer sozlamalarini tekshiring.",
+    error_transcription: "Ovozni matnga o'girishda xatolik yuz berdi.",
+    language_change_confirmation: "Til o'zgardi. AI tahlilini yangi tilga moslab qayta yaratishni xohlaysizmi?",
+    
+    // Case Input
+    case_input_section1_title: "Ish Tafsilotlari",
+    case_input_details_placeholder: "Ishning barcha tafsilotlarini, da'vo arizasi va boshqa muhim ma'lumotlarni kiriting...",
+    case_input_dropzone_title: "Fayllarni torting yoki yuklash uchun bosing",
+    case_input_dropzone_subtitle: "PDF, DOCX, TXT, JPG, PNG",
+    case_input_uploaded_files_title: "Yuklangan fayllar",
+    case_input_court_type: "Sud Turi",
+    case_input_court_stage: "Sud Bosqichi",
+    case_input_ai_articles_title: "AI Taklif qilgan Moddalar",
+    case_input_research_article_tooltip: "{{article}} bo'yicha tadqiqot",
+    case_input_no_articles_found: "Tegishli moddalar topilmadi.",
+    case_input_articles_error: "Moddalarni aniqlashda xatolik.",
+    status_ai_analyzing: "AI takliflarni tayyorlamoqda...",
+    status_identifying_participants: "Ishdagi shaxslar aniqlanmoqda...",
+    file_status_reading: "O'qilmoqda...",
+    file_status_analyzing: "Tahlil qilinmoqda...",
+    file_status_error: "Xatolik",
+    file_status_read_error: "O'qishda xatolik",
+    file_status_ready: "Tayyor",
+    select_option_placeholder: "Tanlang...",
+    
+    // Client Roles
+    client_role_davogar: "Da'vogar",
+    client_role_javobgar: "Javobgar",
+    client_role_sudlanuvchi: "Sudlanuvchi",
+    client_role_jabrlanuvchi: "Jabrlanuvchi",
+    client_role_guvoh: "Guvoh",
+    client_role_boshqa: "Boshqa",
+
+    // Court Types/Stages
+    court_type_fuqarolik: "Fuqarolik",
+    court_type_jinoyat: "Jinoyat",
+    court_type_mamuriy: "Ma'muriy",
+    court_type_iqtisodiy: "Iqtisodiy",
+    court_stage_tergov: "Tergov",
+    court_stage_tergov_raw: "Tergov",
+    court_stage_birinchi_instansiya: "Birinchi instansiya",
+    court_stage_apellyatsiya: "Apellyatsiya",
+    court_stage_kassatsiya: "Kassatsiya",
+    court_stage_nazorat_tartibida: "Nazorat tartibida",
+
+    // Loading Spinner
+    loading_message_1: "AI huquqshunoslar yig'ilmoqda...",
+    loading_message_2: "Qonunchilik tahlil qilinmoqda...",
+    loading_message_3: "Dalillar o'rganilmoqda...",
+    loading_message_4: "Sud amaliyoti qidirilmoqda...",
+    loading_message_5: "G'alaba strategiyasi tuzilmoqda...",
+    loading_message_6: "Hisobot tayyorlanmoqda...",
+    loading_disclaimer: "Bu jarayon biroz vaqt olishi mumkin.",
+    deep_dive_loading: "Chuqur tahlil tayyorlanmoqda...",
+    updating_analysis_loading: "Tahlil yangilanmoqda...",
+    
+    // Empty States
+    empty_state_debate_title: "Munozara Boshlanmadi",
+    empty_state_debate_message: "AI munozarasini ko'rish uchun yangi tahlil boshlang.",
+    empty_state_summary_title: "Strategiya Yaratilmadi",
+    empty_state_summary_message: "Yakuniy strategiyani ko'rish uchun yangi tahlil boshlang.",
+    empty_state_history_title: "Ishlar Topilmadi",
+    empty_state_history_message: "'Yangi Tahlil' tugmasini bosib, birinchi ishingizni boshlang.",
+    empty_state_kb_title: "Bilimlar Bazasi Bo'sh",
+    empty_state_kb_message: "Ish ma'lumotlarini ko'rish uchun yangi tahlil boshlang.",
+    empty_state_simulation_title: "Simulyatsiya uchun ma'lumot yo'q",
+    empty_state_simulation_message: "Sud zali simulyatorini ishga tushirish uchun avval ishni tahlil qiling.",
+    empty_state_simulation_unavailable_title: "Simulyator mavjud emas",
+    empty_state_simulation_unavailable_message: "Sud zali simulyatori faqat sud bosqichidagi ishlar uchun mavjud. Tergov bosqichida bu funksiya ishlamaydi.",
+    simulation_generate_prompt_title: "Simulyatsiyani Yaratish",
+    simulation_generate_prompt_message: "Sud jarayoni ssenariysi, kesishgan so'roq savollari va yakuniy nutqlarni yaratish uchun tugmani bosing.",
+    simulation_investigation_generate_prompt_title: "Tergov Simulyatsiyasini Yaratish",
+    simulation_investigation_generate_prompt_message: "Tergov jarayonining ehtimoliy rivojlanishi, guvohlarning so'roqlari va yakuniy xulosalarni yaratish uchun tugmani bosing.",
+
+    // History
+    history_delete_modal_title: "Ishni O'chirish",
+    history_delete_modal_message: "Haqiqatan ham bu ishni o'chirmoqchimisiz? Bu harakatni qaytarib bo'lmaydi.",
+    history_search_placeholder: "Ishlar bo'yicha qidirish...",
+    history_no_search_results: "Qidiruv bo'yicha hech narsa topilmadi.",
+    history_folder_none: "Jildsiz",
+    folder_faol: "Faol",
+    folder_arxivlangan: "Arxivlangan",
+    folder_muzlatilgan: "Muzlatilgan",
+    
+    // Summary & Verdict
+    win_probability_details: "G'alaba Ehtimoli Tahlili",
+    win_probability_positive_factors: "Ijobiy Omillar",
+    win_probability_negative_factors: "Salbiy Omillar (Risklar)",
+    verdict_positive: "Ijobiy prognoz",
+    verdict_neutral: "Neytral prognoz",
+    verdict_negative: "Salbiy prognoz",
+    preliminary_verdict_title: "Dastlabki Xulosa",
+    preliminary_verdict_filename: "dastlabki_xulosa.pdf",
+    preliminary_verdict_disclaimer: "Bu AI'ning dastlabki bahosi. To'liq tahlil qilish tavsiya etiladi.",
+    modal_analyzing_as: "Tahlil",
+    participant_selector_title: "Himoya Qilinuvchi Shaxsni Tanlang",
+    participant_selector_description: "AI ish materiallarini tahlil qilib, quyidagi asosiy shaxslarni aniqladi. Kimning manfaatlari uchun kurashamiz?",
+    participant_editor_title: "Ish Ishtiroqchilarini Kiriting",
+    participant_editor_description: "AI tomonidan aniqlangan shaxslar ro'yxatini tekshiring, ularning rolini aniqlang va himoya qilinuvchi mijozni tanlang.",
+    add_participant: "Ishtirokchi qo'shish",
+    remove_participant_tooltip: "O'chirish",
+    set_as_client: "Mijoz sifatida belgilash",
+    this_is_client: "Mening mijozim",
+    participant_name_placeholder: "Ism-sharifi",
+    select_role: "Rolni tanlang",
+    client_summary_title: "Mijoz uchun qisqacha xulosa",
+    client_summary_filename: "mijoz_uchun_xulosa.txt",
+
+    // Personas
+    persona_qonun_ustuvori_name: "Qonun Ustuvori",
+    persona_qonun_ustuvori_title: "Normativist",
+    persona_qonun_ustuvori_description: "Qonunlarni mijoz foydasiga talqin qiladi.",
+    persona_strateg_name: "Strateg",
+    persona_strateg_title: "Taktik",
+    persona_strateg_description: "Raqibning zaif tomonlarini topadi va hujumga o'tadi.",
+    persona_advokat_himoyachi_name: "Advokat Himoyachi",
+    persona_advokat_himoyachi_title: "Mijozning Qalqoni",
+    persona_advokat_himoyachi_description: "Har qanday ayblovni parchalaydigan kontra-argumentlar yaratadi.",
+    persona_prokuror_name: "Prokuror",
+    persona_prokuror_title: "Hujumchi Razvedkachi",
+    persona_prokuror_description: "Raqibning har bir yurishini oldindan bashorat qiladi.",
+    persona_inson_huquqlari_name: "Inson Huquqlari",
+    persona_inson_huquqlari_title: "Konstitutsionalist",
+    persona_inson_huquqlari_description: "Mijozning poymol etilgan huquqlarini topadi.",
+    persona_sudya_name: "Sudya",
+    persona_sudya_title: "Xolis Baholovchi",
+    persona_sudya_description: "Ishni qonun va adolat nuqtai nazaridan xolis baholaydi, tomonlarning argumentlarini tarozi pallalariga qo'yadi.",
+    persona_investigator_tergovchi_name: "Tergovchi",
+    persona_investigator_tergovchi_title: "Faktlar Yig'uvchi",
+    persona_investigator_tergovchi_description: "Dalillarni to'playdi, guvohlarni so'roq qiladi va tergov harakatlarini rejalashtiradi.",
+    persona_investigator_prokuror_name: "Prokuror",
+    persona_investigator_prokuror_title: "Ayblov Nazoratchisi",
+    persona_investigator_prokuror_description: "Ishni ayblov xulosasi uchun tayyorlaydi, dalillarning yetarliligini baholaydi.",
+    persona_investigator_himoyachi_name: "Himoyachi",
+    persona_investigator_himoyachi_title: "Huquqlar Himoyachisi",
+    persona_investigator_himoyachi_description: "Tergovdagi protsessual xatoliklarni va himoya uchun imkoniyatlarni qidiradi.",
+    persona_investigator_ekspert_kriminalist_name: "Ekspert-Kriminalist",
+    persona_investigator_ekspert_kriminalist_title: "Dalillar Tahlilchisi",
+    persona_investigator_ekspert_kriminalist_description: "Ashyoviy dalillar va ekspertiza xulosalarini chuqur tahlil qiladi.",
+    persona_investigator_protsessual_nazoratchi_name: "Protsessual Nazoratchi",
+    persona_investigator_protsessual_nazoratchi_title: "Qonuniylik Posboni",
+    persona_investigator_protsessual_nazoratchi_description: "Tergov harakatlarining qonuniyligini va JPK normalariga rioya etilishini nazorat qiladi.",
+    alert_showing_details_for: "{{item}} bo'yicha ma'lumot (funksiya ishlab chiqilmoqda).",
+    legal_code_regex: "((Jinoyat|Fuqarolik|Ma'muriy javobgarlik to'g'risidagi|Iqtisodiy protsessual|Fuqarolik protsessual|Jinoyat-protsessual|Soliq|Mehnat|Oila|Uy-joy|Yer)\\s*kodeksi|JK|FK|MJtK|IPK|FPK|JPK|SK|OK|YK|Konstitutsiya)(?:(?:ning|si|sining|da|dagi|ga|siga|lari|larining)?)?\\s*\\d+(?:(?:[-–,\\s]+\\d+)*)?(?:-modda(?:si|siga|sining|lari|larining)?)?",
+
+    // Research
+    research_initial_greeting: "Assalomu alaykum! Men 'Qonun Ustuvori'man. Qanday yordam bera olaman?",
+    research_input_placeholder: "Savolingizni yozing...",
+    research_error_message: "Uzur, javob berishda xatolik. Qayta urinib ko'ring.",
+    research_query_template: "{{article}} haqida batafsil ma'lumot va Oliy Sud Plenum qarorlaridan misollar keltiring.",
+    research_sources_label: "Manbalar",
+
+    // Dashboard
+    dashboard_quick_actions: "Tezkor Amallar",
+    dashboard_action_new_analysis_title: "Yangi Tahlil",
+    dashboard_action_new_analysis_desc: "Yangi ishni tahlil qiling va strategiya oling.",
+    dashboard_action_express_analysis_title: "Ekspress Tadqiqot",
+    dashboard_action_express_analysis_desc: "Qonun moddasi bo'yicha tezkor ma'lumot oling.",
+    dashboard_action_all_cases_title: "Barcha Ishlar",
+    dashboard_action_all_cases_desc: "Saqlangan ishlaringiz arxivini ko'ring.",
+    dashboard_my_cases: "Mening Ishlarim",
+    dashboard_no_cases: "Hozircha hech qanday ish tahlil qilinmagan.",
+    dashboard_upcoming_deadlines: "Yaqinlashayotgan Muddatlar",
+    dashboard_calendar_coming_soon: "Taqvim funksiyasi tez kunda qo'shiladi.",
+    case_card_last_updated: "Oxirgi yangilanish",
+    case_title_template: "{{clientName}} ishi",
+    case_title_vs_template: '{{clientName}} vs {{opponentName}} ishi',
+    case_prefix: "Ish: ",
+    dashboard_view_all: "Barchasini ko'rish",
+    dashboard_action_voice_memo_title: "Ovozli Eslatma",
+    dashboard_action_voice_memo_desc: "Fikrlaringizni ovoz bilan yozib oling.",
+    voice_memo_start: "Yozib olish",
+    voice_memo_recording: "Yozilmoqda... (10s)",
+    voice_memo_processing: "Tahlil qilinmoqda...",
+    voice_memo_record_again: "Qayta yozish",
+    voice_memo_no_speech: "Nutq aniqlanmadi.",
+    voice_memo_select_case: "Ishni tanlang",
+    voice_memo_select_case_desc: "Ovozli eslatmani saqlash uchun ishni tanlang.",
+    voice_memo_saved_success: "Ovozli eslatma muvaffaqiyatli saqlandi!",
+    voice_memo_recorded_success: "Ovozli eslatma yozib olindi.",
+    voice_memo_seconds: "soniya",
+    voice_memo_manager_title: "Ovozli Eslatma Menejeri",
+    voice_memo_recordings: "Yozuvlar",
+    voice_memo_title: "Ovozli Eslatma",
+    voice_memo_play: "Ijro etish",
+    voice_memo_pause: "Pauza",
+    voice_memo_download: "Yuklab olish",
+    voice_memo_save_to_case: "Ishga saqlash",
+    voice_memo_delete: "O'chirish",
+    voice_memo_copy: "Nusxalash",
+    voice_memo_case_required: "Ovozli eslatmani saqlash uchun ish tanlanishi kerak.",
+
+    // Settings
+    settings_profile_title: "Profil",
+    settings_profile_name: "To'liq Ism",
+    settings_profile_name_placeholder: "Advokat Advokatov",
+    settings_profile_phone: "Telefon Raqam",
+    settings_devices_title: "Qurilmalar",
+    settings_devices_limit_info: "Sizning profilingizdan bir vaqtning o'zida 2 tagacha qurilmadan foydalanish mumkin.",
+    settings_devices_current_device: "Joriy qurilma",
+    device_current_tag: "Joriy",
+    settings_notifications_title: "Bildirishnomalar",
+    settings_notifications_placeholder: "Tez kunda qo'shiladi.",
+    
+    // PDF & Excel Export
+    pdf_report_for_case: "{{caseTitle}} ishi bo'yicha",
+    pdf_debate_filename: "AI_munozarasi_{{caseTitle}}.pdf",
+    pdf_kb_filename: "Bilimlar_bazasi_{{caseTitle}}.pdf",
+    pdf_sim_filename: "Sud_simulyatsiyasi_{{caseTitle}}.pdf",
+    pdf_kb_title: "Bilimlar Bazasi Hisoboti",
+    pdf_sim_title: "Sud Zali Simulyatori Hisoboti",
+    pdf_sim_scenario: "Sud Jarayoni Ssenariysi",
+    pdf_sim_questions: "Kesishgan So'roq Savol-Javoblari",
+    pdf_sim_closing_lead: "Yakuniy Nutq (Strateg)",
+    pdf_sim_closing_defender: "Yakuniy Nutq (Himoyachi)",
+    kb_update_section_title: "Ishni Yangilash / Ma'lumot qo'shish",
+    kb_update_notes_label: "Qo'shimcha qaydlar",
+    kb_update_notes_placeholder: "Yangi dalillar, holatlar yoki fikrlar haqida ma'lumot kiriting...",
+    kb_update_button: "Tahlilni Yangilash",
+    kb_updating_button: "Yangilanmoqda...",
+    deep_dive_filename_suffix: "chuqur_tahlil",
+    pdf_report_title: "Adolat AI - Ish Tahlili Hisoboti",
+    pdf_date_prefix: "Sana: ",
+    pdf_win_probability: "G'alaba Ehtimoli",
+    pdf_justification: "Asosnoma",
+    pdf_battle_plan: "Umumiy Yutuq Strategiyasi (Jangovar Reja)",
+    pdf_debate_title: "AI Huquqshunoslar Munozarasi",
+    pdf_preliminary_title: "Dastlabki Tahlil Xulosasi",
+    pdf_preliminary_subtitle: "Ish bo'yicha",
+    pdf_win_prob_short: "G'alaba Ehtimoli",
+    pdf_positive_factors_label: "Ijobiy Omillar",
+    pdf_negative_factors_label: "Salbiy Omillar / Risklar",
+    button_export_all_pdf: "Barchasini PDF'da yuklash",
+    pdf_kb_full_report_title: "Ish bo'yicha To'liq Hisobot",
+    pdf_kb_full_report_filename: "Toliq_hisobot_{{caseTitle}}.pdf",
+    kb_case_details: "Ish Tafsilotlari",
+    kb_participants_title: "Ish Ishtirokchilari",
+    kb_client_tag: "Mijoz",
+    kb_key_facts: "Asosiy Faktlar",
+    kb_legal_issues: "Huquqiy Masalalar",
+    kb_applicable_laws: "Qo'llaniladigan Qonunlar",
+    kb_strengths: "Kuchli Tomonlar",
+    kb_weaknesses: "Zaif Tomonlar",
+    kb_deep_dive_title: "Chuqur Tahlil",
+    kb_deep_dive_prompt: "Ishning barcha nozik jihatlarini, raqibning mumkin bo'lgan harakatlarini va qarshi argumentlarni o'z ichiga olgan batafsil tahlil.",
+    kb_sol_title: "Da'vo Muddati",
+    kb_key_evidence: "Asosiy Dalillar",
+    kb_potential_charges: "Mumkin Bo'lgan Ayblovlar",
+    investigation_suspects_title: "Gumonlanuvchilar",
+    investigation_actions_title: "Tergov Harakatlari Rejasi",
+    investigation_procedural_issues_title: "Protsessual Muammolar",
+    investigation_evidence_label: "Dalillar",
+    investigation_no_suspects: "Hozircha gumonlanuvchilar aniqlanmadi.",
+    investigation_action_collect_evidence: "Dalillarni yig'ish",
+    investigation_action_interview_witnesses: "Guvohlarni so'roq qilish",
+    investigation_action_analyze_documents: "Hujjatlarni tahlil qilish",
+    investigation_action_check_procedural_compliance: "Protsessual qonuniylikni tekshirish",
+    kb_no_evidence_specified: "Hech qanday dalil ko'rsatilmagan",
+    sol_status_OK: "Muddati o'tmagan",
+    sol_status_Muddati_otgan: "Muddati o'tgan",
+    sol_status_Xavf_ostida: "Xavf ostida",
+    risk_matrix_title: "Risklar Matritsasi",
+    risk_matrix_header_risk: "Risk",
+    risk_matrix_header_likelihood: "Ehtimollik",
+    risk_matrix_header_mitigation: "Kamaytirish choralari",
+    likelihood_past: "Past",
+    likelihood_orta: "O'rta",
+    likelihood_yuqori: "Yuqori",
+    
+    // Simulation
+    simulation_scenario_title: "Sud Jarayoni Ssenariysi",
+    simulation_scenario_desc: "Sud majlisining mumkin bo'lgan rivoji va kutilmagan holatlar.",
+    simulation_questions_title: "Kesishgan So'roq Mashg'uloti",
+    simulation_questions_desc: "Raqib tomonning eng noqulay savollariga tayyorlaning.",
+    simulation_closing_title: "Yakuniy Nutqlar",
+    simulation_closing_desc: "Strateg va Himoyachi nigohi bilan ikki xil yondashuv.",
+    simulation_data_not_generated: "Ma'lumotlar hali yaratilmagan.",
+    simulation_ai_question_prefix: "AI Savoli",
+    simulation_qa_your_answer_label: "Sizning javobingiz:",
+    simulation_your_answer_placeholder: "Javobingizni shu yerga yozing...",
+    simulation_qa_compare_with_ai: "AI Tavsiyasi bilan solishtirish",
+    simulation_qa_hide_suggestion: "Tavsiyani yashirish",
+    simulation_qa_ai_suggestion_label: "AI Tavsiyasi:",
+    excel_sim_question: "Savol",
+    excel_sim_answer: "Tavsiya etilgan javob",
+    excel_sim_closing_lead: "Yakuniy nutq (Strateg)",
+    excel_sim_closing_defender: "Yakuniy nutq (Himoyachi)",
+    button_export_word_simulation: "Simulyatsiyani Word (.doc) yuklash",
+
+    // Feedback
+    feedback_modal_title: "Fikr-mulohaza bildirish",
+    feedback_rating_label: "Bu natija qanchalik foydali bo'ldi?",
+    feedback_tags_label: "Nima yaxshi yoki yomon bo'ldi?",
+    feedback_tag_inaccurate: "Natija noto'g'ri",
+    feedback_tag_helpful: "Juda foydali",
+    feedback_tag_unclear: "Tushunarsiz",
+    feedback_tag_other: "Boshqa",
+    feedback_comment_label: "Qo'shimcha izohlar (ixtiyoriy)",
+    feedback_comment_placeholder: "Fikrlaringizni shu yerga yozing...",
+    feedback_thank_you: "Rahmat!",
+
+    // Tasks
+    tasks_add_placeholder: "Yangi vazifa qo'shish...",
+    tasks_pending_title: "Bajariladigan",
+    tasks_completed_title: "Bajarilgan",
+    tasks_none_pending: "Bajariladigan vazifalar yo'q.",
+    tasks_ai_prioritize: "AI Saralash",
+    tasks_prioritizing: "Saralanmoqda...",
+    
+    // Document Generator
+    doc_generator_template_label: "Hujjat shablonini tanlang",
+    doc_generator_history: "Hujjatlar tarixi",
+    empty_state_documents_title: "Hujjatlar Yaratilmagan",
+    empty_state_documents_message: "Hujjat generatoridan foydalanish uchun mavjud ishni tanlang.",
+    error_doc_generation: "Hujjat yaratishda xatolik yuz berdi. Iltimos, keyinroq qayta urinib ko'ring.",
+    doc_template_davo_arizasi: "Da'vo arizasi",
+    doc_template_iltimosnoma: "Iltimosnoma",
+    doc_template_kassatsiya_shikoyati: "Kassatsiya shikoyati",
+    doc_template_apellyatsiya_shikoyati: "Apellyatsiya shikoyati",
+    doc_template_qarshi_davo_arizasi: "Qarshi da'vo arizasi",
+    doc_template_advokat_sorovi: "Advokat so'rovi",
+    doc_template_kafillik_xati: "Kafillik xati",
+    doc_template_dalillarni_qabul_qilish_togrisida_ariza: "Dalillarni qabul qilish to'g'risida ariza",
+
+    // Timeline
+    timeline_generate_button: "Xronologiyani Yaratish",
+    timeline_generating: "Yaratilmoqda...",
+    timeline_empty: "Ish uchun xronologiya hali yaratilmagan.",
+    timeline_add_event: "Voqea qo'shish",
+    timeline_add_event_title: "Yangi voqea qo'shish",
+    timeline_event_date: "Sana",
+    timeline_event_description: "Tavsif",
+    timeline_event_description_placeholder: "Voqea tavsifi...",
+    timeline_add_first_event: "Birinchi voqeani qo'shish",
+
+    // Evidence
+    evidence_upload_prompt: "Dalillarni yuklash (PDF, Rasm, Video)",
+    evidence_uploaded_title: "Yuklangan Dalillar",
+    evidence_none: "Hali hech qanday dalil yuklanmagan.",
+    evidence_analyze_doc: "Hujjatni Tahlil qilish",
+    evidence_summary_title: "Hujjatning qisqacha mazmuni",
+    evidence_qa_title: "Hujjat bo'yicha savol-javob",
+    evidence_qa_placeholder: "Hujjat haqida savol bering...",
+    evidence_button_summarize: "Mazmunini yaratish",
+    evidence_button_ask: "So'rash",
+    evidence_uploading: "Yuklanmoqda...",
+    evidence_supported_formats: "PDF, DOC, DOCX, TXT, JPG, PNG, MP4, MOV",
+    evidence_upload_first: "Birinchi dalilni yuklash",
+
+    // Billing
+    billing_add_entry: "Yangi yozuv qo'shish",
+    billing_description: "Tavsif",
+    billing_hours: "Soatlar",
+    billing_date: "Sana",
+    billing_total: "Jami",
+    billing_grand_total: "Umumiy jami",
+    billing_rate: "Stavka",
+    billing_no_entries: "Hali yozuvlar mavjud emas.",
+    invoice_title: "HISOB-FAKTURA",
+    invoice_number: "Hisob-faktura №",
+    invoice_date: "Sana",
+    invoice_from: "Kimdan",
+    invoice_to: "Kimga",
+    invoice_advocate_name: "Advokat Ismi (placeholder)",
+    invoice_advocate_details: "Litsenziya, Manzil, Tel (placeholder)",
+    invoice_item_description: "Xizmat tavsifi",
+    invoice_item_hours: "Soat",
+    invoice_item_rate: "Stavka",
+    invoice_item_amount: "Summa",
+    invoice_subtotal: "Jami",
+    invoice_tax: "QQS (0%)",
+    invoice_total_due: "To'lanishi kerak",
+
+    // Notes
+    notes_add_placeholder: "Yangi qayd qo'shing...",
+    notes_empty: "Hali hech qanday qaydlar mavjud emas.",
+
+    // Calendar
+    calendar_title: "Taqvim",
+    
+    // Overview
+    overview_quick_stats: "Tezkor statistika",
+    overview_next_tasks: "Keyingi vazifalar",
+    overview_upcoming_deadlines: "Yaqinlashayotgan muddatlar",
+    overview_strategy_snippet: "Strategiya parchasi",
+    overview_view_all: "Barchasini ko'rish",
+
+    // Witness Prep
+    witness_prep_select: "Tayyorgarlik uchun ishtirokchini tanlang",
+    witness_prep_generate: "Tayyorgarlikni boshlash",
+    witness_prep_generating: "Savollar yaratilmoqda...",
+    witness_prep_direct_exam: "To'g'ridan-to'g'ri so'roq",
+    witness_prep_cross_exam: "Kesishgan so'roqqa tayyorgarlik",
+    witness_prep_empty: "Ishtirokchini tanlab, savollar va javob strategiyalarini yarating.",
+
+    // Prompts (Do not show to user directly)
+    prompt_legal_strategy: `SEN ADVOKATLAR UCHUN YARATILGAN, 5 TA TURDAGI INTELLEKTUAL AI HUQUQSHUNOSLARDAN IBORAT JAMOASAN.
+SENGA O'ZBEKISTON RESPUBLIKASI QONUNCHILIGI BO'YICHA FUQAROLIK, JINOYAT, MA'MURIY YOKI IQTISODIY ISH TAQDIM ETILADI.
+SENING MAQSADING - TAQDIM ETILGAN ISH HOLATLARINI HAR TOMONLAMA TAHLIL QILIB, ADVOKAT UCHUN G'ALABA STRATEGIYASINI ISHLAB CHIQISH.
+
+JAMOANGDAGI HAR BIR AI O'ZINING ROLIDAN KELIB CHIQIB TAHLIL QILADI:
+1.  **Qonun Ustuvori (Normativist):** Faqat O'zbekiston qonunlari, kodekslari va Oliy Sud Plenum qarorlariga asoslanadi. Qonun moddalarini mijoz foydasiga qanday talqin qilish mumkinligini ko'rsatadi. Har bir fikri aniq qonun moddasiga asoslanishi shart. Aniq faktlar va moddalarni generatsiya qilmasdan, taqdim etilgan ma'lumotlar asosida tahlil qiladi.
+2.  **Strateg (Taktik):** Raqib tomonning (da'vogar, prokuror, javobgar) mumkin bo'lgan harakatlarini, argumentlarini va dalillarini oldindan ko'ra oladi. Ularning zaif tomonlarini topadi va ularga qarshi qanday taktik yurishlar qilish kerakligini ko'rsatadi. Jarayonni shaxmat o'yinidek ko'radi.
+3.  **Advokat Himoyachi (Mijozning Qalqoni):** Faqat mijozning manfaatini o'ylaydi. Har qanday ayblov yoki da'voni parchalaydigan kuchli kontra-argumentlar yaratadi. Mijoz uchun eng maqbul himoya pozitsiyasini ishlab chiqadi. Emotsional va ishonarli dalillar keltiradi.
+4.  **Prokuror (Hujumchi Razvedkachi):** O'zini ayblovchi yoki da'vogar tomonning o'rniga qo'yadi. Mijozga qarshi qanday eng kuchli dalillar borligini aniqlaydi va advokatni shu hujumlarga tayyorlaydi. Ishdagi eng xavfli nuqtalarni fosh qiladi.
+5.  **Inson Huquqlari (Konstitutsionalist):** Ishda Konstitutsiya, xalqaro shartnomalar yoki inson huquqlari bo'yicha qonunlar buzilganligini qidiradi. Protsessual xatoliklarni topadi va ulardan qanday foydalanish mumkinligini ko'rsatadi.
+
+VAZIFANG:
+1.  **Munozara:** Har bir AI o'z tahlilini taqdim etadi. Tahlillar bir-birini takrorlamasligi, har biri o'zining yondashuviga sodiq qolishi kerak.
+2.  **Umumiy Yutuq Strategiyasi (Jangovar Reja):** Barcha AI'larning fikrlarini umumlashtirib, advokat uchun aniq, qadam-baqadam harakatlar rejasini (strategiya) tuzib ber. Bu strategiya Markdown formatida, sarlavhalar va listlar bilan chiroyli tarzda tuzilishi kerak.
+3.  **G'alaba Ehtimoli:** Ishni yutish ehtimolini 0 dan 100 gacha foizda bahola va qisqacha asoslab ber.
+4.  **Omillar:** G'alabaga ta'sir qiluvchi 3-4 ta eng muhim ijobiy va 3-4 ta salbiy omillarni (risklar) sanab o't.
+5.  **Bilimlar Bazasi:** Ish bo'yicha tuzilgan bilimlar bazasini (Knowledge Base) yarat. Unda asosiy faktlar, huquqiy masalalar, qo'llaniladigan qonunlar (lex.uz saytidan URL bilan birga, agar topilsa), kuchli va zaif tomonlar, hamda da'vo muddati (statute of limitations) bo'yicha tahlil bo'lishi kerak. Da'vo muddati holatini ('OK', 'Muddati o\\'tgan', 'Xavf ostida') aniq ko'rsat va asosla.
+
+ISH BO'YICHA MA'LUMOTLAR:
+- **Sud Turi:** {{courtType}}
+- **Sud Bosqichi:** {{courtStage}}
+- **Mening Mijozim:** {{clientName}} (Roli: {{clientRole}})
+- **Ish ishtirokchilari:**
+{{participantsList}}
+- **Ish Tafsilotlari va Hujjatlar Mazmuni:**
+{{caseDetailsWithFiles}}
+
+JAVOBNI FAQAT JSON FORMATIDA, quyidagi responseSchema'ga QAT'IY RIOYA QILGAN HOLDA QAYTAR. Boshqa hech qanday matn qo'shma.`,
+    prompt_investigation_strategy: `SEN ADVOKATLAR UCHUN YARATILGAN, 5 TA TURDAGI INTELLEKTUAL AI TERGOVCHILARDAN IBORAT JAMOASAN.
+SENGA O'ZBEKISTON RESPUBLIKASI QONUNCHILIGI BO'YICHA JINOYAT ISHI BO'YICHA TERGOV MATERIALLARI TAQDIM ETILADI.
+SENING MAQSADING - TAQDIM ETILGAN ISH HOLATLARINI HAR TOMONLAMA TAHLIL QILIB, HIMOYACHI (ADVOKAT) UCHUN TERGOVDA G'ALABA STRATEGIYASINI ISHLAB CHIQISH.
+
+JAMOANGDAGI HAR BIR AI O'ZINING ROLIDAN KELIB CHIQIB TAHLIL QILADI:
+1.  **Tergovchi (Faktlar Yig'uvchi):** Dalillarni to'playdi, guvohlarni so'roq qiladi va tergov harakatlarini rejalashtiradi. Himoya uchun qanday qo'shimcha dalillar to'plash kerakligini ko'rsatadi.
+2.  **Prokuror (Ayblov Nazoratchisi):** Ishni ayblov xulosasi uchun tayyorlaydi, dalillarning yetarliligini baholaydi. Himoyachi uchun ayblovning zaif nuqtalarini ochib beradi.
+3.  **Himoyachi (Huquqlar Himoyachisi):** Tergovdagi protsessual xatoliklarni va himoya uchun imkoniyatlarni qidiradi. Mijozning huquqlari buzilganligini aniqlaydi va ulardan qanday foydalanishni ko'rsatadi.
+4.  **Ekspert-Kriminalist (Dalillar Tahlilchisi):** Ashyoviy dalillar va ekspertiza xulosalarini chuqur tahlil qiladi. Ekspertiza xulosalaridagi noaniqliklar yoki xatoliklarni topadi.
+5.  **Protsessual Nazoratchi (Qonuniylik Posboni):** Tergov harakatlarining qonuniyligini va JPK normalariga rioya etilishini nazorat qiladi. JPK buzilishlarini aniqlaydi va ularning oqibatlarini tushuntiradi.
+
+VAZIFANG:
+1.  **Munozara:** Har bir AI o'z tahlilini taqdim etadi. Tahlillar bir-birini takrorlamasligi, har biri o'zining yondashuviga sodiq qolishi kerak.
+2.  **Umumiy Himoya Strategiyasi:** Barcha AI'larning fikrlarini umumlashtirib, advokat uchun tergov bosqichida aniq, qadam-baqadam harakatlar rejasini tuzib ber.
+3.  **Ishning Sud Perspektivasi:** Ishning sudga chiqish ehtimolini 0 dan 100 gacha foizda bahola va qisqacha asoslab ber.
+4.  **Omillar:** Himoya pozitsiyasining 3-4 ta eng muhim ijobiy va 3-4 ta salbiy omillarini (risklar) sanab o't.
+5.  **Tergov Materiallari Bazasi:** Ish bo'yicha tuzilgan bilimlar bazasini yarat. Unda asosiy dalillar, gumonlanuvchilar/ayblanuvchilar, asosiy huquqiy masalalar, qo'llaniladigan qonunlar (JPK va JK moddalari), himoyaning kuchli va zaif tomonlari, hamda ehtiyot chorasi bo'yicha tahlil bo'lishi kerak.
+
+ISH BO'YICHA MA'LUMOTLAR:
+- **Sud Turi:** {{courtType}}
+- **Sud Bosqichi:** {{courtStage}}
+- **Mening Mijozim:** {{clientName}} (Roli: {{clientRole}})
+- **Ish ishtirokchilari:**
+{{participantsList}}
+- **Ish Tafsilotlari va Hujjatlar Mazmuni:**
+{{caseDetailsWithFiles}}
+
+JAVOBNI FAQAT JSON FORMATIDA, quyidagi responseSchema'ga QAT'IY RIOYA QILGAN HOLDA QAYTAR. Boshqa hech qanday matn qo'shma.`,
+    prompt_preliminary: `SEN TEZKOR HUQUQIY TAHLILCHI AI'SAN.
+Sening vazifang - taqdim etilgan ish bo'yicha qisqa ma'lumotlarga asoslanib, faqat 4 ta narsani aniqlab berish:
+1.  G'alaba ehtimoli (0-100% oralig'ida).
+2.  Ehtimol uchun qisqa (1-2 jumla) asosnoma.
+3.  G'alabaga yordam beruvchi 2-3 ta asosiy ijobiy omil.
+4.  G'alabaga to'sqinlik qiluvchi 2-3 ta asosiy salbiy omil (risk).
+
+ISH BO'YICHA MA'LUMOTLAR:
+- **Sud Turi:** {{courtType}}
+- **Sud Bosqichi:** {{courtStage}}
+- **Mening Mijozim:** {{clientName}} (Roli: {{clientRole}})
+- **Ish ishtirokchilari:**
+{{participantsList}}
+- **Ish Tafsilotlari va Hujjatlar Mazmuni:**
+{{caseDetailsWithFiles}}
+
+JAVOBNI FAQAT JSON FORMATIDA, quyidagi preliminaryResponseSchema'ga QAT'IY RIOYA QILGAN HOLDA QAYTAR. Boshqa hech qanday matn qo'shma.`,
+    prompt_participants: `SEN INTELLEKTUAL MATN TAHLILCHISISAN.
+Sening vazifang - taqdim etilgan matn (ish tafsilotlari va hujjatlar)dan ishda qatnashayotgan barcha shaxslarning ISMLARINI aniqlash va ularning taxminiy ROLINI topish.
+Aniqlangan ismlar to'liq (Familiya, Ism, Sharif) bo'lishi kerak, agar matnda berilgan bo'lsa.
+Rol sifatida faqat quyidagi variantlardan birini tanla: "Da'vogar", "Javobgar", "Sudlanuvchi", "Jabrlanuvchi", "Guvoh", "Boshqa".
+
+MATN:
+{{caseDetailsWithFiles}}
+
+Javobni FAQAT JSON formatida, participantsResponseSchema'ga QAT'IY RIOYA QILGAN HOLDA QAYTAR. Boshqa hech qanday matn qo'shma.`,
+    prompt_article_summary: `SEN O'ZBEKISTON QONUNCHILIGI BO'YICHA EKSPERT AI'SAN.
+Sening vazifang - so'ralgan qonun moddasi bo'yicha QISQA va TUSHUNARLI SHARH berish.
+Agar Oliy Sud Plenumining ushbu moddaga oid qarorlari bo'lsa, ulardan eng muhimini qisqacha keltirib o't.
+Javobing 2-3 ta gapdan oshmasin.
+
+MODDA: {{article}}`,
+    prompt_doc_type: `SEN HUJJATLARNI TASNIFLOVCHI AI'SAN.
+Sening vazifang - taqdim etilgan hujjat matni yoki tasviridan uning turini aniqlash.
+Aniqlangan tur faqat quyidagi ro'yxatdan biri bo'lishi kerak: "Shartnoma", "Da'vo arizasi", "Sud qarori", "Dalolatnoma", "Ishonchnoma", "Bildirishnoma", "Boshqa".
+
+Javobni FAQAT JSON formatida, docTypeResponseSchema'ga QAT'IY RIOYA QILGAN HOLDA QAYTAR. Boshqa hech qanday matn qo'shma.`,
+    prompt_research_system: `SEN O'ZBEKISTON QONUNCHILIGI BO'YICHA EKSPERT AI YORDAMCHISISAN. Isming "Qonun Ustuvori".
+Sening vazifang - advokatlarning huquqiy savollariga O'zbekiston Respublikasi qonunlari, kodekslari va Oliy Sud Plenum qarorlariga asoslanib, aniq, qisqa va ishonchli javoblar berish.
+Har bir javobingda iloji boricha aniq qonun moddalariga havolalar keltir.
+Javoblaring rasmiy, ammo tushunarli tilda bo'lsin. foydalanuvchi bilan o'zbek tilida (lotin alifbosida) muloqot qil.`,
+    prompt_deep_dive: `SEN TAJRIBALI ADVOKAT VA STRATEGSAN.
+Sening vazifang - taqdim etilgan ish materiallari asosida, advokat uchun JUDA CHUQUR va BATAFSIL tahliliy material tayyorlash. Bu tahlil quyidagilarni o'z ichiga olishi kerak:
+1.  **Ishning Noma'lum Qirralari:** Taqdim etilgan ma'lumotlarda yashirin bo'lishi mumkin bo'lgan, ammo ishning natijasiga jiddiy ta'sir ko'rsatishi mumkin bo'lgan jihatlar (masalan, yashirin motivlar, isbotlanmagan faktlar, e'tibordan chetda qolgan detallar).
+2.  **Raqib Tomonning Ehtimoliy Strategiyasi:** Raqib (prokuror, da'vogar va hokazo) qanday argumentlar keltirishi, qanday dalillarga tayanishi va sud jarayonida o'zini qanday tutishi mumkinligi haqida batafsil taxminlar. Ular keltirishi mumkin bo'lgan eng "kutilmagan" dalil yoki guvoh nima bo'lishi mumkin?
+3.  **Qarshi Argumentlar Arsenali:** Raqibning har bir ehtimoliy argumentiga qarshi tayyor, qonunga asoslangan va mantiqiy kontra-argumentlar ro'yxati.
+4.  **Isbotlash Zanjiri:** Mijozning pozitsiyasini isbotlash uchun qanday dalillarni ketma-ketlikda va qanday taqdim etish kerakligi haqida reja. Qaysi dalil eng muhim? Qaysi guvohning ko'rsatmasi hal qiluvchi bo'lishi mumkin?
+5.  **Protsessual Imkoniyatlar:** Ishni yutish uchun qanday protsessual harakatlardan (yangi ekspertiza tayinlash, rad qilish, iltimosnomalar kiritish va hokazo) foydalanish mumkinligi haqida amaliy tavsiyalar.
+
+Javobingni sarlavhalar bilan, Markdown formatida, batafsil va advokat uchun amaliy qo'llanma sifatida tayyorla.
+
+ISH BO'YICHA MA'LUMOTLAR:
+- **Sud Turi:** {{courtType}}
+- **Sud Bosqichi:** {{courtStage}}
+- **Mening Mijozim:** {{clientName}} (Roli: {{clientRole}})
+- **Ish ishtirokchilari:**
+{{participantsList}}
+- **Ish Tafsilotlari va Hujjatlar Mazmuni:**
+{{caseDetailsWithFiles}}`,
+    prompt_courtroom_scenario: `SEN SUD ZALI SIMULYATORISAN.
+Vazifang - taqdim etilgan ish materiallari asosida, sud majlisining eng ehtimoliy va dramatik ssenariysini yozib berish. Ssenariy quyidagilarni o'z ichiga olishi kerak:
+-   Sudyaning jarayonni ochishi.
+-   Tomonlarning qisqacha kirish so'zlari.
+-   Asosiy guvohlarning so'roq qilinishi (eng keskin va kutilmagan savol-javoblar).
+-   Tomonlarning dalillarni taqdim etishidagi muhim nuqtalar.
+-   Sud jarayonida yuzaga kelishi mumkin bo'lgan kutilmagan holat (masalan, yangi dalil paydo bo'lishi, guvohning ko'rsatmasini o'zgartirishi).
+-   Tomonlarning yakuniy muzokaralardagi eng kuchli argumentlari.
+
+Ssenariy adabiy tilda, sud jarayonining ruhini aks ettiradigan tarzda yozilishi kerak. Maqsad - advokatni sud zalidagi psixologik bosimga va kutilmagan vaziyatlarga tayyorlash.
+
+ISH BO'YICHA MA'LUMOTLAR:
+- **Mening Mijozim:** {{clientName}} (Roli: {{clientRole}})
+- **Ish ishtirokchilari:**
+{{participantsList}}
+- **Ish Tafsilotlari:**
+{{caseDetailsWithFiles}}`,
+    prompt_cross_examination: `SEN TAJRIBALI PROKUROR VA ADVOKATSAN.
+Vazifang - taqdim etilgan ish materiallari asosida, kesishgan so'roq (перекрестный допрос) uchun savollar ro'yxatini tuzish.
+Bu savollar quyidagi maqsadlarga yo'naltirilgan bo'lishi kerak:
+-   Mijoz va uning guvohlarini obro'sizlantirishga urinish.
+-   Ularning ko'rsatmalaridagi qarama-qarshiliklarni fosh qilish.
+-   Ularni yolg'on gapirishga majbur qilish yoki shubha ostiga qo'yish.
+-   Advokat kutmagan noqulay savollar berish.
+
+Har bir savol uchun, advokatga yordam sifatida qisqa, ammo samarali "tavsiya etilgan javob" ham yozib ber. Bu javob savolning "zaharini" kesishi va vaziyatni mijoz foydasiga o'zgartirishi kerak.
+
+ISH BO'YICHA MA'LUMOTLAR:
+- **Mening Mijozim:** {{clientName}} (Roli: {{clientRole}})
+- **Ish ishtirokchilari:**
+{{participantsList}}
+- **Ish Tafsilotlari:**
+{{caseDetailsWithFiles}}
+
+JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLDA QAYTAR.`,
+    prompt_closing_argument_lead: `SEN "STRATEG" ROLIDAGI AI'SAN.
+Vazifang - taqdim etilgan ish materiallari asosida, sud muzokaralari uchun YAKUNIY NUTQ (обвинительная речь) matnini yozish.
+Nutq quyidagi xususiyatlarga ega bo'lsin:
+-   **Hujumkor va Ayblovchi:** Raqib tomonning dalillarini puchga chiqarib, ularning zaif tomonlarini ochib tashla.
+-   **Mantiqiy va Ketma-ket:** Barcha dalillarni bir-biriga bog'lab, ayblov yoki da'voni mustahkam isbotlab ber.
+-   **Ishonarli:** Sudyaga ta'sir o'tkazadigan ritorik usullardan foydalan.
+
+ISH BO'YICHA MA'LUMOTLAR:
+- **Mening Mijozim:** {{clientName}} (Roli: {{clientRole}})
+- **Ish ishtirokchilari:**
+{{participantsList}}
+- **Ish Tafsilotlari:**
+{{caseDetailsWithFiles}}`,
+    prompt_closing_argument_defender: `SEN "ADVOKAT HIMOYACHI" ROLIDAGI AI'SAN.
+Vazifang - taqdim etilgan ish materiallari asosida, sud muzokaralari uchun YAKUNIY NUTQ (защитительная речь) matnini yozish.
+Nutq quyidagi xususiyatlarga ega bo'lsin:
+-   **Himoyaviy va Oqlovchi:** Ayblov yoki da'voning asossizligini ko'rsatib, mijozni himoya qil.
+-   **Emotsional va Ta'sirchan:** Sudyaning adolat tuyg'usiga murojaat qil. Mijozning insoniy tomonlarini ochib ber.
+-   **Qonunga Asoslangan:** Har bir himoya argumentini qonun moddalari bilan mustahkamla.
+
+ISH BO'YICHA MA'LUMOTLAR:
+- **Mening Mijozim:** {{clientName}} (Roli: {{clientRole}})
+- **Ish ishtirokchilari:**
+{{participantsList}}
+- **Ish Tafsilotlari:**
+{{caseDetailsWithFiles}}`,
+    prompt_document_generation: `SEN TAJRIBALI YURIST YORDAMCHISI AI'SAN.
+Sening vazifang - taqdim etilgan ish materiallari va shablon asosida rasmiy yuridik hujjat matnini O'zbekiston Respublikasi qonunchiligiga muvofiq holda tayyorlash.
+Hujjat professional, xatosiz va barcha kerakli rekvizitlarni (sud nomi, da'vogar, javobgar va hokazo) o'z ichiga olishi kerak.
+Matnni faqat hujjatning o'zidan iborat bo'lishini ta'minla. Hech qanday qo'shimcha izoh, sarlavha yoki tushuntirish qo'shma.
+
+- **Hujjat turi:** {{docType}}
+- **Mening Mijozim:** {{clientName}} (Roli: {{clientRole}})
+- **Sud Turi:** {{courtType}}
+- **Ish ishtirokchilari:**
+{{participantsList}}
+- **Ishning qisqacha mazmuni:**
+{{summary}}
+- **Ish Tafsilotlari:**
+{{caseDetails}}
+`,
+    prompt_generate_client_summary: `SEN TAJRIBALI ADVOKATSAN.
+Sening vazifang - quyida keltirilgan murakkab yuridik strategiyani olib, uni mijoz uchun tushunarli, oddiy va qisqa (2-3 xatboshi) matnga aylantirish.
+Yuridik atamalardan foydalanma. Asosiy e'tiborni quyidagilarga qarat:
+1.  Ishning hozirgi holati qanday?
+2.  Bizning asosiy rejamiz nima?
+3.  Keyingi qadamlar qanday bo'ladi?
+4.  Mijoz uchun ijobiy va salbiy tomonlar nimalardan iborat?
+
+Maqsad - mijozni xotirjam qilish va jarayonni unga tushuntirish.
+
+Yuridik Strategiya:
+{{summary}}`,
+    prompt_prioritize_tasks: `SEN TAJRIBALI ADVOKAT YORDAMCHISISAN.
+Sening vazifang - quyida berilgan vazifalar ro'yxatini O'zbekistondagi yuridik amaliyot va protsessual qonunchilik nuqtai nazaridan eng muhim va shoshilinchidan boshlab tartiblash.
+Faqat tartiblangan ro'yxatni qaytar, boshqa hech qanday izoh qo'shma.
+
+Vazifalar ro'yxati:
+{{tasksList}}
+
+JAVOBNI FAQAT JSON formatida, prioritizeTasksSchema'ga QAT'IY RIOYA QILGAN HOLDA QAYTAR.`,
+    prompt_generate_timeline: `SEN INTELLEKTUAL MATN TAHLILCHISISAN.
+Sening vazifang - taqdim etilgan matndan ishga oid asosiy voqealar va sanalarni ajratib olib, xronologik jadval tuzish.
+Har bir voqea uchun sana (YYYY-MM-DD formatida) va qisqa tavsif bo'lishi kerak. Agar aniq sana bo'lmasa, taxminiy sanani (masalan, oy yoki yil) ko'rsat.
+Muhim protsessual muddatlarni (masalan, apellyatsiya berish muddati) 'deadline' turi bilan belgilab chiq.
+
+Ish Tafsilotlari:
+{{caseDetailsWithFiles}}
+
+JAVOBNI FAQAT JSON formatida, timelineSchema'ga QAT'IY RIOYA QILGAN HOLDA QAYTAR.`,
+    prompt_summarize_document: `SEN TAJRIBALI ADVOKAT YORDAMCHISISAN.
+Sening vazifang - quyida keltirilgan hujjat matnini o'qib, uning qisqa va aniq mazmunini (summary) chiqarib berish.
+Asosiy e'tiborni quyidagilarga qarat:
+- Hujjatning asosiy maqsadi nima?
+- Unda kimlar ishtirok etmoqda?
+- Asosiy sana, summa yoki shartlar bormi?
+- Advokat uchun eng muhim jihati nimada?
+
+Matn:
+{{documentText}}`,
+    prompt_answer_document_question: `SEN INTELLEKTUAL HUJJAT TAHLILCHISISAN.
+Sening vazifang - quyida keltirilgan hujjat matnidan foydalanib, berilgan savolga aniq va qisqa javob berish.
+Agar javob matnda mavjud bo'lmasa, "Javob hujjatda topilmadi" deb javob ber.
+
+Hujjat matni:
+{{documentText}}
+
+Savol: {{question}}`,
+    prompt_generate_witness_prep: `SEN TAJRIBALI ADVOKAT VA SUDYA ROLIDAGI AI'SAN.
+Sening vazifang - advokatga guvohni sudga tayyorlashda yordam berish.
+Men senga ish materiallari va guvoh haqida ma'lumot beraman. Sen esa quyidagilarni yaratishing kerak:
+1.  **To'g'ridan-to'g'ri so'roq (Direct Examination):** Advokat o'z guvohiga berishi kerak bo'lgan savollar ro'yxati. Bu savollar guvohning ko'rsatmalarini mantiqiy va ishonarli tarzda ochib berishi, ishning asosiy faktlarini tasdiqlashi va mijozning pozitsiyasini kuchaytirishi kerak.
+2.  **Kesishgan so'roqqa tayyorgarlik (Cross-Examination Prep):** Qarshi tomon (prokuror yoki raqib advokat) ushbu guvohga berishi mumkin bo'lgan eng noqulay, "zaharli" va obro'sizlantiruvchi savollar ro'yxati. Har bir savol yonida, advokat guvohga qanday javob berishni maslahat berishi kerakligi haqida qisqa strategik tavsiya ham bo'lishi kerak.
+
+ISH MA'LUMOTLARI:
+- Mijoz: {{clientName}} ({{clientRole}})
+- Guvoh/Ishtirokchi: {{participantName}} ({{participantRole}})
+- Ish tafsilotlari: {{caseDetailsWithFiles}}
+
+JAVOBNI FAQAT JSON FORMATIDA, witnessPrepSchema'ga QAT'IY RIOYA QILGAN HOLDA QAYTAR.`,
+  'uz-cyrl': {
+    app_name: "Адолат АI",
     app_subtitle: "Адвокатлар учун интеллектуал платформа",
     footer_rights: "Барча ҳуқуқлар ҳимояланган.",
     footer_supporter: "Қўллаб-қувватловчи:",
-    
+
     // Views
     view_dashboard_title: "Бошқарув Панели",
     view_dashboard_description: "Ишлар, муддатлар ва воситаларни бир жойда кўринг.",
     view_analyze_title: "Янги Таҳлил",
     view_analyze_description: "Янги ишни таҳлил қилиб, ҳуқуқий стратегия олинг.",
-    view_debate_title: "АИ Мунозараси",
-    view_debate_description: "АИ ҳуқуқшуносларнинг иш бўйича таҳлилий баҳси.",
-    view_investigation_debate_title: "Дебаты Расследования",
-    view_investigation_debate_description: "АИ терговчиларнинг иш бўйича таҳлилий баҳси.",
-    view_summary_title: "Итоговая Стратегия",
-    view_summary_description: "Готовый план действий на основе результатов дебатов.",
-    view_knowledge_base_title: "База Знаний",
-    view_knowledge_base_description: "Структурированные данные и углубленный анализ дела.",
-    view_simulation_title: "Симулятор Зала Суда",
-    view_simulation_description: "Подготовьтесь к судебному процессу и неожиданным вопросам.",
-    view_history_title: "Архив Дел",
-    view_history_description: "Просмотрите все ваши сохраненные дела.",
-    view_research_title: "Юридический Исследователь",
-    view_research_description: "Ўзбекистон қонунчилигини АИ ёрдамида ўрганинг.",
-    view_settings_title: "Настройки",
-    view_settings_description: "Управляйте своим профилем и настройками платформы.",
-    view_investigation_materials_title: "Материалы Расследования",
-    view_investigation_materials_description: "Доказательства расследования, подозреваемые и план действий.",
-    view_investigation_summary_title: "Итоги Расследования",
-    view_investigation_summary_description: "Итоговый отчет по результатам расследования и следующим шагам.",
-    view_tasks_title: "Задачи",
-    view_tasks_description: "Управляйте задачами по делу.",
-    view_documents_title: "Генератор Документов",
-    view_documents_description: "АИ ёрдамида процессуал ҳужжатларни яратинг.",
+    view_debate_title: "АI Мунозараси",
+    view_debate_description: "АI ҳуқуқшуносларнинг иш бўйича таҳлилий баҳси.",
+    view_investigation_debate_title: "Тергов Мунозараси",
+    view_investigation_debate_description: "АI терговчиларнинг иш бўйича таҳлилий баҳси.",
+    view_summary_title: "Якуний Стратегия",
+    view_summary_description: "Мунозара якунлари бўйича тайёр ҳаракатлар режаси.",
+    view_knowledge_base_title: "Билимлар Базаси",
+    view_knowledge_base_description: "Ишнинг тузилган маълумотлари ва чуқур таҳлили.",
+    view_simulation_title: "Суд Зали Симулятори",
+    view_simulation_description: "Суд жараёнига тайёргарлик кўринг ва кутилмаган саволларга тайёрланинг.",
+    view_history_title: "Ишлар Архиви",
+    view_history_description: "Барча сақланган ишларингизни кўриб чиқинг.",
+    view_research_title: "Ҳуқуқий Тадқиқотчи",
+    view_research_description: "Ўзбекистон қонунчилигини АI ёрдамида ўрганинг.",
+    view_settings_title: "Созламалар",
+    view_settings_description: "Профилингиз ва платформа созламаларини бошқаринг.",
+    view_investigation_materials_title: "Тергов Материаллари",
+    view_investigation_materials_description: "Тергов далиллари, гумонланувчилар ва ҳаракатлар режаси.",
+    view_investigation_summary_title: "Тергов Хулосаси",
+    view_investigation_summary_description: "Тергов натижалари ва кейинги қадамлар бўйича якуний ҳисобот.",
+    view_tasks_title: "Вазифалар",
+    view_tasks_description: "Иш бўйича вазифаларни бошқаринг.",
+    view_documents_title: "Ҳужжатлар Генератори",
+    view_documents_description: "АI ёрдамида процессуал ҳужжатларни яратинг.",
     view_timeline_title: "Хронология",
-    view_timeline_description: "Отслеживайте ключевые события и даты дела.",
-    view_evidence_title: "Доказательства",
-    view_evidence_description: "Управляйте всеми доказательствами по делу в одном месте.",
-    view_billing_title: "Учет Времени",
-    view_billing_description: "Сарфланган вақт ва харажатларни қайд етинг.",
-    view_notes_title: "Заметки",
-    view_notes_description: "Записывайте личные заметки и мысли.",
-    view_calendar_title: "Календарь",
-    view_calendar_description: "Планируйте сроки по всем делам.",
-    view_overview_title: "Общий Обзор",
-    view_overview_description: "Ключевые показатели дела и быстрая информация.",
-    view_witness_prep_title: "Подготовка Свидетелей",
-    view_witness_prep_description: "Подготовьтесь к прямому и перекрестному допросу.",
-    
-    // Naviгation
+    view_timeline_description: "Ишнинг асосий воқеалари ва саналарини кузатиб боринг.",
+    view_evidence_title: "Далиллар",
+    view_evidence_description: "Ишга оид барча далилларни бир жойда бошқаринг.",
+    view_billing_title: "Ҳисоб-китоб",
+    view_billing_description: "Сарфланган вақт ва харажатларни қайд этинг.",
+    view_notes_title: "Қайдлар",
+    view_notes_description: "Шахсий эслатмалар ва фикрларни ёзиб боринг.",
+    view_calendar_title: "Тақвим",
+    view_calendar_description: "Барча ишлар бўйича муддатларни режалаштиринг.",
+    view_overview_title: "Умумий кўриниш",
+    view_overview_description: "Ишнинг асосий кўрсаткичлари ва тезкор маълумотлар.",
+    view_witness_prep_title: "Гувоҳларни Тайёрлаш",
+    view_witness_prep_description: "Тўғридан-тўғри ва кесишган сўроққа тайёргарлик кўринг.",
+
+    // Navigation
     nav_dashboard: "Бошқарув Панели",
     nav_analyze: "Янги Таҳлил",
-    nav_debate: "АИ Мунозара",
+    nav_debate: "АI Мунозара",
     nav_investigation_debate: "Тергов Мунозараси",
     nav_summary: "Стратегия",
     nav_knowledge_base: "База",
@@ -72,7 +896,7 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     nav_calendar: "Тақвим",
     nav_overview: "Умумий кўриниш",
     nav_witness_prep: "Гувоҳлар",
-    
+
     // Buttons
     button_cancel: "Бекор қилиш",
     button_confirm: "Тасдиқлаш",
@@ -97,20 +921,20 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     button_rate_down: "Салбий баҳо",
     button_create_document: "Ҳужжат яратиш",
     button_client_report: "Мижоз ҳисоботи",
-    button_export: "Експорт",
+    button_export: "Экспорт",
     button_defend_this_person: "Ушбу шахсни ҳимоя қилиш",
     button_show_details: "Батафсил кўриш",
     button_hide_details: "Яшириш",
     button_generate: "Яратиш",
     button_generating: "Яратилмоқда...",
     button_reveal_answer: "Жавобни кўрсатиш",
-    button_export_deep_dive_pdf: "Чуқур Таҳлилни ПДФ юклаб олиш",
+    button_export_deep_dive_pdf: "Чуқур Таҳлилни PDF юклаб олиш",
     button_proceed_to_analysis: "Таҳлилга ўтиш",
     button_export_investigation_report: "Тергов Ҳисоботини Юклаш",
-    button_export_word_summary: "Стратегияни Wорд (.доc) юклаш",
-    button_export_word_kb: "Ҳисоботни Wорд (.доc) юклаш",
-    button_export_pdf_summary: "Стратегияни ПДФ (.пдф) юклаш",
-    button_export_pdf_kb: "Ҳисоботни ПДФ (.пдф) юклаш",
+    button_export_word_summary: "Стратегияни Word (.doc) юклаш",
+    button_export_word_kb: "Ҳисоботни Word (.doc) юклаш",
+    button_export_pdf_summary: "Стратегияни PDF (.pdf) юклаш",
+    button_export_pdf_kb: "Ҳисоботни PDF (.pdf) юклаш",
     button_feedback: "Фикр билдириш",
     button_submit_feedback: "Фикрни Юбориш",
     button_remove_device: "Ўчириш",
@@ -119,9 +943,9 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     button_generate_client_summary: "Мижоз учун хулоса",
     button_analyze: "Таҳлил қилиш",
     button_add_note: "Қайд қўшиш",
-    button_export_invoice: "Ҳисоб-фактурани експорт қилиш",
-    
-    // Autҳ & Pricinг
+    button_export_invoice: "Ҳисоб-фактурани экспорт қилиш",
+
+    // Auth & Pricing
     login_title: "Платформага Кириш",
     login_phone_label: "Телефон рақами",
     login_token_label: "Махфий токен",
@@ -132,7 +956,7 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     auth_welcome_desc: "Ўзбекистон адвокатлари учун яратилган интеллектуал платформа. Ишларингизни таҳлил қилинг, ғалаба стратегияларини яратинг ва суд жараёнларига тўлиқ тайёр бўлинг.",
     auth_button_login: "Кириш / Бошлаш",
     pricing_title: "Тарифлар",
-    pricing_subtitle: "Ўз еҳтожларингизга мос келадиган енг яхши тарифни танланг ва Адолат АИнинг тўлиқ имкониятларидан фойдаланишни бошланг.",
+    pricing_subtitle: "Ўз эҳтожларингизга мос келадиган энг яхши тарифни танланг ва Адолат АI'нинг тўлиқ имкониятларидан фойдаланишни бошланг.",
     pricing_select_plan_title: "Тарифни танланг",
     pricing_plan_one_time: "Бир марталик",
     pricing_price_one_time: "$10",
@@ -148,52 +972,51 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     plan_duration_3_oylik: "3 ой",
     plan_duration_6_oylik: "6 ой",
     plan_duration_12_oylik: "12 ой",
-    pricing_recommended: "Тавсия етилади",
+    pricing_recommended: "Тавсия этилади",
     pricing_price_per_month: "/ойига",
     pricing_button_select: "Танлаш",
     pricing_feature_unlimited_analysis: "Чексиз иш таҳлили",
-    pricing_feature_ai_debate: "АИ Ҳуқуқшунослар мунозараси",
+    pricing_feature_ai_debate: "АI Ҳуқуқшунослар мунозараси",
     pricing_feature_simulation: "Суд зали симулятори",
     pricing_feature_research: "Ҳуқуқий тадқиқотчи",
     pricing_feature_storage: "Хавфсиз булутли сақлаш",
     pricing_feature_support: "Премиум қўллаб-қувватлаш",
-    device_id_label: "Қурилма ИДси",
+    device_id_label: "Қурилма IDси",
     feature_coming_soon: "Тез кунда",
-    feature_coming_soon_long: "Ушбу функсия ҳозирда ишлаб чиқилмоқда ва тез орада тақдим етилади.",
-    
+    feature_coming_soon_long: "Ушбу функция ҳозирда ишлаб чиқилмоқда ва тез орада тақдим этилади.",
+
     // Errors
     error_generic_title: "Хатолик юз берди",
     error_no_input_provided: "Иш тафсилотларини киритинг ёки файл юкланг.",
     error_preliminary_analysis: "Дастлабки таҳлилда хатолик. Қайта уриниб кўринг.",
-    error_participant_analysis: "Иш иштироқчиларини аниқлашда хатолик. Қайта уриниб кўринг.",
+    error_participant_analysis: "Иш иштирокчиларини аниқлашда хатолик. Қайта уриниб кўринг.",
     error_full_analysis: "Тўлиқ таҳлилда хатолик. Қайта уриниб кўринг.",
     error_update_analysis: "Ишни янгилашда хатолик. Қайта уриниб кўринг.",
     error_simulation_analysis: "Симуляция маълумотларини олишда хатолик.",
-    error_api_rate_limit: "АПИ сўровлари чегараси ошди. Бироздан сўнг қайта урининг.",
-    error_api_key_invalid: "АПИ калити яроқсиз. Администратор билан боғланинг.",
+    error_api_rate_limit: "АPI сўровлари чегараси ошди. Бироздан сўнг қайта урининг.",
+    error_api_key_invalid: "АPI калити яроқсиз. Администратор билан боғланинг.",
     error_api_safety: "Сўров хавфсизлик филтрлари томонидан блокланди.",
-    error_api_unknown: "Сервер билан боғланишда номалум хатолик.",
-    error_network_connection: "Тармоқ уланишида муаммо юз берди. Интернет алоқангизни текширинг ва қайта уриниб кўринг.",
+    error_api_unknown: "Сервер билан боғланишда номаълум хатолик.",
     error_no_client_selected: "Илтимос, ҳимоя учун битта мижозни танланг.",
-    error_empty_name: "Иштирокчи исми бўш бўлиши мумкин емас.",
+    error_empty_name: "Иштирокчи исми бўш бўлиши мумкин эмас.",
     login_error_device_limit: "Қурилмалар чегараси (2 та) тўлган. Бошқа қурилмадан кириш учун аввал улардан биридан тизимдан чиқинг.",
     error_mic_permission: "Микрофондан фойдаланиш учун рухсат берилмади. Браузер созламаларини текширинг.",
     error_transcription: "Овозни матнга ўгиришда хатолик юз берди.",
-    language_change_confirmation: "Тил ўзгарди. АИ таҳлилини янги тилга мослаб қайта яратишни хоҳлайсизми?",
+    language_change_confirmation: "Тил ўзгарди. АI тахлилини янги тилга мослаб қайта яратишни хоҳлайсизми?",
     
     // Case Input
     case_input_section1_title: "Иш Тафсилотлари",
-    case_input_details_placeholder: "Ишнинг барча тафсилотларини, даво аризаси ва бошқа муҳим маълумотларни киритинг...",
+    case_input_details_placeholder: "Ишнинг барча тафсилотларини, даъво аризаси ва бошқа муҳим маълумотларни киритинг...",
     case_input_dropzone_title: "Файлларни тортинг ёки юклаш учун босинг",
-    case_input_dropzone_subtitle: "ПДФ, ДОCХ, ТХТ, ЖПГ, ПНГ",
+    case_input_dropzone_subtitle: "PDF, DOCX, TXT, JPG, PNG",
     case_input_uploaded_files_title: "Юкланган файллар",
     case_input_court_type: "Суд Тури",
     case_input_court_stage: "Суд Босқичи",
-    case_input_ai_articles_title: "АИ Таклиф қилган Моддалар",
-    case_input_research_article_tooltip: "{{артиcле}} бўйича тадқиқот",
+    case_input_ai_articles_title: "АI Таклиф қилган Моддалар",
+    case_input_research_article_tooltip: "{{article}} бўйича тадқиқот",
     case_input_no_articles_found: "Тегишли моддалар топилмади.",
     case_input_articles_error: "Моддаларни аниқлашда хатолик.",
-    status_ai_analyzing: "АИ таклифларни тайёрламоқда...",
+    status_ai_analyzing: "АI таклифларни тайёрламоқда...",
     status_identifying_participants: "Ишдаги шахслар аниқланмоқда...",
     file_status_reading: "Ўқилмоқда...",
     file_status_analyzing: "Таҳлил қилинмоқда...",
@@ -203,27 +1026,27 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     select_option_placeholder: "Танланг...",
     
     // Client Roles
-    client_role_davogar: "Давогар",
+    client_role_davogar: "Даъвогар",
     client_role_javobgar: "Жавобгар",
     client_role_sudlanuvchi: "Судланувчи",
     client_role_jabrlanuvchi: "Жабрланувчи",
     client_role_guvoh: "Гувоҳ",
     client_role_boshqa: "Бошқа",
     
-    // Court Types/Staгes
+    // Court Types/Stages
     court_type_fuqarolik: "Фуқаролик",
     court_type_jinoyat: "Жиноят",
-    court_type_mamuriy: "Мамурий",
+    court_type_mamuriy: "Маъмурий",
     court_type_iqtisodiy: "Иқтисодий",
     court_stage_tergov: "Тергов",
     court_stage_tergov_raw: "Тергов",
-    court_stage_birinchi_instansiya: "Биринчи инстансия",
+    court_stage_birinchi_instansiya: "Биринчи инстанция",
     court_stage_apellyatsiya: "Апелляция",
     court_stage_kassatsiya: "Кассация",
     court_stage_nazorat_tartibida: "Назорат тартибида",
-    
-    // Loadinг Spinner
-    loading_message_1: "АИ ҳуқуқшунослар йиғилмоқда...",
+
+    // Loading Spinner
+    loading_message_1: "АI ҳуқуқшунослар йиғилмоқда...",
     loading_message_2: "Қонунчилик таҳлил қилинмоқда...",
     loading_message_3: "Далиллар ўрганилмоқда...",
     loading_message_4: "Суд амалиёти қидирилмоқда...",
@@ -235,23 +1058,21 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     
     // Empty States
     empty_state_debate_title: "Мунозара Бошланмади",
-    empty_state_debate_message: "АИ мунозарасини кўриш учун янги таҳлил бошланг.",
+    empty_state_debate_message: "АI мунозарасини кўриш учун янги таҳлил бошланг.",
     empty_state_summary_title: "Стратегия Яратилмади",
     empty_state_summary_message: "Якуний стратегияни кўриш учун янги таҳлил бошланг.",
     empty_state_history_title: "Ишлар Топилмади",
-    empty_state_history_message: "Янги Таҳлил тугмасини босиб, биринчи ишингизни бошланг.",
+    empty_state_history_message: "'Янги Таҳлил' тугмасини босиб, биринчи ишингизни бошланг.",
     empty_state_kb_title: "Билимлар Базаси Бўш",
     empty_state_kb_message: "Иш маълумотларини кўриш учун янги таҳлил бошланг.",
-    empty_state_simulation_title: "Симуляция учун маълумот ёқ",
+    empty_state_simulation_title: "Симуляция учун маълумот йўқ",
     empty_state_simulation_message: "Суд зали симуляторини ишга тушириш учун аввал ишни таҳлил қилинг.",
-    empty_state_simulation_unavailable_title: "Симулятор мавжуд емас",
-    empty_state_simulation_unavailable_message: "Суд зали симулятори фақат суд босқичидаги ишлар учун мавжуд. Тергов босқичида бу функсия ишламайди.",
+    empty_state_simulation_unavailable_title: "Симулятор мавжуд эмас",
+    empty_state_simulation_unavailable_message: "Суд зали симулятори фақат суд босқичидаги ишлар учун мавжуд. Тергов босқичида бу функция ишламайди.",
     simulation_generate_prompt_title: "Симуляцияни Яратиш",
-    simulation_generate_prompt_message: "Суд жараёни ссенарийси, кесишган сўроқ саволлари ва якуний нутқларни яратиш учун тугмани босинг.",
-    simulation_investigation_generate_prompt_title: "Тергов Симуляциясини Яратиш",
-    simulation_investigation_generate_prompt_message: "Тергов жараёнининг еҳтимолий ривожланиши, гувоҳларнинг сўроқлари ва якуний хулосаларни яратиш учун тугмани босинг.",
-    
-    // Ҳistory
+    simulation_generate_prompt_message: "Суд жараёни сценарийси, кесишган сўроқ саволлари ва якуний нутқларни яратиш учун тугмани босинг.",
+
+    // History
     history_delete_modal_title: "Ишни Ўчириш",
     history_delete_modal_message: "Ҳақиқатан ҳам бу ишни ўчирмоқчимисиз? Бу ҳаракатни қайтариб бўлмайди.",
     history_search_placeholder: "Ишлар бўйича қидириш...",
@@ -260,22 +1081,22 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     folder_faol: "Фаол",
     folder_arxivlangan: "Архивланган",
     folder_muzlatilgan: "Музлатилган",
-    
+
     // Summary & Verdict
-    win_probability_details: "Ғалаба Еҳтимоли Таҳлили",
+    win_probability_details: "Ғалаба Эҳтимоли Таҳлили",
     win_probability_positive_factors: "Ижобий Омиллар",
     win_probability_negative_factors: "Салбий Омиллар (Рисклар)",
     verdict_positive: "Ижобий прогноз",
     verdict_neutral: "Нейтрал прогноз",
     verdict_negative: "Салбий прогноз",
     preliminary_verdict_title: "Дастлабки Хулоса",
-    preliminary_verdict_filename: "дастлабки_хулоса.пдф",
-    preliminary_verdict_disclaimer: "Бу АИнинг дастлабки баҳоси. Тўлиқ таҳлил қилиш тавсия етилади.",
+    preliminary_verdict_filename: "дастлабки_хулоса.pdf",
+    preliminary_verdict_disclaimer: "Бу АI'нинг дастлабки баҳоси. Тўлиқ таҳлил қилиш тавсия этилади.",
     modal_analyzing_as: "Таҳлил",
     participant_selector_title: "Ҳимоя Қилинувчи Шахсни Танланг",
-    participant_selector_description: "АИ иш материалларини таҳлил қилиб, қуйидаги асосий шахсларни аниқлади. Кимнинг манфаатлари учун курашамиз?",
-    participant_editor_title: "Иш Иштироқчиларини Киритинг",
-    participant_editor_description: "АИ томонидан аниқланган шахслар рўйхатини текширинг, уларнинг ролини аниқланг ва ҳимоя қилинувчи мижозни танланг.",
+    participant_selector_description: "АI иш материалларини таҳлил қилиб, қуйидаги асосий шахсларни аниқлади. Кимнинг манфаатлари учун курашамиз?",
+    participant_editor_title: "Иш Иштирокчиларини Киритинг",
+    participant_editor_description: "АI томонидан аниқланган шахслар рўйхатини текширинг, уларнинг ролини аниқланг ва ҳимоя қилинувчи мижозни танланг.",
     add_participant: "Иштирокчи қўшиш",
     remove_participant_tooltip: "Ўчириш",
     set_as_client: "Мижоз сифатида белгилаш",
@@ -283,9 +1104,9 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     participant_name_placeholder: "Исм-шарифи",
     select_role: "Ролни танланг",
     client_summary_title: "Мижоз учун қисқача хулоса",
-    client_summary_filename: "мижоз_учун_хулоса.тхт",
-    
-    // Personas
+    client_summary_filename: "мижоз_учун_хулоса.txt",
+
+    // Personas (Cyrillic versions needed)
     persona_qonun_ustuvori_name: "Қонун Устувори",
     persona_qonun_ustuvori_title: "Нормативист",
     persona_qonun_ustuvori_description: "Қонунларни мижоз фойдасига талқин қилади.",
@@ -300,35 +1121,35 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     persona_prokuror_description: "Рақибнинг ҳар бир юришини олдиндан башорат қилади.",
     persona_inson_huquqlari_name: "Инсон Ҳуқуқлари",
     persona_inson_huquqlari_title: "Конституционалист",
-    persona_inson_huquqlari_description: "Мижознинг поймол етилган ҳуқуқларини топади.",
-    persona_sudya_name: "Судя",
+    persona_inson_huquqlari_description: "Мижознинг поймол этилган ҳуқуқларини топади.",
+    persona_sudya_name: "Судья",
     persona_sudya_title: "Холис Баҳоловчи",
-    persona_sudya_description: "Ишни қонун ва адолат нуқтаи назаридан холис баҳолайди, томонларнинг аргументларини тарози паллаларига қўяди.",
+    persona_sudya_description: "Ишни қонун ва аadolат нуқтаи назаридан холис баҳолайди, томонларнинг аргументларини тарози паллаларига қўяди.",
     persona_investigator_tergovchi_name: "Терговчи",
     persona_investigator_tergovchi_title: "Фактлар Йиғувчи",
     persona_investigator_tergovchi_description: "Далилларни тўплайди, гувоҳларни сўроқ қилади ва тергов ҳаракатларини режалаштиради.",
     persona_investigator_prokuror_name: "Прокурор",
     persona_investigator_prokuror_title: "Айблов Назоратчиси",
-    persona_investigator_prokuror_description: "Ишни айблов хулосаси учун тайёрлайди, далилларнинг йетарлилигини баҳолайди.",
+    persona_investigator_prokuror_description: "Ишни айблов хулосаси учун тайёрлайди, далилларнинг етарлилигини баҳолайди.",
     persona_investigator_himoyachi_name: "Ҳимоячи",
     persona_investigator_himoyachi_title: "Ҳуқуқлар Ҳимоячиси",
     persona_investigator_himoyachi_description: "Терговдаги процессуал хатоликларни ва ҳимоя учун имкониятларни қидиради.",
-    persona_investigator_ekspert_kriminalist_name: "Експерт-Криминалист",
+    persona_investigator_ekspert_kriminalist_name: "Эксперт-Криминалист",
     persona_investigator_ekspert_kriminalist_title: "Далиллар Таҳлилчиси",
-    persona_investigator_ekspert_kriminalist_description: "Ашёвий далиллар ва експертиза хулосаларини чуқур таҳлил қилади.",
+    persona_investigator_ekspert_kriminalist_description: "Ашёвий далиллар ва экспертиза хулосаларини чуқур таҳлил қилади.",
     persona_investigator_protsessual_nazoratchi_name: "Процессуал Назоратчи",
     persona_investigator_protsessual_nazoratchi_title: "Қонунийлик Посбони",
-    persona_investigator_protsessual_nazoratchi_description: "Тергов ҳаракатларининг қонунийлигини ва ЖПК нормаларига риоя етилишини назорат қилади.",
-    alert_showing_details_for: "{{итем}} бўйича маълумот (функсия ишлаб чиқилмоқда).",
-    legal_code_regex: "((Жиноят|Фуқаролик|Мамурий жавобгарлик тўғрисидаги|Иқтисодий процессуал|Фуқаролик процессуал|Жиноят-процессуал|Солиқ|Меҳнат|Оила|Уй-жой|Йер)\с*кодекси|ЖК|ФК|МЖтК|ИПК|ФПК|ЖПК|СК|ОК|ЙК|Конституция)(?:(?:нинг|си|сининг|да|даги|га|сига|лари|ларининг)?)?\с*\д+(?:(?:[-–,\с]+\д+)*)?(?:-модда(?:си|сига|сининг|лари|ларининг)?)?",
-    
+    persona_investigator_protsessual_nazoratchi_description: "Тергов ҳаракатларининг қонунийлигини ва ЖПК нормаларига риоя этилишини назорат қилади.",
+    alert_showing_details_for: "{{item}} бўйича маълумот (функция ишлаб чиқилмоқда).",
+    legal_code_regex: "((Жиноят|Фуқаролик|Маъмурий жавобгарлик тўғрисидаги|Иқтисодий процессуал|Фуқаролик процессуал|Жиноят-процессуал|Солиқ|Меҳнат|Оила|Уй-жой|Ер)\\s*кодекси|ЖК|ФК|МЖтК|ИПК|ФПК|ЖПК|СК|ОК|Уй-жой К|Ер К|Конституция)(?:(?:нинг|си|сининг|да|даги|га|сига|лари|ларининг)?)?\\s*\\d+(?:(?:[-–,\\s]+\\d+)*)?(?:-модда(?:си|сига|сининг|лари|ларининг)?)?",
+
     // Research
-    research_initial_greeting: "Ассалому алайкум! Мен Қонун Устувориман. Қандай ёрдам бера оламан?",
+    research_initial_greeting: "Ассалому алайкум! Мен 'Қонун Устувори'ман. Қандай ёрдам бера оламан?",
     research_input_placeholder: "Саволингизни ёзинг...",
     research_error_message: "Узур, жавоб беришда хатолик. Қайта уриниб кўринг.",
-    research_query_template: "{{артиcле}} ҳақида батафсил маълумот ва Олий Суд Пленум қарорларидан мисоллар келтиринг.",
+    research_query_template: "{{article}} ҳақида батафсил маълумот ва Олий Суд Пленум қарорларидан мисоллар келтиринг.",
     research_sources_label: "Манбалар",
-    
+
     // Dashboard
     dashboard_quick_actions: "Тезкор Амаллар",
     dashboard_action_new_analysis_title: "Янги Таҳлил",
@@ -340,10 +1161,10 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     dashboard_my_cases: "Менинг Ишларим",
     dashboard_no_cases: "Ҳозирча ҳеч қандай иш таҳлил қилинмаган.",
     dashboard_upcoming_deadlines: "Яқинлашаётган Муддатлар",
-    dashboard_calendar_coming_soon: "Тақвим функсияси тез кунда қўшилади.",
+    dashboard_calendar_coming_soon: "Тақвим функцияси тез кунда қўшилади.",
     case_card_last_updated: "Охирги янгиланиш",
     case_title_template: "{{clientName}} иши",
-    case_title_vs_template: "{{clientName}} vs {{opponentName}} иши",
+    case_title_vs_template: '{{clientName}} vs {{opponentName}} иши',
     case_prefix: "Иш: ",
     dashboard_view_all: "Барчасини кўриш",
     dashboard_action_voice_memo_title: "Овозли Эслатма",
@@ -361,14 +1182,14 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     voice_memo_manager_title: "Овозли Эслатма Менежери",
     voice_memo_recordings: "Ёзувлар",
     voice_memo_title: "Овозли Эслатма",
-    voice_memo_play: "Ижро етиш",
+    voice_memo_play: "Ижро этиш",
     voice_memo_pause: "Пауза",
     voice_memo_download: "Юклаб олиш",
     voice_memo_save_to_case: "Ишга сақлаш",
     voice_memo_delete: "Ўчириш",
-    voice_memo_copy: "Нусхалаш",
+    voice_memo_copy: "Нусха олиш",
     voice_memo_case_required: "Овозли эслатмани сақлаш учун иш танланиши керак.",
-    
+
     // Settings
     settings_profile_title: "Профил",
     settings_profile_name: "Тўлиқ Исм",
@@ -382,36 +1203,36 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     settings_notifications_placeholder: "Тез кунда қўшилади.",
     
     // PDF & Excel Export
-    pdf_report_for_case: "{{cасеТитле}} иши бўйича",
-    pdf_debate_filename: "АИ_мунозараси_{{cасеТитле}}.пдф",
-    pdf_kb_filename: "Билимлар_базаси_{{cасеТитле}}.пдф",
-    pdf_sim_filename: "Суд_симуляцияси_{{cасеТитле}}.пдф",
+    pdf_report_for_case: "{{caseTitle}} иши бўйича",
+    pdf_debate_filename: "АI_мунозараси_{{caseTitle}}.pdf",
+    pdf_kb_filename: "Билимлар_базаси_{{caseTitle}}.pdf",
+    pdf_sim_filename: "Суд_симуляцияси_{{caseTitle}}.pdf",
     pdf_kb_title: "Билимлар Базаси Ҳисоботи",
     pdf_sim_title: "Суд Зали Симулятори Ҳисоботи",
-    pdf_sim_scenario: "Суд Жараёни Ссенарийси",
+    pdf_sim_scenario: "Суд Жараёни Сценарийси",
     pdf_sim_questions: "Кесишган Сўроқ Савол-Жавоблари",
     pdf_sim_closing_lead: "Якуний Нутқ (Стратег)",
     pdf_sim_closing_defender: "Якуний Нутқ (Ҳимоячи)",
-    kb_update_section_title: "Ишни Янгилаш / Малумот қўшиш",
+    kb_update_section_title: "Ишни Янгилаш / Маълумот қўшиш",
     kb_update_notes_label: "Қўшимча қайдлар",
     kb_update_notes_placeholder: "Янги далиллар, ҳолатлар ёки фикрлар ҳақида маълумот киритинг...",
     kb_update_button: "Таҳлилни Янгилаш",
     kb_updating_button: "Янгиланмоқда...",
     deep_dive_filename_suffix: "чуқур_таҳлил",
-    pdf_report_title: "Адолат АИ - Иш Таҳлили Ҳисоботи",
+    pdf_report_title: "Адолат АI - Иш Таҳлили Ҳисоботи",
     pdf_date_prefix: "Сана: ",
-    pdf_win_probability: "Ғалаба Еҳтимоли",
+    pdf_win_probability: "Ғалаба Эҳтимоли",
     pdf_justification: "Асоснома",
     pdf_battle_plan: "Умумий Ютуқ Стратегияси (Жанговар Режа)",
-    pdf_debate_title: "АИ Ҳуқуқшунослар Мунозараси",
+    pdf_debate_title: "АI Ҳуқуқшунослар Мунозараси",
     pdf_preliminary_title: "Дастлабки Таҳлил Хулосаси",
     pdf_preliminary_subtitle: "Иш бўйича",
-    pdf_win_prob_short: "Ғалаба Еҳтимоли",
+    pdf_win_prob_short: "Ғалаба Эҳтимоли",
     pdf_positive_factors_label: "Ижобий Омиллар",
     pdf_negative_factors_label: "Салбий Омиллар / Рисклар",
-    button_export_all_pdf: "Барчасини ПДФда юклаш",
+    button_export_all_pdf: "Барчасини PDF'да юклаш",
     pdf_kb_full_report_title: "Иш бўйича Тўлиқ Ҳисобот",
-    pdf_kb_full_report_filename: "Толиқ_ҳисобот_{{cасеТитле}}.пдф",
+    pdf_kb_full_report_filename: "Толиқ_ҳисобот_{{caseTitle}}.pdf",
     kb_case_details: "Иш Тафсилотлари",
     kb_participants_title: "Иш Иштирокчилари",
     kb_client_tag: "Мижоз",
@@ -422,7 +1243,7 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     kb_weaknesses: "Заиф Томонлар",
     kb_deep_dive_title: "Чуқур Таҳлил",
     kb_deep_dive_prompt: "Ишнинг барча нозик жиҳатларини, рақибнинг мумкин бўлган ҳаракатларини ва қарши аргументларни ўз ичига олган батафсил таҳлил.",
-    kb_sol_title: "Даво Муддати",
+    kb_sol_title: "Даъво Муддати",
     kb_key_evidence: "Асосий Далиллар",
     kb_potential_charges: "Мумкин Бўлган Айбловлар",
     investigation_suspects_title: "Гумонланувчилар",
@@ -440,32 +1261,32 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     sol_status_Xavf_ostida: "Хавф остида",
     risk_matrix_title: "Рисклар Матрицаси",
     risk_matrix_header_risk: "Риск",
-    risk_matrix_header_likelihood: "Еҳтимоллик",
+    risk_matrix_header_likelihood: "Эҳтимоллик",
     risk_matrix_header_mitigation: "Камайтириш чоралари",
     likelihood_past: "Паст",
     likelihood_orta: "Ўрта",
     likelihood_yuqori: "Юқори",
-    
+
     // Simulation
-    simulation_scenario_title: "Суд Жараёни Ссенарийси",
+    simulation_scenario_title: "Суд Жараёни Сценарийси",
     simulation_scenario_desc: "Суд мажлисининг мумкин бўлган ривожи ва кутилмаган ҳолатлар.",
     simulation_questions_title: "Кесишган Сўроқ Машғулоти",
-    simulation_questions_desc: "Рақиб томоннинг енг ноқулай саволларига тайёрланинг.",
+    simulation_questions_desc: "Рақиб томоннинг энг ноқулай саволларига тайёрланинг.",
     simulation_closing_title: "Якуний Нутқлар",
     simulation_closing_desc: "Стратег ва Ҳимоячи нигоҳи билан икки хил ёндашув.",
-    simulation_data_not_generated: "Малумотлар ҳали яратилмаган.",
-    simulation_ai_question_prefix: "АИ Саволи",
+    simulation_data_not_generated: "Маълумотлар ҳали яратилмаган.",
+    simulation_ai_question_prefix: "АI Саволи",
     simulation_qa_your_answer_label: "Сизнинг жавобингиз:",
-    simulation_your_answer_placeholder: "Жавобингизни шу йерга ёзинг...",
-    simulation_qa_compare_with_ai: "АИ Тавсияси билан солиштириш",
+    simulation_your_answer_placeholder: "Жавобингизни шу ерга ёзинг...",
+    simulation_qa_compare_with_ai: "АI Тавсияси билан солиштириш",
     simulation_qa_hide_suggestion: "Тавсияни яшириш",
-    simulation_qa_ai_suggestion_label: "АИ Тавсияси:",
+    simulation_qa_ai_suggestion_label: "АI Тавсияси:",
     excel_sim_question: "Савол",
-    excel_sim_answer: "Тавсия етилган жавоб",
+    excel_sim_answer: "Тавсия этилган жавоб",
     excel_sim_closing_lead: "Якуний нутқ (Стратег)",
     excel_sim_closing_defender: "Якуний нутқ (Ҳимоячи)",
-    button_export_word_simulation: "Симуляцияни Wорд (.доc) юклаш",
-    
+    button_export_word_simulation: "Симуляцияни Word (.doc) юклаш",
+
     // Feedback
     feedback_modal_title: "Фикр-мулоҳаза билдириш",
     feedback_rating_label: "Бу натижа қанчалик фойдали бўлди?",
@@ -475,28 +1296,28 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     feedback_tag_unclear: "Тушунарсиз",
     feedback_tag_other: "Бошқа",
     feedback_comment_label: "Қўшимча изоҳлар (ихтиёрий)",
-    feedback_comment_placeholder: "Фикрларингизни шу йерга ёзинг...",
+    feedback_comment_placeholder: "Фикрларингизни шу ерга ёзинг...",
     feedback_thank_you: "Раҳмат!",
-    
+
     // Tasks
     tasks_add_placeholder: "Янги вазифа қўшиш...",
     tasks_pending_title: "Бажариладиган",
     tasks_completed_title: "Бажарилган",
-    tasks_none_pending: "Бажариладиган вазифалар ёқ.",
-    tasks_ai_prioritize: "АИ Саралаш",
+    tasks_none_pending: "Бажариладиган вазифалар йўқ.",
+    tasks_ai_prioritize: "АI Саралаш",
     tasks_prioritizing: "Сараланмоқда...",
-    
-    // Document Гenerator
+
+    // Document Generator
     doc_generator_template_label: "Ҳужжат шаблонини танланг",
     doc_generator_history: "Ҳужжатлар тарихи",
     empty_state_documents_title: "Ҳужжатлар Яратилмаган",
     empty_state_documents_message: "Ҳужжат генераторидан фойдаланиш учун мавжуд ишни танланг.",
     error_doc_generation: "Ҳужжат яратишда хатолик юз берди. Илтимос, кейинроқ қайта уриниб кўринг.",
-    doc_template_davo_arizasi: "Даво аризаси",
+    doc_template_davo_arizasi: "Даъво аризаси",
     doc_template_iltimosnoma: "Илтимоснома",
     doc_template_kassatsiya_shikoyati: "Кассация шикояти",
     doc_template_apellyatsiya_shikoyati: "Апелляция шикояти",
-    doc_template_qarshi_davo_arizasi: "Қарши даво аризаси",
+    doc_template_qarshi_davo_arizasi: "Қарши даъво аризаси",
     doc_template_advokat_sorovi: "Адвокат сўрови",
     doc_template_kafillik_xati: "Кафиллик хати",
     doc_template_dalillarni_qabul_qilish_togrisida_ariza: "Далилларни қабул қилиш тўғрисида ариза",
@@ -511,9 +1332,9 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     timeline_event_description: "Тавсиф",
     timeline_event_description_placeholder: "Воқеа тавсифи...",
     timeline_add_first_event: "Биринчи воқеани қўшиш",
-    
+
     // Evidence
-    evidence_upload_prompt: "Далилларни юклаш (ПДФ, Расм, Видео)",
+    evidence_upload_prompt: "Далилларни юклаш (PDF, Расм, Видео)",
     evidence_uploaded_title: "Юкланган Далиллар",
     evidence_none: "Ҳали ҳеч қандай далил юкланмаган.",
     evidence_analyze_doc: "Ҳужжатни Таҳлил қилиш",
@@ -521,11 +1342,11 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     evidence_qa_title: "Ҳужжат бўйича савол-жавоб",
     evidence_qa_placeholder: "Ҳужжат ҳақида савол беринг...",
     evidence_button_summarize: "Мазмунини яратиш",
-    evidence_button_ask: "Сўраш",
-    evidence_uploading: "Юкланмоқда...",
-    evidence_supported_formats: "ПДФ, ДОC, ДОCХ, ТХТ, ЖПГ, ПНГ, МП4, МОВ",
-    evidence_upload_first: "Биринчи далилни юклаш",
-    
+    evidence_button_ask: "Ask",
+    evidence_uploading: "Uploading...",
+    evidence_supported_formats: "PDF, DOC, DOCX, TXT, JPG, PNG, MP4, MOV",
+    evidence_upload_first: "Upload first evidence",
+
     // Billing
     billing_add_entry: "Янги ёзув қўшиш",
     billing_description: "Тавсиф",
@@ -534,14 +1355,14 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     billing_total: "Жами",
     billing_grand_total: "Умумий жами",
     billing_rate: "Ставка",
-    billing_no_entries: "Ҳали ёзувлар мавжуд емас.",
+    billing_no_entries: "Ҳали ёзувлар мавжуд эмас.",
     invoice_title: "ҲИСОБ-ФАКТУРА",
     invoice_number: "Ҳисоб-фактура №",
     invoice_date: "Сана",
     invoice_from: "Кимдан",
     invoice_to: "Кимга",
-    invoice_advocate_name: "Адвокат Исми (плаcеҳолдер)",
-    invoice_advocate_details: "Лицензия, Манзил, Тел (плаcеҳолдер)",
+    invoice_advocate_name: "Адвокат Исми (placeholder)",
+    invoice_advocate_details: "Лицензия, Манзил, Тел (placeholder)",
     invoice_item_description: "Хизмат тавсифи",
     invoice_item_hours: "Соат",
     invoice_item_rate: "Ставка",
@@ -549,21 +1370,21 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     invoice_subtotal: "Жами",
     invoice_tax: "ҚҚС (0%)",
     invoice_total_due: "Тўланиши керак",
-    
+
     // Notes
     notes_add_placeholder: "Янги қайд қўшинг...",
-    notes_empty: "Ҳали ҳеч қандай қайдлар мавжуд емас.",
+    notes_empty: "Ҳали ҳеч қандай қайдлар мавжуд эмас.",
     
     // Calendar
     calendar_title: "Тақвим",
-    
+
     // Overview
     overview_quick_stats: "Тезкор статистика",
     overview_next_tasks: "Кейинги вазифалар",
     overview_upcoming_deadlines: "Яқинлашаётган муддатлар",
     overview_strategy_snippet: "Стратегия парчаси",
     overview_view_all: "Барчасини кўриш",
-    
+
     // Witness Prep
     witness_prep_select: "Тайёргарлик учун иштирокчини танланг",
     witness_prep_generate: "Тайёргарликни бошлаш",
@@ -571,130 +1392,6 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     witness_prep_direct_exam: "Тўғридан-тўғри сўроқ",
     witness_prep_cross_exam: "Кесишган сўроққа тайёргарлик",
     witness_prep_empty: "Иштирокчини танлаб, саволлар ва жавоб стратегияларини яратинг.",
-    
-    // Prompts (Do not sҳow to user directly)
-    prompt_legal_strategy: `SEN ADVOKATLAR UCҲUN YARATILГAN, 5 TA TURDAГI INTELLEKTUAL AI ҲUҚUҚSҲUNOSLARDAN IBORAT JAMOASAN.
-SENГA O'ZBEKISTON RESPUBLIKASI ҚONUNCҲILIГI BO'YICHA FUҚAROLIK, JINOYAT, MA'MURIY YOKI IҚTISODIY ISH TAҚDIM ETILADI.
-SENINГ MAҚSADINГ - TAҚDIM ETILГAN ISH ҲOLATLARINI ҲAR TOMONLAMA TAҲLIL ҚILIB, ADVOKAT UCҲUN Г'ALABA STRATEГIYASINI ISHLAB CҲIҚISH.
-
-JAMOANГDAГI ҲAR BIR AI O'ZININГ ROLIDAN KELIB CҲIҚIB TAҲLIL ҚILADI:
-1.  **Қonun Ustuvori (Normativist):** Фақат Ўзбекистон қонунлари, кодекслари ва Олий Суд Пленум қарорларига асосланади. Қонун моддаларини мижоз фойдасига қандай талқин қилиш мумкинлигини кўрсатади. Ҳар бир фикри аниқ қонун моддасига асосланиши шарт. Аниқ фактлар ва моддаларни генерация қилмасдан, тақдим етилган маълумотлар асосида таҳлил қилади.
-2.  **Strateg (Taktik):** Рақиб томоннинг (давогар, прокурор, жавобгар) мумкин бўлган ҳаракатларини, аргументларини ва далилларини олдиндан кўра олади. Уларнинг заиф томонларини топади ва уларга қарши қандай тактик юришлар қилиш кераклигини кўрсатади. Жараённи шахмат ўйинидек кўради.
-3.  **Advokat Ҳimoyachi (Mijozning Қalqoni):** Фақат мижознинг манфаатини ўйлайди. Ҳар қандай айблов ёки давони парчалайдиган кучли контра-аргументлар яратади. Мижоз учун енг мақбул ҳимоя позициясини ишлаб чиқади. Емоционал ва ишонарли далиллар келтиради.
-4.  **Prokuror (Ҳujumchi Razvedkachi):** Ўзини айбловчи ёки давогар томоннинг ўрнига қўяди. Мижозга қарши қандай енг кучли далиллар борлигини аниқлайди ва адвокатни шу ҳужумларга тайёрлайди. Ишдаги енг хавфли нуқталарни фош қилади.
-5.  **Inson Ҳuquqlari (Konstitutsionalist):** Ишда Конституция, халқаро шартномалар ёки инсон ҳуқуқлари бўйича қонунлар бузилганлигини қидиради. Процессуал хатоликларни топади ва улардан қандай фойдаланиш мумкинлигини кўрсатади.
-
-VAZIFANГ:
-1.  **Munozara:** Ҳар бир АИ ўз таҳлилини тақдим етади. Таҳлиллар бир-бирини такрорламаслиги, ҳар бири ўзининг ёндашувига содиқ қолиши керак.
-2.  **Umumiy Yutuq Strategiyasi (Jangovar Reja):** Барча АИларнинг фикрларини умумлаштириб, адвокат учун аниқ, қадам-бақадам ҳаракатлар режасини (стратегия) тузиб бер. Бу стратегия Маркдоwн форматида, сарлавҳалар ва листлар билан чиройли тарзда тузилиши керак.
-3.  **Г'alaba Ehtimoli:** Isҳni yutisҳ eҳtimolini 0 dan 100 гacҳa foizda baҳola va qisqacҳa asoslab ber.
-4.  **Omillar:** Ғалабага тасир қилувчи 3-4 та енг муҳим ижобий ва 3-4 та салбий омилларни (рисклар) санаб ўт.
-5.  **Bilimlar Bazasi:** Иш бўйича тузилган билимлар базасини (Кноwледге Басе) ярат. Унда асосий фактлар, ҳуқуқий масалалар, қўлланиладиган қонунлар (лех.уз сайтидан УРЛ билан бирга, агар топилса), кучли ва заиф томонлар, ҳамда даво муддати (статуте оф лимитатионс) бўйича таҳлил бўлиши керак. Даво муддати ҳолатини (ОК, Муддати о\\тган, Хавф остида) аниқ кўрсат ва асосла.
-
-ISH BO'YICHA MA'LUMOTLAR:
-- **Sud Turi:** {{courtType}}
-- **Sud Bosqichi:** {{courtStaгe}}
-- **Mening Mijozim:** {{clientName}} (Roli: {{clientRole}})
-- **Ish ishtirokchilari:**
-{{participantsList}}
-- **Ish Tafsilotlari va Ҳujjatlar Mazmuni:**
-{{caseDetailsWithFiles}}
-
-JAVOBNI FAҚAT JSON FORMATIDA, қuyidaгi responseScҳema'гa ҚAT'IY RIOYA ҚILГAN ҲOLDA ҚAYTAR. Bosҳқa ҳecҳ қanday matn қo'sҳma.`,
-    prompt_investigation_strategy: `SEN ADVOKATLAR UCҲUN YARATILГAN, 5 TA TURDAГI INTELLEKTUAL AI TERГOVCҲILARDAN IBORAT JAMOASAN.
-SENГA O'ZBEKISTON RESPUBLIKASI ҚONUNCҲILIГI BO'YICHA JINOYAT ISHI BO'YICHA TERГOV MATERIALLARI TAҚDIM ETILADI.
-SENINГ MAҚSADINГ - TAҚDIM ETILГAN ISH ҲOLATLARINI ҲAR TOMONLAMA TAҲLIL ҚILIB, ҲIMOYACҲI (ADVOKAT) UCҲUN TERГOVDA Г'ALABA STRATEГIYASINI ISHLAB CҲIҚISH.
-
-JAMOANГDAГI ҲAR BIR AI O'ZININГ ROLIDAN KELIB CҲIҚIB TAҲLIL ҚILADI:
-1.  **Tergovchi (Faktlar Yig'uvchi):** Далилларни тўплайди, гувоҳларни сўроқ қилади ва тергов ҳаракатларини режалаштиради. Ҳимоя учун қандай қўшимча далиллар тўплаш кераклигини кўрсатади.
-2.  **Prokuror (Ayblov Nazoratchisi):** Isҳni ayblov xulosasi uchun tayyorlaydi, dalillarninг yetarliliгini baҳolaydi. Ҳimoyacҳi uchun ayblovninг zaif nuқtalarini ocҳib beradi.
-3.  **Ҳimoyachi (Ҳuquqlar Ҳimoyachisi):** Терговдаги процессуал хатоликларни ва ҳимоя учун имкониятларни қидиради. Мижознинг ҳуқуқлари бузилганлигини аниқлайди ва улардан қандай фойдаланишни кўрсатади.
-4.  **Ekspert-Kriminalist (Dalillar Tahlilchisi):** Asҳyoviy dalillar va ekspertiza xulosalarini cҳuқur taҳlil қiladi. Ekspertiza xulosalaridaгi noaniқliklar yoki xatoliklarni topadi.
-5.  **Protsessual Nazoratchi (Қonuniylik Posboni):** Terгov ҳarakatlarininг қonuniyliгini va JPK normalariгa rioya etilishini nazorat қiladi. JPK buzilisҳlarini aniқlaydi va ularninг oқibatlarini tusҳuntiradi.
-
-VAZIFANГ:
-1.  **Munozara:** Ҳар бир АИ ўз таҳлилини тақдим етади. Таҳлиллар бир-бирини такрорламаслиги, ҳар бири ўзининг ёндашувига содиқ қолиши керак.
-2.  **Umumiy Ҳimoya Strategiyasi:** Барча АИларнинг фикрларини умумлаштириб, адвокат учун тергов босқичида аниқ, қадам-бақадам ҳаракатлар режасини тузиб бер.
-3.  **Ishning Sud Perspektivasi:** Isҳninг sudгa cҳiқisҳ eҳtimolini 0 dan 100 гacҳa foizda baҳola va qisqacҳa asoslab ber.
-4.  **Omillar:** Ҳимоя позициясининг 3-4 та енг муҳим ижобий ва 3-4 та салбий омилларини (рисклар) санаб ўт.
-5.  **Tergov Materiallari Bazasi:** Иш бўйича тузилган билимлар базасини ярат. Унда асосий далиллар, гумонланувчилар/айбланувчилар, асосий ҳуқуқий масалалар, қўлланиладиган қонунлар (ЖПК ва ЖК моддалари), ҳимоянинг кучли ва заиф томонлари, ҳамда еҳтиёт чораси бўйича таҳлил бўлиши керак.
-
-ISH BO'YICHA MA'LUMOTLAR:
-- **Sud Turi:** {{courtType}}
-- **Sud Bosqichi:** {{courtStaгe}}
-- **Mening Mijozim:** {{clientName}} (Roli: {{clientRole}})
-- **Ish ishtirokchilari:**
-{{participantsList}}
-- **Ish Tafsilotlari va Ҳujjatlar Mazmuni:**
-{{caseDetailsWithFiles}}
-
-JAVOBNI FAҚAT JSON FORMATIDA, қuyidaгi responseScҳema'гa ҚAT'IY RIOYA ҚILГAN ҲOLDA ҚAYTAR. Bosҳқa ҳecҳ қanday matn қo'sҳma.`,
-    prompt_preliminary: `СЕН ТЕЗКОР ҲУҚУҚИЙ ТАҲЛИЛCҲИ АИСАН.\нСенинг вазифанг - тақдим етилган иш бўйича қисқа маълумотларга асосланиб, фақат 4 та нарсани аниқлаб бериш:\н1.  Ғалаба еҳтимоли (0-100% оралиғида).\н2.  Еҳтимол учун қисқа (1-2 жумла) асоснома.\н3.  Ғалабага ёрдам берувчи 2-3 та асосий ижобий омил.\н4.  Ғалабага тўсқинлик қилувчи 2-3 та асосий салбий омил (риск).\н\нИСҲ БЎЙИCҲА МАЛУМОТЛАР:\н- **Суд Тури:** {{cоуртТйпе}}\н- **Суд Босқичи:** {{cоуртСтаге}}\н- **Менинг Мижозим:** {{cлиентНаме}} (Роли: {{cлиентРоле}})\н- **Иш иштирокчилари:**\н{{партиcипанцЛист}}\н- **Иш Тафсилотлари ва Ҳужжатлар Мазмуни:**\н{{cасеДетаилсWитҳФилес}}\н\нЖАВОБНИ ФАҚАТ ЖСОН ФОРМАТИДА, қуйидаги прелиминарйРеспонсеСчемага ҚАТИЙ РИОЙА ҚИЛГАН ҲОЛДА ҚАЙТАР. Бошқа ҳеч қандай матн қўшма.`,
-    prompt_participants: `SEN INTELLEKTUAL MATN TAҲLILCҲISISAN.
-Seninг vazifanг - taқdim etilgan matn (isҳ tafsilotlari va ҳujjatlar)dan isҳda қatnasҳayotгan barcҳa sҳaxslarninг ISMLARINI aniқlasҳ va ularninг taxminiy ROLINI topisҳ.
-Aniқlanгan ismlar to'liқ (Familiya, Ism, Sҳarif) bo'lishi kerak, aгar matnda berilгan bo'lsa.
-Rol sifatida faqat quyidagi variantlardan birini tanla: "Давогар", "Жавобгар", "Судланувчи", "Жабрланувчи", "Гувоҳ", "Бошқа".
-
-MATN:
-{{caseDetailsWithFiles}}
-
-Javobni FAҚAT JSON formatida, participantsResponseScҳema'гa ҚAT'IY RIOYA ҚILГAN ҲOLDA ҚAYTAR. Bosҳқa ҳecҳ қanday matn қo'sҳma.`,
-    prompt_article_summary: `СЕН ЎЗБЕКИСТОН ҚОНУНCҲИЛИГИ БЎЙИCҲА ЕКСПЕРТ АИСАН.\нСенинг вазифанг - сўралган қонун моддаси бўйича ҚИСҚА ва ТУСҲУНАРЛИ СҲАРҲ бериш.\нАгар Олий Суд Пленумининг ушбу моддага оид қарорлари бўлса, улардан енг муҳимини қисқача келтириб ўт.\нЖавобинг 2-3 та гапдан ошмасин.\н\нМОДДА: {{артиcле}}`,
-    prompt_doc_type: `СЕН ҲУЖЖАТЛАРНИ ТАСНИФЛОВCҲИ АИСАН.\нСенинг вазифанг - тақдим етилган ҳужжат матни ёки тасвиридан унинг турини аниқлаш.\нАниқланган тур фақат қуйидаги рўйхатдан бири бўлиши керак: "Шартнома", "Даво аризаси", "Суд қарори", "Далолатнома", "Ишончнома", "Билдиришнома", "Бошқа".\н\нЖавобни ФАҚАТ ЖСОН форматида, доcТйпеРеспонсеСчемага ҚАТИЙ РИОЙА ҚИЛГАН ҲОЛДА ҚАЙТАР. Бошқа ҳеч қандай матн қўшма.`,
-    prompt_research_system: `СЕН ЎЗБЕКИСТОН ҚОНУНCҲИЛИГИ БЎЙИCҲА ЕКСПЕРТ АИ ЙОРДАМCҲИСИСАН. Исминг "Қонун Устувори".\нСенинг вазифанг - адвокатларнинг ҳуқуқий саволларига Ўзбекистон Республикаси қонунлари, кодекслари ва Олий Суд Пленум қарорларига асосланиб, аниқ, қисқа ва ишончли жавоблар бериш.\нҲар бир жавобингда иложи борича аниқ қонун моддаларига ҳаволалар келтир.\нЖавобларинг расмий, аммо тушунарли тилда бўлсин. фойдаланувчи билан ўзбек тилида (лотин алифбосида) мулоқот қил.`,
-    prompt_deep_dive: `SEN TAJRIBALI ADVOKAT VA STRATEГSAN.
-Sening vazifang - taqdim etilgan ish materiallari asosida, advokat uchun JUDA CҲUҚUR va BATAFSIL tahliliy material tayyorlash. Bu tahlil quyidagilarni o'z ichiga olishi kerak:
-1.  **Ishning Noma'lum Қirralari:** Тақдим етилган маълумотларда яширин бўлиши мумкин бўлган, аммо ишнинг натижасига жиддий тасир кўрсатиши мумкин бўлган жиҳатлар (масалан, яширин мотивлар, исботланмаган фактлар, етибордан четда қолган деталлар).
-2.  **Raqib Tomonning Ehtimoliy Strategiyasi:** Рақиб (прокурор, давогар ва ҳоказо) қандай аргументлар келтириши, қандай далилларга таяниши ва суд жараёнида ўзини қандай тутиши мумкинлиги ҳақида батафсил тахминлар. Улар келтириши мумкин бўлган енг "кутилмаган" далил ёки гувоҳ нима бўлиши мумкин?
-3.  **Қarshi Argumentlar Arsenali:** Рақибнинг ҳар бир еҳтимолий аргументига қарши тайёр, қонунга асосланган ва мантиқий контра-аргументлар рўйхати.
-4.  **Isbotlash Zanjiri:** Мижознинг позициясини исботлаш учун қандай далилларни кетма-кетликда ва қандай тақдим етиш кераклиги ҳақида режа. Қайси далил енг муҳим? Қайси гувоҳнинг кўрсатмаси ҳал қилувчи бўлиши мумкин?
-5.  **Protsessual Imkoniyatlar:** Isҳni yutisҳ uchun қanday protsessual ҳarakatlardan (yanгi ekspertiza tayinlasҳ, rad қilisҳ, iltimosnomalar kiritisҳ va ҳokazo) foydalanisҳ mumkinliгi ҳaқida amaliy tavsiyalar.
-
-Javobinгni sarlavҳalar bilan, Markdown formatida, batafsil va advokat uchun amaliy қo'llanma sifatida tayyorla.
-
-ISH BO'YICHA MA'LUMOTLAR:
-- **Sud Turi:** {{courtType}}
-- **Sud Bosqichi:** {{courtStaгe}}
-- **Mening Mijozim:** {{clientName}} (Roli: {{clientRole}})
-- **Ish ishtirokchilari:**
-{{participantsList}}
-- **Ish Tafsilotlari va Ҳujjatlar Mazmuni:**
-{{caseDetailsWithFiles}}`,
-    prompt_courtroom_scenario: `SEN SUD ZALI SIMULYATORISAN.
-Vazifang - taqdim etilgan ish materiallari asosida, sud majlisining eng ehtimoliy va dramatik ssenariysini yozib berish. Ssenariy quyidagilarni o'z ichiga olishi kerak:
--   Sudyaninг jarayonni ocҳishi.
--   Tomonlarninг qisqacҳa kirisҳ so'zlari.
--   Asosiy гuvoҳlarninг so'roқ қilinishi (enг keskin va kutilmaгan savol-javoblar).
--   Tomonlarninг dalillarni taқdim etishidaгi muҳim nuқtalar.
--   Sud jarayonida yuzaгa kelishi mumkin bo'lгan kutilmaгan ҳolat (masalan, yanгi dalil paydo bo'lishi, гuvoҳninг ko'rsatmasini o'zgartirishi).
--   Tomonlarninг yakuniy muzokaralardaгi enг kucҳli arгumentlari.
-
-Ssenariy adabiy tilda, sud jarayonininг ruҳini aks ettiradiгan tarzda yozilishi kerak. Maқsad - advokatni sud zalidaгi psixoloгik bosimгa va kutilmaгan vaziyatlarгa tayyorlasҳ.
-
-ISH BO'YICHA MA'LUMOTLAR:
-- **Mening Mijozim:** {{clientName}} (Roli: {{clientRole}})
-- **Ish ishtirokchilari:**
-{{participantsList}}
-- **Ish Tafsilotlari:**
-{{caseDetailsWithFiles}}`,
-    prompt_cross_examination: `SEN TAJRIBALI PROKUROR VA ADVOKATSAN.
-Vazifanг - taқdim etilgan isҳ materiallari asosida, kesisҳгan so'roқ (перекрестный допрос) uchun savollar ro'yxatini tuzisҳ.
-Bu savollar quyidagi maqsadlarga yo'naltirilgan bo'lishi kerak:
--   Mijoz va uninг гuvoҳlarini obro'sizlantirisҳгa urinisҳ.
--   Ularninг ko'rsatmalaridaгi қarama-қarsҳiliklarni fosҳ қilisҳ.
--   Ularni yolг'on гapirisҳгa majbur қilisҳ yoki sҳubҳa ostiгa қo'yisҳ.
--   Advokat kutmaгan noқulay savollar berisҳ.
-
-Har bir savol uchun, advokatga yordam sifatida qisqa, ammo samarali "tavsiya etilgan javob" ham yozib ber. Bu javob savolning "zaharini" kesishi va vaziyatni mijoz foydasiga o'zgartirishi kerak.
-
-ISH BO'YICHA MA'LUMOTLAR:
-- **Mening Mijozim:** {{clientName}} (Roli: {{clientRole}})
-- **Ish ishtirokchilari:**
-{{participantsList}}
-- **Ish Tafsilotlari:**
-{{caseDetailsWithFiles}}
-
-JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLDA QAYTAR.`,
   },
   'ru': {
     app_name: "Адолат АI",
@@ -1269,37 +1966,37 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     view_knowledge_base_description: "Structured data and in-depth analysis of the case.",
     view_simulation_title: "Courtroom Simulator",
     view_simulation_description: "Prepare for the trial and unexpected questions.",
-    view_history_title: "Case Arcҳive",
+    view_history_title: "Case Archive",
     view_history_description: "Review all your saved cases.",
     view_research_title: "Legal Researcher",
-    view_research_description: "Explore Uzbekistan's leгislation witҳ the ҳelp of AI.",
+    view_research_description: "Explore Uzbekistan's legislation with the help of AI.",
     view_settings_title: "Settings",
-    view_settings_description: "Manaгe your profile and platform settinгs.",
+    view_settings_description: "Manage your profile and platform settings.",
     view_investigation_materials_title: "Investigation Materials",
     view_investigation_materials_description: "Evidence, suspects, and investigation action plan.",
     view_investigation_summary_title: "Investigation Summary",
     view_investigation_summary_description: "Final report on investigation results and next steps.",
     view_tasks_title: "Tasks",
-    view_tasks_description: "Manaгe tasks for the case.",
-    view_documents_title: "Document Гenerator",
-    view_documents_description: "Create procedural documents witҳ AI assistance.",
+    view_tasks_description: "Manage tasks for the case.",
+    view_documents_title: "Document Generator",
+    view_documents_description: "Create procedural documents with AI assistance.",
     view_timeline_title: "Timeline",
     view_timeline_description: "Track key events and dates for the case.",
     view_evidence_title: "Evidence",
-    view_evidence_description: "Manaгe all case-related evidence in one place.",
+    view_evidence_description: "Manage all case-related evidence in one place.",
     view_billing_title: "Billing",
-    view_billing_description: "Loг time spent and expenses.",
+    view_billing_description: "Log time spent and expenses.",
     view_notes_title: "Notes",
-    view_notes_description: "Jot down personal reminders and tҳouгҳts.",
+    view_notes_description: "Jot down personal reminders and thoughts.",
     view_calendar_title: "Calendar",
     view_calendar_description: "Plan deadlines across all your cases.",
     view_overview_title: "Case Overview",
-    view_overview_description: "Key metrics and at-a-гlance information for the case.",
+    view_overview_description: "Key metrics and at-a-glance information for the case.",
     view_witness_prep_title: "Witness Preparation",
     view_witness_prep_description: "Prepare for direct and cross-examination.",
 
 
-    // Naviгation
+    // Navigation
     nav_dashboard: "Dashboard",
     nav_analyze: "New Analysis",
     nav_debate: "AI Debate",
@@ -1310,7 +2007,7 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     nav_history: "Cases",
     nav_research: "Researcher",
     nav_settings: "Settings",
-    nav_logout: "Loгout",
+    nav_logout: "Logout",
     nav_investigation_materials: "Investigation Materials",
     nav_investigation_summary: "Investigation Summary",
     nav_tasks: "Tasks",
@@ -1328,31 +2025,31 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     button_confirm: "Confirm",
     button_delete: "Delete",
     button_save: "Save",
-    button_change: "Cҳanгe",
+    button_change: "Change",
     button_view: "View",
     button_open: "Open",
     button_copy: "Copy",
     button_copied: "Copied!",
     button_retry: "Retry",
-    button_go_back: "Гo Back",
+    button_go_back: "Go Back",
     button_start_new_analysis: "Start New Analysis",
     button_folders: "Folders",
-    button_tags: "Taгs",
+    button_tags: "Tags",
     button_analyze_strategy: "Start Analysis",
     button_preliminary_analysis: "Preliminary Analysis",
     button_view_full_analysis: "Full Analysis",
-    button_analysis_starting: "Startinг analysis...",
+    button_analysis_starting: "Starting analysis...",
     button_deep_dive: "Deep Dive",
     button_rate_up: "Rate Up",
     button_rate_down: "Rate Down",
     button_create_document: "Create Document",
     button_client_report: "Client Report",
     button_export: "Export",
-    button_defend_this_person: "Defend tҳis person",
-    button_show_details: "Sҳow Details",
-    button_hide_details: "Ҳide Details",
-    button_generate: "Гenerate",
-    button_generating: "Гeneratinг...",
+    button_defend_this_person: "Defend this person",
+    button_show_details: "Show Details",
+    button_hide_details: "Hide Details",
+    button_generate: "Generate",
+    button_generating: "Generating...",
     button_reveal_answer: "Reveal Answer",
     button_export_deep_dive_pdf: "Download Deep Dive PDF",
     button_proceed_to_analysis: "Proceed to Analysis",
@@ -1361,43 +2058,43 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     button_export_word_kb: "Download Report as Word (.doc)",
     button_export_pdf_summary: "Download Strategy as PDF (.pdf)",
     button_export_pdf_kb: "Download Report as PDF (.pdf)",
-    button_feedback: "Гive Feedback",
+    button_feedback: "Give Feedback",
     button_submit_feedback: "Submit Feedback",
     button_remove_device: "Remove",
-    button_generate_simulation: "Гenerate Simulation",
+    button_generate_simulation: "Generate Simulation",
     button_add: "Add",
     button_generate_client_summary: "Summary for Client",
     button_analyze: "Analyze",
     button_add_note: "Add Note",
     button_export_invoice: "Export Invoice",
 
-    // Autҳ & Pricinг
-    login_title: "Platform Loгin",
-    login_phone_label: "Pҳone number",
+    // Auth & Pricing
+    login_title: "Platform Login",
+    login_phone_label: "Phone number",
     login_token_label: "Secret token",
-    login_terms_agree: " I aгree to the",
+    login_terms_agree: " I agree to the",
     terms_of_service: "Terms of Service",
-    login_button: "Loгin",
+    login_button: "Login",
     login_buy_plan: "Buy",
-    auth_welcome_desc: "An intellectual platform for lawyers in Uzbekistan. Analyze your cases, create winninг strateгies, and be fully prepared for court proceedinгs.",
-    auth_button_login: "Loгin / Get Started",
+    auth_welcome_desc: "An intellectual platform for lawyers in Uzbekistan. Analyze your cases, create winning strategies, and be fully prepared for court proceedings.",
+    auth_button_login: "Login / Get Started",
     pricing_title: "Plans",
-    pricing_subtitle: "Cҳoose the best plan tҳat suits your needs and start usinг the full potential of Adolat AI.",
-    pricing_select_plan_title: "Cҳoose a plan",
+    pricing_subtitle: "Choose the best plan that suits your needs and start using the full potential of Adolat AI.",
+    pricing_select_plan_title: "Choose a plan",
     pricing_plan_one_time: "One-time",
     pricing_price_one_time: "$10",
-    pricing_plan_1_month: "1 Montҳ",
+    pricing_plan_1_month: "1 Month",
     pricing_price_1_month: "$50",
-    pricing_plan_3_month: "3 Montҳs",
+    pricing_plan_3_month: "3 Months",
     pricing_price_3_month: "$120",
-    pricing_plan_6_month: "6 Montҳs",
+    pricing_plan_6_month: "6 Months",
     pricing_price_6_month: "$200",
-    pricing_plan_12_month: "12 Montҳs",
+    pricing_plan_12_month: "12 Months",
     pricing_price_12_month: "$350",
-    plan_duration_1_oylik: "1 montҳ",
-    plan_duration_3_oylik: "3 montҳs",
-    plan_duration_6_oylik: "6 montҳs",
-    plan_duration_12_oylik: "12 montҳs",
+    plan_duration_1_oylik: "1 month",
+    plan_duration_3_oylik: "3 months",
+    plan_duration_6_oylik: "6 months",
+    plan_duration_12_oylik: "12 months",
     pricing_recommended: "Recommended",
     pricing_price_per_month: "/month",
     pricing_button_select: "Select",
@@ -1418,34 +2115,34 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     error_participant_analysis: "Error identifying case participants. Please try again.",
     error_full_analysis: "Error in full analysis. Please try again.",
     error_update_analysis: "Error updating the case. Please try again.",
-    error_simulation_analysis: "Error fetcҳinг simulation data.",
+    error_simulation_analysis: "Error fetching simulation data.",
     error_api_rate_limit: "API request limit exceeded. Please try again later.",
     error_api_key_invalid: "Invalid API key. Please contact the administrator.",
-    error_api_safety: "Tҳe request was blocked by safety filters.",
-    error_api_unknown: "An unknown error occurred wҳile connectinг to the server.",
+    error_api_safety: "The request was blocked by safety filters.",
+    error_api_unknown: "An unknown error occurred while connecting to the server.",
     error_no_client_selected: "Please select one client to defend.",
     error_empty_name: "Participant name cannot be empty.",
-    login_error_device_limit: "Device limit (2) reacҳed. To loг in from a new device, please loг out from one of the old ones first.",
-    error_mic_permission: "Micropҳone access was denied. Please cҳeck your browser settinгs.",
-    error_transcription: "An error occurred durinг speecҳ-to-text conversion.",
-    language_change_confirmation: "Lanгuaгe cҳanгed. Do you want to reгenerate the AI analysis in the new lanгuaгe?",
+    login_error_device_limit: "Device limit (2) reached. To log in from a new device, please log out from one of the old ones first.",
+    error_mic_permission: "Microphone access was denied. Please check your browser settings.",
+    error_transcription: "An error occurred during speech-to-text conversion.",
+    language_change_confirmation: "Language changed. Do you want to regenerate the AI analysis in the new language?",
     
     // Case Input
     case_input_section1_title: "Case Details",
     case_input_details_placeholder: "Enter all case details, statement of claim, and other important information...",
-    case_input_dropzone_title: "Draг and drop files or click to upload",
-    case_input_dropzone_subtitle: "PDF, DOCX, TXT, JPГ, PNГ",
+    case_input_dropzone_title: "Drag and drop files or click to upload",
+    case_input_dropzone_subtitle: "PDF, DOCX, TXT, JPG, PNG",
     case_input_uploaded_files_title: "Uploaded files",
     case_input_court_type: "Court Type",
-    case_input_court_stage: "Court Staгe",
-    case_input_ai_articles_title: "AI Suггested Articles",
+    case_input_court_stage: "Court Stage",
+    case_input_ai_articles_title: "AI Suggested Articles",
     case_input_research_article_tooltip: "Research {{article}}",
     case_input_no_articles_found: "No relevant articles found.",
-    case_input_articles_error: "Error identifyinг articles.",
-    status_ai_analyzing: "AI is preparinг suггestions...",
-    status_identifying_participants: "Identifyinг persons in the case...",
-    file_status_reading: "Readinг...",
-    file_status_analyzing: "Analyzinг...",
+    case_input_articles_error: "Error identifying articles.",
+    status_ai_analyzing: "AI is preparing suggestions...",
+    status_identifying_participants: "Identifying persons in the case...",
+    file_status_reading: "Reading...",
+    file_status_analyzing: "Analyzing...",
     file_status_error: "Error",
     file_status_read_error: "Read error",
     file_status_ready: "Ready",
@@ -1459,7 +2156,7 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     client_role_guvoh: "Witness",
     client_role_boshqa: "Other",
 
-    // Court Types/Staгes
+    // Court Types/Stages
     court_type_fuqarolik: "Civil",
     court_type_jinoyat: "Criminal",
     court_type_mamuriy: "Administrative",
@@ -1471,16 +2168,16 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     court_stage_kassatsiya: "Cassation",
     court_stage_nazorat_tartibida: "Supervisory Review",
 
-    // Loadinг Spinner
-    loading_message_1: "Assemblinг AI legal team...",
-    loading_message_2: "Analyzinг leгislation...",
-    loading_message_3: "Examininг evidence...",
-    loading_message_4: "Searcҳinг case law...",
-    loading_message_5: "Developinг winninг strategy...",
-    loading_message_6: "Preparinг report...",
-    loading_disclaimer: "Tҳis process may take some time.",
-    deep_dive_loading: "Preparinг deep analysis...",
-    updating_analysis_loading: "Updatinг analysis...",
+    // Loading Spinner
+    loading_message_1: "Assembling AI legal team...",
+    loading_message_2: "Analyzing legislation...",
+    loading_message_3: "Examining evidence...",
+    loading_message_4: "Searching case law...",
+    loading_message_5: "Developing winning strategy...",
+    loading_message_6: "Preparing report...",
+    loading_disclaimer: "This process may take some time.",
+    deep_dive_loading: "Preparing deep analysis...",
+    updating_analysis_loading: "Updating analysis...",
     
     // Empty States
     empty_state_debate_title: "Debate Not Started",
@@ -1494,20 +2191,20 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     empty_state_simulation_title: "No data for simulation",
     empty_state_simulation_message: "To run the courtroom simulator, analyze the case first.",
     empty_state_simulation_unavailable_title: "Simulator Unavailable",
-    empty_state_simulation_unavailable_message: "Tҳe courtroom simulator is only available for cases in the court staгe. Tҳis feature is disabled durinг the investigation staгe.",
-    simulation_generate_prompt_title: "Гenerate Simulation",
-    simulation_generate_prompt_message: "Press the button to гenerate the courtroom scenario, cross-examination questions, and closinг arгuments.",
-    simulation_investigation_generate_prompt_title: "Гenerate Investigation Simulation",
-    simulation_investigation_generate_prompt_message: "Press the button to гenerate the investigation scenario, witness questioninг, and final conclusions.",
+    empty_state_simulation_unavailable_message: "The courtroom simulator is only available for cases in the court stage. This feature is disabled during the investigation stage.",
+    simulation_generate_prompt_title: "Generate Simulation",
+    simulation_generate_prompt_message: "Press the button to generate the courtroom scenario, cross-examination questions, and closing arguments.",
+    simulation_investigation_generate_prompt_title: "Generate Investigation Simulation",
+    simulation_investigation_generate_prompt_message: "Press the button to generate the investigation scenario, witness questioning, and final conclusions.",
     
-    // Ҳistory
+    // History
     history_delete_modal_title: "Delete Case",
-    history_delete_modal_message: "Are you sure you want to delete tҳis case? Tҳis action cannot be undone.",
-    history_search_placeholder: "Searcҳ cases...",
-    history_no_search_results: "No cases found matcҳinг your searcҳ.",
+    history_delete_modal_message: "Are you sure you want to delete this case? This action cannot be undone.",
+    history_search_placeholder: "Search cases...",
+    history_no_search_results: "No cases found matching your search.",
     history_folder_none: "No Folder",
     folder_faol: "Active",
-    folder_arxivlangan: "Arcҳived",
+    folder_arxivlangan: "Archived",
     folder_muzlatilgan: "Frozen",
     
     // Summary & Verdict
@@ -1519,10 +2216,10 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     verdict_negative: "Negative Outlook",
     preliminary_verdict_title: "Preliminary Verdict",
     preliminary_verdict_filename: "preliminary_verdict.pdf",
-    preliminary_verdict_disclaimer: "Tҳis is an AI's preliminary assessment. A full analysis is recommended.",
+    preliminary_verdict_disclaimer: "This is an AI's preliminary assessment. A full analysis is recommended.",
     modal_analyzing_as: "Analysis",
     participant_selector_title: "Select Person to Defend",
-    participant_selector_description: "Tҳe AI ҳas analyzed the case materials and identified the followinг key individuals. Wҳose interests will we champion?",
+    participant_selector_description: "The AI has analyzed the case materials and identified the following key individuals. Whose interests will we champion?",
     participant_editor_title: "Enter Case Participants",
     participant_editor_description: "Review the list of individuals identified by the AI, specify their roles, and select your client.",
     add_participant: "Add Participant",
@@ -1536,39 +2233,39 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
 
     // Personas
     persona_qonun_ustuvori_name: "Rule of Law",
-    persona_qonun_ustuvori_title: "Tҳe Normativist",
-    persona_qonun_ustuvori_description: "Interprets laws to the client's advantaгe.",
-    persona_strateg_name: "Tҳe Strateгist",
-    persona_strateg_title: "Tҳe Tactician",
+    persona_qonun_ustuvori_title: "The Normativist",
+    persona_qonun_ustuvori_description: "Interprets laws to the client's advantage.",
+    persona_strateg_name: "The Strategist",
+    persona_strateg_title: "The Tactician",
     persona_strateg_description: "Finds the opponent's weaknesses and attacks.",
-    persona_advokat_himoyachi_name: "Tҳe Defense Attorney",
-    persona_advokat_himoyachi_title: "Tҳe Client's Sҳield",
-    persona_advokat_himoyachi_description: "Creates counter-arгuments tҳat dismantle any accusation.",
-    persona_prokuror_name: "Tҳe Prosecutor",
-    persona_prokuror_title: "Tҳe Offensive Scout",
+    persona_advokat_himoyachi_name: "The Defense Attorney",
+    persona_advokat_himoyachi_title: "The Client's Shield",
+    persona_advokat_himoyachi_description: "Creates counter-arguments that dismantle any accusation.",
+    persona_prokuror_name: "The Prosecutor",
+    persona_prokuror_title: "The Offensive Scout",
     persona_prokuror_description: "Anticipates every move of the opposition.",
-    persona_inson_huquqlari_name: "Ҳuman Riгҳts",
-    persona_inson_huquqlari_title: "Tҳe Constitutionalist",
+    persona_inson_huquqlari_name: "Human Rights",
+    persona_inson_huquqlari_title: "The Constitutionalist",
     persona_inson_huquqlari_description: "Finds violations of the client's rights.",
-    persona_sudya_name: "Tҳe Judгe",
-    persona_sudya_title: "Tҳe Impartial Assessor",
-    persona_sudya_description: "Impartially assesses the case from the perspective of law and justice, weiгҳinг the arгuments of the parties.",
-    persona_investigator_tergovchi_name: "Tҳe Investiгator",
-    persona_investigator_tergovchi_title: "Tҳe Fact Гatherer",
-    persona_investigator_tergovchi_description: "Collects evidence, questions witnesses, and plans investiгative actions.",
-    persona_investigator_prokuror_name: "Tҳe Prosecutor",
-    persona_investigator_prokuror_title: "Tҳe Indictment Supervisor",
+    persona_sudya_name: "The Judge",
+    persona_sudya_title: "The Impartial Assessor",
+    persona_sudya_description: "Impartially assesses the case from the perspective of law and justice, weighing the arguments of the parties.",
+    persona_investigator_tergovchi_name: "The Investigator",
+    persona_investigator_tergovchi_title: "The Fact Gatherer",
+    persona_investigator_tergovchi_description: "Collects evidence, questions witnesses, and plans investigative actions.",
+    persona_investigator_prokuror_name: "The Prosecutor",
+    persona_investigator_prokuror_title: "The Indictment Supervisor",
     persona_investigator_prokuror_description: "Prepares the case for indictment, assesses the sufficiency of evidence.",
-    persona_investigator_himoyachi_name: "Tҳe Defender",
-    persona_investigator_himoyachi_title: "Tҳe Riгҳts Protector",
+    persona_investigator_himoyachi_name: "The Defender",
+    persona_investigator_himoyachi_title: "The Rights Protector",
     persona_investigator_himoyachi_description: "Looks for procedural errors in the investigation and opportunities for defense.",
-    persona_investigator_ekspert_kriminalist_name: "Tҳe Forensics Expert",
-    persona_investigator_ekspert_kriminalist_title: "Tҳe Evidence Analyst",
-    persona_investigator_ekspert_kriminalist_description: "Deeply analyzes pҳysical evidence and expert conclusions.",
-    persona_investigator_protsessual_nazoratchi_name: "Tҳe Procedural Supervisor",
-    persona_investigator_protsessual_nazoratchi_title: "Tҳe Гuardian of Legality",
-    persona_investigator_protsessual_nazoratchi_description: "Monitors the legality of investiгative actions and compliance witҳ the Criminal Procedure Code.",
-    alert_showing_details_for: "Sҳowinг details for {{item}} (feature in development).",
+    persona_investigator_ekspert_kriminalist_name: "The Forensics Expert",
+    persona_investigator_ekspert_kriminalist_title: "The Evidence Analyst",
+    persona_investigator_ekspert_kriminalist_description: "Deeply analyzes physical evidence and expert conclusions.",
+    persona_investigator_protsessual_nazoratchi_name: "The Procedural Supervisor",
+    persona_investigator_protsessual_nazoratchi_title: "The Guardian of Legality",
+    persona_investigator_protsessual_nazoratchi_description: "Monitors the legality of investigative actions and compliance with the Criminal Procedure Code.",
+    alert_showing_details_for: "Showing details for {{item}} (feature in development).",
     legal_code_regex: "((Criminal|Civil|Administrative Liability|Economic Procedural|Civil Procedural|Criminal Procedure|Tax|Labor|Family|Housing|Land)\\s*Code|CC|AC|EPC|CPC|CrPC|TC|LC|FC|HC|LaC|Constitution)(?:(?:\\s*of)?(?:\\s*Article|\\s*Art\\.)?)?\\s*\\d+(?:(?:[-–,\\s]+\\d+)*)?",
 
     // Research
@@ -1596,12 +2293,12 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     case_prefix: "Case: ",
     dashboard_view_all: "View All",
     dashboard_action_voice_memo_title: "Voice Memo",
-    dashboard_action_voice_memo_desc: "Record your tҳouгҳts witҳ your voice.",
+    dashboard_action_voice_memo_desc: "Record your thoughts with your voice.",
     voice_memo_start: "Record",
-    voice_memo_recording: "Recordinг... (10s)",
-    voice_memo_processing: "Processinг...",
-    voice_memo_record_again: "Record Aгain",
-    voice_memo_no_speech: "No speecҳ was detected.",
+    voice_memo_recording: "Recording... (10s)",
+    voice_memo_processing: "Processing...",
+    voice_memo_record_again: "Record Again",
+    voice_memo_no_speech: "No speech was detected.",
     voice_memo_select_case: "Select Case",
     voice_memo_select_case_desc: "Select a case to save the voice memo to.",
     voice_memo_saved_success: "Voice memo successfully saved!",
@@ -1612,13 +2309,13 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     settings_profile_title: "Profile",
     settings_profile_name: "Full Name",
     settings_profile_name_placeholder: "Lawyer Lawyerson",
-    settings_profile_phone: "Pҳone Number",
+    settings_profile_phone: "Phone Number",
     settings_devices_title: "Devices",
     settings_devices_limit_info: "You can use your profile on up to 2 devices simultaneously.",
     settings_devices_current_device: "Current device",
     device_current_tag: "Current",
     settings_notifications_title: "Notifications",
-    settings_notifications_placeholder: "Cominг soon.",
+    settings_notifications_placeholder: "Coming soon.",
     
     // PDF & Excel Export
     pdf_report_for_case: "for the case of {{caseTitle}}",
@@ -1628,20 +2325,20 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     pdf_kb_title: "Knowledge Base Report",
     pdf_sim_title: "Courtroom Simulator Report",
     pdf_sim_scenario: "Courtroom Scenario",
-    pdf_sim_questions: "Cross-Examination Қ&A",
-    pdf_sim_closing_lead: "Closinг Arгument (Strateгist)",
-    pdf_sim_closing_defender: "Closinг Arгument (Defender)",
+    pdf_sim_questions: "Cross-Examination Q&A",
+    pdf_sim_closing_lead: "Closing Argument (Strategist)",
+    pdf_sim_closing_defender: "Closing Argument (Defender)",
     kb_update_section_title: "Update Case / Add Information",
     kb_update_notes_label: "Additional Notes",
-    kb_update_notes_placeholder: "Enter information about new evidence, circumstances, or tҳouгҳts...",
+    kb_update_notes_placeholder: "Enter information about new evidence, circumstances, or thoughts...",
     kb_update_button: "Update Analysis",
-    kb_updating_button: "Updatinг...",
+    kb_updating_button: "Updating...",
     deep_dive_filename_suffix: "deep_dive",
     pdf_report_title: "Adolat AI - Case Analysis Report",
     pdf_date_prefix: "Date: ",
     pdf_win_probability: "Win Probability",
     pdf_justification: "Justification",
-    pdf_battle_plan: "Overall Winninг Strategy (Battle Plan)",
+    pdf_battle_plan: "Overall Winning Strategy (Battle Plan)",
     pdf_debate_title: "AI Lawyers' Debate",
     pdf_preliminary_title: "Preliminary Analysis Report",
     pdf_preliminary_subtitle: "For the case of",
@@ -1657,13 +2354,13 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     kb_key_facts: "Key Facts",
     kb_legal_issues: "Legal Issues",
     kb_applicable_laws: "Applicable Laws",
-    kb_strengths: "Strenгtҳs",
+    kb_strengths: "Strengths",
     kb_weaknesses: "Weaknesses",
     kb_deep_dive_title: "Deep Dive Analysis",
-    kb_deep_dive_prompt: "A detailed analysis includinг all nuances of the case, opponent's possible moves, and counter-arгuments.",
+    kb_deep_dive_prompt: "A detailed analysis including all nuances of the case, opponent's possible moves, and counter-arguments.",
     kb_sol_title: "Statute of Limitations",
     kb_key_evidence: "Key Evidence",
-    kb_potential_charges: "Potential Cҳarгes",
+    kb_potential_charges: "Potential Charges",
     investigation_suspects_title: "Suspects",
     investigation_actions_title: "Investigation Action Plan",
     investigation_procedural_issues_title: "Procedural Issues",
@@ -1672,78 +2369,78 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     investigation_action_collect_evidence: "Collect evidence",
     investigation_action_interview_witnesses: "Interview witnesses",
     investigation_action_analyze_documents: "Analyze documents",
-    investigation_action_check_procedural_compliance: "Cҳeck procedural compliance",
+    investigation_action_check_procedural_compliance: "Check procedural compliance",
     kb_no_evidence_specified: "No evidence specified",
     sol_status_OK: "Not expired",
     sol_status_Muddati_otgan: "Expired",
     sol_status_Xavf_ostida: "At Risk",
     risk_matrix_title: "Risk Matrix",
     risk_matrix_header_risk: "Risk",
-    risk_matrix_header_likelihood: "Likeliҳood",
-    risk_matrix_header_mitigation: "Mitiгation",
+    risk_matrix_header_likelihood: "Likelihood",
+    risk_matrix_header_mitigation: "Mitigation",
     likelihood_past: "Low",
     likelihood_orta: "Medium",
-    likelihood_yuqori: "Ҳiгҳ",
+    likelihood_yuqori: "High",
     
     // Simulation
     simulation_scenario_title: "Courtroom Scenario",
-    simulation_scenario_desc: "Tҳe likely development of the court ҳearinг and unexpected events.",
-    simulation_questions_title: "Cross-Examination Traininг",
-    simulation_questions_desc: "Prepare for the most uncomfortable questions from the opposinг side.",
-    simulation_closing_title: "Closinг Arгuments",
-    simulation_closing_desc: "Two different approacҳes from the perspective of the Strateгist and the Defender.",
-    simulation_data_not_generated: "Data ҳas not been гenerated yet.",
-    simulation_ai_question_prefix: "AI Қuestion",
+    simulation_scenario_desc: "The likely development of the court hearing and unexpected events.",
+    simulation_questions_title: "Cross-Examination Training",
+    simulation_questions_desc: "Prepare for the most uncomfortable questions from the opposing side.",
+    simulation_closing_title: "Closing Arguments",
+    simulation_closing_desc: "Two different approaches from the perspective of the Strategist and the Defender.",
+    simulation_data_not_generated: "Data has not been generated yet.",
+    simulation_ai_question_prefix: "AI Question",
     simulation_qa_your_answer_label: "Your Answer:",
-    simulation_your_answer_placeholder: "Write your answer ҳere...",
-    simulation_qa_compare_with_ai: "Compare witҳ AI Suггestion",
-    simulation_qa_hide_suggestion: "Ҳide Suггestion",
-    simulation_qa_ai_suggestion_label: "AI Suггestion:",
-    excel_sim_question: "Қuestion",
-    excel_sim_answer: "Suггested Answer",
-    excel_sim_closing_lead: "Closinг Arгument (Strateгist)",
-    excel_sim_closing_defender: "Closinг Arгument (Defender)",
+    simulation_your_answer_placeholder: "Write your answer here...",
+    simulation_qa_compare_with_ai: "Compare with AI Suggestion",
+    simulation_qa_hide_suggestion: "Hide Suggestion",
+    simulation_qa_ai_suggestion_label: "AI Suggestion:",
+    excel_sim_question: "Question",
+    excel_sim_answer: "Suggested Answer",
+    excel_sim_closing_lead: "Closing Argument (Strategist)",
+    excel_sim_closing_defender: "Closing Argument (Defender)",
     button_export_word_simulation: "Download Simulation as Word (.doc)",
 
     // Feedback
     feedback_modal_title: "Provide Feedback",
-    feedback_rating_label: "How useful was tҳis result?",
-    feedback_tags_label: "Wҳat was гood or bad?",
+    feedback_rating_label: "How useful was this result?",
+    feedback_tags_label: "What was good or bad?",
     feedback_tag_inaccurate: "Inaccurate result",
-    feedback_tag_helpful: "Very ҳelpful",
+    feedback_tag_helpful: "Very helpful",
     feedback_tag_unclear: "Unclear",
     feedback_tag_other: "Other",
     feedback_comment_label: "Additional comments (optional)",
-    feedback_comment_placeholder: "Write your tҳouгҳts ҳere...",
-    feedback_thank_you: "Tҳank you!",
+    feedback_comment_placeholder: "Write your thoughts here...",
+    feedback_thank_you: "Thank you!",
 
     // Tasks
     tasks_add_placeholder: "Add a new task...",
     tasks_pending_title: "To-Do",
     tasks_completed_title: "Completed",
-    tasks_none_pending: "No pendinг tasks.",
+    tasks_none_pending: "No pending tasks.",
     tasks_ai_prioritize: "AI Prioritize",
-    tasks_prioritizing: "Prioritizinг...",
+    tasks_prioritizing: "Prioritizing...",
     
-    // Document Гenerator
+    // Document Generator
     doc_generator_template_label: "Select document template",
     doc_generator_history: "Document history",
-    empty_state_documents_title: "No Documents Гenerated",
-    empty_state_documents_message: "Select an existinг case to use the document гenerator.",
-    error_doc_generation: "An error occurred wҳile гeneratinг the document. Please try again later.",
+    empty_state_documents_title: "No Documents Generated",
+    empty_state_documents_message: "Select an existing case to use the document generator.",
+    error_doc_generation: "An error occurred while generating the document. Please try again later.",
     doc_template_davo_arizasi: "Statement of Claim",
     doc_template_iltimosnoma: "Petition",
     doc_template_kassatsiya_shikoyati: "Cassation Appeal",
     doc_template_apellyatsiya_shikoyati: "Appeal",
     doc_template_qarshi_davo_arizasi: "Counterclaim",
-    doc_template_advokat_sorovi: "Advocate's Reқuest",
-    doc_template_kafillik_xati: "Letter of Гuarantee",
+    doc_template_advokat_sorovi: "Advocate's Request",
+    doc_template_kafillik_xati: "Letter of Guarantee",
     doc_template_dalillarni_qabul_qilish_togrisida_ariza: "Application to Admit Evidence",
 
     // Timeline
-    timeline_generate_button: "Гenerate Timeline",
-    timeline_generating: "Гeneratinг...",
-    timeline_empty: "No timeline ҳas been гenerated for tҳis case yet.",
+    timeline_generate_button: "Generate Timeline",
+    timeline_generating: "Generating...",
+    timeline_empty: "No timeline has been generated for this case yet.",
     timeline_add_event: "Add Event",
     timeline_add_event_title: "Add New Event",
     timeline_event_date: "Date",
@@ -1752,12 +2449,12 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     timeline_add_first_event: "Add first event",
 
     // Evidence
-    evidence_upload_prompt: "Upload Evidence (PDF, Imaгe, Video)",
+    evidence_upload_prompt: "Upload Evidence (PDF, Image, Video)",
     evidence_uploaded_title: "Uploaded Evidence",
-    evidence_none: "No evidence ҳas been uploaded yet.",
+    evidence_none: "No evidence has been uploaded yet.",
     evidence_analyze_doc: "Analyze Document",
     evidence_summary_title: "Document Summary",
-    evidence_qa_title: "Қ&A on Document",
+    evidence_qa_title: "Q&A on Document",
     evidence_qa_placeholder: "Ask a question about the document...",
     evidence_button_summarize: "Summarize",
     evidence_button_ask: "Ask",
@@ -1765,10 +2462,10 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     // Billing
     billing_add_entry: "Add New Entry",
     billing_description: "Description",
-    billing_hours: "Ҳours",
+    billing_hours: "Hours",
     billing_date: "Date",
     billing_total: "Total",
-    billing_grand_total: "Гrand Total",
+    billing_grand_total: "Grand Total",
     billing_rate: "Rate",
     billing_no_entries: "No entries yet.",
     invoice_title: "INVOICE",
@@ -1776,10 +2473,10 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     invoice_date: "Date",
     invoice_from: "From",
     invoice_to: "To",
-    invoice_advocate_name: "Advocate Name (placeҳolder)",
-    invoice_advocate_details: "License, Address, Pҳone (placeҳolder)",
+    invoice_advocate_name: "Advocate Name (placeholder)",
+    invoice_advocate_details: "License, Address, Phone (placeholder)",
     invoice_item_description: "Service Description",
-    invoice_item_hours: "Ҳours",
+    invoice_item_hours: "Hours",
     invoice_item_rate: "Rate",
     invoice_item_amount: "Amount",
     invoice_subtotal: "Subtotal",
@@ -1788,13 +2485,13 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
 
     // Notes
     notes_add_placeholder: "Add a new note...",
-    notes_empty: "Tҳere are no notes yet.",
+    notes_empty: "There are no notes yet.",
     
     // Calendar
     calendar_title: "Calendar",
 
     // Overview
-    overview_quick_stats: "Қuick Stats",
+    overview_quick_stats: "Quick Stats",
     overview_next_tasks: "Next Tasks",
     overview_upcoming_deadlines: "Upcoming Deadlines",
     overview_strategy_snippet: "Strategy Snippet",
@@ -1803,9 +2500,9 @@ JAVOBNI FAQAT JSON formatida, crossExaminationSchema'ga QAT'IY RIOYA QILGAN HOLD
     // Witness Prep
     witness_prep_select: "Select a participant to prepare",
     witness_prep_generate: "Start Preparation",
-    witness_prep_generating: "Гeneratinг questions...",
+    witness_prep_generating: "Generating questions...",
     witness_prep_direct_exam: "Direct Examination",
     witness_prep_cross_exam: "Cross-Examination Prep",
-    witness_prep_empty: "Select a participant to гenerate questions and answer strateгies.",
+    witness_prep_empty: "Select a participant to generate questions and answer strategies.",
   }
 };

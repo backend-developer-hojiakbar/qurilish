@@ -31,6 +31,103 @@ const parseGeminiError = (error: any): Error => {
     return new Error('error_api_unknown');
 };
 
+// --- Translation helpers for export ---
+const translateResultSchema = {
+  type: Type.OBJECT,
+  properties: {
+    summary: { type: Type.STRING },
+    winProbability: { type: Type.INTEGER },
+    probabilityJustification: { type: Type.STRING },
+    positiveFactors: { type: Type.ARRAY, items: { type: Type.STRING } },
+    negativeFactors: { type: Type.ARRAY, items: { type: Type.STRING } },
+    debate: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          lawyerName: { type: Type.STRING },
+          analysis: { type: Type.STRING }
+        },
+        required: ["lawyerName", "analysis"]
+      }
+    },
+    deepDiveAnalysis: { type: Type.STRING, nullable: true },
+    courtroomScenario: { type: Type.STRING, nullable: true },
+    crossExaminationQuestions: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          question: { type: Type.STRING },
+          suggestedAnswer: { type: Type.STRING }
+        },
+        required: ["question", "suggestedAnswer"]
+      },
+      nullable: true
+    },
+    closingArgumentLead: { type: Type.STRING, nullable: true },
+    closingArgumentDefender: { type: Type.STRING, nullable: true },
+    clientSummary: { type: Type.STRING, nullable: true }
+  },
+  required: [
+    'summary','winProbability','probabilityJustification','positiveFactors','negativeFactors','debate'
+  ]
+};
+
+export const translateDebateResult = async (
+  result: DebateResult,
+  targetLanguage: string = 'uz-cyrl'
+): Promise<DebateResult> => {
+  try {
+    const systemInstruction = `You are a professional legal translator. Translate ALL human-readable text fields of the following JSON into ${targetLanguage}. Do not add or remove fields. Preserve arrays and object structure exactly. Keep percentages and numbers as-is. Return ONLY valid JSON conforming to the provided schema.`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: { parts: [{ text: JSON.stringify(result) }] },
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: translateResultSchema,
+        temperature: 0.2,
+        thinkingConfig: { thinkingBudget: 0 },
+        systemInstruction
+      }
+    });
+
+    const jsonText = response.text.trim();
+    const translated = JSON.parse(jsonText) as DebateResult;
+    return translated;
+  } catch (error) {
+    throw parseGeminiError(error);
+  }
+};
+
+export const translateTextArray = async (
+  texts: string[],
+  targetLanguage: string = 'uz-cyrl'
+): Promise<string[]> => {
+  try {
+    const systemInstruction = `Translate each item of the provided JSON array into ${targetLanguage}. Return ONLY a JSON array of strings with the same length and order.`;
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: { parts: [{ text: JSON.stringify(texts) }] },
+      config: {
+        responseMimeType: "application/json",
+        temperature: 0.2,
+        thinkingConfig: { thinkingBudget: 0 },
+        systemInstruction
+      }
+    });
+    const jsonText = response.text.trim();
+    const translated = JSON.parse(jsonText) as string[];
+    if (!Array.isArray(translated) || translated.length !== texts.length) {
+      throw new Error('Invalid translation array shape');
+    }
+    return translated;
+  } catch (error) {
+    throw parseGeminiError(error);
+  }
+};
+
 
 // Helper to combine case details with extracted text from files
 const aggregateText = (caseDetails: string, files: CaseFile[]): string => {
@@ -60,17 +157,17 @@ const responseSchema = {
     properties: {
         debate: {
             type: Type.ARRAY,
-            description: "Har bir AI huquqshunosning tahlili va fikrlari.",
+            description: "Ҳар бир AI ҳуқуқшуносининг таҳлили ва фикрлари.",
             items: {
                 type: Type.OBJECT,
                 properties: {
                     lawyerName: {
                         type: Type.STRING,
-                        description: "AI huquqshunosning nomi (masalan, 'Qonun Ustuvori')."
+                        description: "AI ҳуқуқшуносининг номи (масалан, 'Қонун Устувори')."
                     },
                     analysis: {
                         type: Type.STRING,
-                        description: "AI huquqshunosning ish bo'yicha batafsil tahlili va argumentlari."
+                        description: "AI ҳуқуқшуносининг иш бўйича батафсил таҳлили ва аргументлари."
                     }
                 },
                 required: ["lawyerName", "analysis"]
@@ -78,94 +175,94 @@ const responseSchema = {
         },
         summary: {
             type: Type.STRING,
-            description: "Munozara yakunlari bo'yicha umumlashtirilgan, advokat uchun amaliy strategiya. Markdown formatida bo'lishi kerak."
+            description: "Мунозара якунлари бўйича умумлаштирилган, адвокат учун амалий стратегия. Markdown форматида бўлиши керак."
         },
         winProbability: {
             type: Type.INTEGER,
-            description: "Ishni yutish ehtimoli, 0 dan 100 gacha bo'lgan foiz."
+            description: "Ишни ютиш эҳтимоли, 0 дан 100 гача бўлган фоиз."
         },
         probabilityJustification: {
             type: Type.STRING,
-            description: "G'alaba ehtimoli foizini asoslovchi qisqa izoh."
+            description: "Ғалаба эҳтимоли фоизини асословчи қисқа изоҳ."
         },
         positiveFactors: {
             type: Type.ARRAY,
-            description: "G'alaba ehtimolini oshiruvchi asosiy omillar ro'yxati.",
+            description: "Ғалаба эҳтимолини оширувчи асосий омиллар рўйхати.",
             items: { type: Type.STRING }
         },
         negativeFactors: {
             type: Type.ARRAY,
-            description: "G'alaba ehtimolini pasaytiruvchi asosiy xavflar (risklar) ro'yxati.",
+            description: "Ғалаба эҳтимолини пасайтирувчи асосий хавфлар (рисклар) рўйхати.",
             items: { type: Type.STRING }
         },
         riskMatrix: {
             type: Type.ARRAY,
-            description: "Risklar, ularning ehtimoli va kamaytirish yo'llari ko'rsatilgan matritsa.",
+            description: "Рисклар, уларнинг эҳтимоли ва камайтириш йўллари кўрсатилган матрица.",
             items: {
                 type: Type.OBJECT,
                 properties: {
-                    risk: { type: Type.STRING, description: "Potensial risk tavsifi." },
-                    likelihood: { type: Type.STRING, description: "Riskning yuzaga kelish ehtimoli.", enum: ['Past', 'O\'rta', 'Yuqori'] },
-                    mitigation: { type: Type.STRING, description: "Riskni kamaytirish bo'yicha tavsiya." }
+                    risk: { type: Type.STRING, description: "Потенсиал риск тавсифи." },
+                    likelihood: { type: Type.STRING, description: "Рискнинг юзага келиш эҳтимоли.", enum: ['Паст', 'Ўрта', 'Юқори'] },
+                    mitigation: { type: Type.STRING, description: "Рискни камайтириш бўйича тавсия." }
                 },
                 required: ["risk", "likelihood", "mitigation"]
             }
         },
         suggestedTasks: {
             type: Type.ARRAY,
-            description: "Advokat uchun birinchi navbatda bajarilishi kerak bo'lgan 3-5 ta amaliy vazifa.",
+            description: "Адвокат учун биринчи навбатда бажарилиши керак бўлган 3-5 та амалий вазифа.",
             items: { type: Type.STRING }
         },
         knowledgeBase: {
             type: Type.OBJECT,
-            description: "Ish bo'yicha tuzilgan bilimlar bazasi.",
+            description: "Иш бўйича тузилган билимлар базаси.",
             properties: {
                 keyFacts: {
                     type: Type.ARRAY,
-                    description: "Ishning asosiy faktlari va ularning ahamiyati.",
+                    description: "Ишнинг асосий фактлари ва уларнинг аҳамияти.",
                     items: {
                         type: Type.OBJECT,
                         properties: {
-                            fact: { type: Type.STRING, description: "Muhim fakt." },
-                            relevance: { type: Type.STRING, description: "Ushbu faktning ish uchun ahamiyati." }
+                            fact: { type: Type.STRING, description: "Муҳим факт." },
+                            relevance: { type: Type.STRING, description: "Ушбу фактнинг иш учун аҳамияти." }
                         },
                         required: ["fact", "relevance"]
                     }
                 },
                 legalIssues: {
                     type: Type.ARRAY,
-                    description: "Hal qilinishi kerak bo'lgan asosiy huquqiy masalalar.",
+                    description: "Ҳал қилиниши керак бўлган асосий ҳуқуқий масалалар.",
                     items: { type: Type.STRING }
                 },
                 applicableLaws: {
                     type: Type.ARRAY,
-                    description: "Ishga aloqador qonun moddalari va ularning qisqacha tavsifi.",
+                    description: "Ишга алоқадор қонун моддалари ва уларнинг қисқача тавсифи.",
                     items: {
                         type: Type.OBJECT,
                         properties: {
-                            article: { type: Type.STRING, description: "Qonun moddasi (masalan, 'JK 168-modda')." },
-                            summary: { type: Type.STRING, description: "Moddaning ishga aloqador qisqacha mazmuni." },
-                            url: { type: Type.STRING, description: "Qonun moddasiga oid lex.uz saytidagi yoki boshqa ishonchli manbadagi to'g'ridan-to'g'ri havola (URL). Agar topilmasa, bo'sh qoldiring." }
+                            article: { type: Type.STRING, description: "Қонун моддаси (масалан, 'ЖК 168-модда')." },
+                            summary: { type: Type.STRING, description: "Модданинг ишга алоқадор қисқача мазмуни." },
+                            url: { type: Type.STRING, description: "Қонун моддасига оид lex.uz сайтидаги ёки бошқа ишончли манбадаги тўғридан-тўғри ҳавола (URL). Агар топилмаса, бўш қолдиринг." }
                         },
                         required: ["article", "summary"]
                     }
                 },
                 strengths: {
                     type: Type.ARRAY,
-                    description: "Mijoz pozitsiyasining kuchli tomonlari.",
+                    description: "Мижоз позициясининг кучли томонлари.",
                     items: { type: Type.STRING }
                 },
                 weaknesses: {
                     type: Type.ARRAY,
-                    description: "Mijoz pozitsiyasining zaif tomonlari.",
+                    description: "Мижоз позициясининг заиф томонлари.",
                     items: { type: Type.STRING }
                 },
                 statuteOfLimitations: {
                     type: Type.OBJECT,
                     description: "Da'vo muddati bo'yicha tahlil. Status 'OK', 'Muddati o\\'tgan' (Expired), yoki 'Xavf ostida' (At Risk) bo'lishi kerak.",
                     properties: {
-                        status: { type: Type.STRING, description: "Da'vo muddatining holati.", enum: ['OK', 'Muddati o\'tgan', 'Xavf ostida'] },
-                        summary: { type: Type.STRING, description: "Holat bo'yicha qisqa tushuntirish." }
+                        status: { type: Type.STRING, description: "Даъво муддатининг ҳолати.", enum: ['OK', 'Муддати ўтган', 'Хавф остида'] },
+                        summary: { type: Type.STRING, description: "Ҳолат бўйича қисқа тушунтириш." }
                     },
                     required: ["status", "summary"]
                 }
@@ -177,7 +274,7 @@ const responseSchema = {
 };
 
 
-export const getLegalStrategy = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<DebateResult> => {
+export const getLegalStrategy = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<DebateResult> => {
   try {
     const fullText = aggregateText(caseDetails, files);
     const participantsList = formatParticipantsForPrompt(participants, clientName, (key) => t(key));
@@ -250,27 +347,27 @@ const preliminaryResponseSchema = {
     properties: {
         winProbability: {
             type: Type.INTEGER,
-            description: "Ishni yutish ehtimoli, 0 dan 100 gacha bo'lgan foiz."
+            description: "Ишни ютиш эҳтимоли, 0 дан 100 гача бўлган фоиз."
         },
         probabilityJustification: {
             type: Type.STRING,
-            description: "G'alaba ehtimoli foizini asoslovchi qisqa (1-2 jumla) izoh."
+            description: "Ғалаба эҳтимоли фоизини асословчи қисқа (1-2 жумла) изоҳ."
         },
         positiveFactors: {
             type: Type.ARRAY,
-            description: "G'alaba ehtimolini oshiruvchi 2-3 ta asosiy omil.",
+            description: "Ғалаба эҳтимолини оширувчи 2-3 та асосий омил.",
             items: { type: Type.STRING }
         },
         negativeFactors: {
             type: Type.ARRAY,
-            description: "G'alaba ehtimolini pasaytiruvchi 2-3 ta asosiy xavf.",
+            description: "Ғалаба эҳтимолини пасайтирувчи 2-3 та асосий хавф.",
             items: { type: Type.STRING }
         }
     },
     required: ["winProbability", "probabilityJustification", "positiveFactors", "negativeFactors"]
 };
 
-export const getPreliminaryVerdict = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<PreliminaryVerdict> => {
+export const getPreliminaryVerdict = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<PreliminaryVerdict> => {
   try {
     const fullText = aggregateText(caseDetails, files);
     const participantsList = formatParticipantsForPrompt(participants, clientName, (key) => t(key));
@@ -340,15 +437,15 @@ const participantsResponseSchema = {
     properties: {
         participants: {
             type: Type.ARRAY,
-            description: "Ishda qatnashayotgan aniqlangan shaxslar ro'yxati.",
+            description: "Ишда қатнашаётган аниқланган шахслар рўйхати.",
             items: {
                 type: Type.OBJECT,
                 properties: {
-                    name: { type: Type.STRING, description: "Shaxsning to'liq ism-sharifi." },
+                    name: { type: Type.STRING, description: "Шахснинг тўлиқ исм-шарифи." },
                     suggestedRole: { 
                         type: Type.STRING, 
-                        description: "Shaxsning ish bo'yicha taxminiy roli.",
-                        enum: ["Da'vogar", "Javobgar", "Sudlanuvchi", "Jabrlanuvchi", "Guvoh", "Boshqa"]
+                        description: "Шахснинг иш бўйича тахминий роли.",
+                        enum: ["Даъвогар", "Жавобгар", "Судланувчи", "Жабрланувчи", "Гувоҳ", "Бошқа"]
                     }
                 },
                 required: ["name", "suggestedRole"]
@@ -362,7 +459,7 @@ interface ParticipantsResponse {
     participants: SuggestedParticipant[];
 }
 
-export const getCaseParticipants = async (caseDetails: string, files: CaseFile[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<SuggestedParticipant[]> => {
+export const getCaseParticipants = async (caseDetails: string, files: CaseFile[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<SuggestedParticipant[]> => {
     try {
         const fullText = aggregateText(caseDetails, files);
         const fullPrompt = t('prompt_participants', { caseDetailsWithFiles: fullText });
@@ -417,7 +514,7 @@ export const getCaseParticipants = async (caseDetails: string, files: CaseFile[]
     }
 };
 
-export const getArticleSummary = async (article: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
+export const getArticleSummary = async (article: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<string> => {
     try {
         const fullPrompt = t('prompt_article_summary', { article });
         const response = await ai.models.generateContent({
@@ -443,8 +540,8 @@ const docTypeResponseSchema = {
     properties: {
         documentType: {
             type: Type.STRING,
-            description: "Aniqlangan hujjat turi.",
-            enum: ["Shartnoma", "Da'vo arizasi", "Sud qarori", "Dalolatnoma", "Ishonchnoma", "Bildirishnoma", "Boshqa"]
+            description: "Аниқланган ҳужжат тури.",
+            enum: ["Шартнома", "Даъво аризаси", "Суд қарори", "Далолатнома", "Ишончнома", "Билдиришнома", "Бошқа"]
         }
     },
     required: ["documentType"]
@@ -454,7 +551,7 @@ interface DocumentTypeResponse {
     documentType: string;
 }
 
-export const getDocumentType = async (file: CaseFile, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
+export const getDocumentType = async (file: CaseFile, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<string> => {
     try {
         let promptText = t('prompt_doc_type');
         const fileParts: { inlineData: { mimeType: string; data: string; } }[] = [];
@@ -557,7 +654,7 @@ export const sendResearchMessage = async (message: string, t: (key: string, repl
 };
 
 
-export const getDeepDiveAnalysis = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
+export const getDeepDiveAnalysis = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<string> => {
     try {
         const fullText = aggregateText(caseDetails, files);
         const translatedCourtStage = t(`court_stage_${courtStage.replace(/ /g, '_').toLowerCase()}`);
@@ -614,7 +711,7 @@ export const getDeepDiveAnalysis = async (caseDetails: string, files: CaseFile[]
 
 // --- NEW SIMULATOR SERVICES ---
 
-export const getCourtroomScenario = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
+export const getCourtroomScenario = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<string> => {
     try {
         const fullText = aggregateText(caseDetails, files);
         const translatedCourtStage = t(`court_stage_${courtStage.replace(/ /g, '_').toLowerCase()}`);
@@ -661,7 +758,7 @@ const crossExaminationSchema = {
     required: ["questions"]
 };
 
-export const getCrossExaminationQuestions = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<CrossExaminationQuestion[]> => {
+export const getCrossExaminationQuestions = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<CrossExaminationQuestion[]> => {
     try {
         const fullText = aggregateText(caseDetails, files);
         const participantsList = formatParticipantsForPrompt(participants, clientName, (key) => t(key));
@@ -694,7 +791,7 @@ export const getCrossExaminationQuestions = async (caseDetails: string, files: C
     }
 };
 
-export const getClosingArgument = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], persona: 'lead' | 'defender', t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
+export const getClosingArgument = async (caseDetails: string, files: CaseFile[], courtType: string, courtStage: string, clientRole: string, clientName: string, participants: CaseParticipant[], persona: 'lead' | 'defender', t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<string> => {
     try {
         const fullText = aggregateText(caseDetails, files);
         const participantsList = formatParticipantsForPrompt(participants, clientName, (key) => t(key));
@@ -726,7 +823,7 @@ export const generateDocument = async (
     docType: string,
     caseData: Case,
     t: (key: string, replacements?: { [key: string]: string }) => string,
-    language: string = 'uz-lat'
+    language: string = 'uz-cyrl'
 ): Promise<string> => {
     try {
         const fullText = aggregateText(caseData.caseDetails, caseData.files.map(f => ({ ...f, content: '', extractedText: f.name })));
@@ -758,7 +855,7 @@ export const generateDocument = async (
 };
 
 // --- NEW CLIENT SUMMARY SERVICE ---
-export const generateClientSummary = async (summary: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
+export const generateClientSummary = async (summary: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<string> => {
     try {
         const fullPrompt = t('prompt_generate_client_summary', { summary });
         const response = await ai.models.generateContent({
@@ -783,7 +880,7 @@ const prioritizeTasksSchema = {
     properties: {
         prioritizedTasks: {
             type: Type.ARRAY,
-            description: "Muhimligi bo'yicha tartiblangan vazifalar ro'yxati.",
+            description: "Муҳимлиги бўйича тартибланган вазифалар рўйхати.",
             items: { type: Type.STRING }
         }
     },
@@ -794,7 +891,7 @@ interface PrioritizedTasksResponse {
     prioritizedTasks: string[];
 }
 
-export const prioritizeTasks = async (tasks: string[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string[]> => {
+export const prioritizeTasks = async (tasks: string[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<string[]> => {
     try {
         const tasksList = tasks.map((task, i) => `${i + 1}. ${task}`).join('\n');
         const fullPrompt = t('prompt_prioritize_tasks', { tasksList });
@@ -830,11 +927,11 @@ const timelineSchema = {
     properties: {
         events: {
             type: Type.ARRAY,
-            description: "Xronologik tartibda voqealar ro'yxati.",
+            description: "Хронологик тартибда воқеалар рўйхати.",
             items: {
                 type: Type.OBJECT,
                 properties: {
-                    date: { type: Type.STRING, description: "Sana (YYYY-MM-DD formatida)." },
+                    date: { type: Type.STRING, description: "Сана (YYYY-MM-DD форматида)." },
                     description: { type: Type.STRING, description: "Voqeaning qisqa tavsifi." },
                     type: { type: Type.STRING, description: "Voqea turi.", enum: ['event', 'deadline'] }
                 },
@@ -849,7 +946,7 @@ interface TimelineResponse {
     events: TimelineEvent[];
 }
 
-export const getTimeline = async (caseDetails: string, files: CaseFile[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<TimelineEvent[]> => {
+export const getTimeline = async (caseDetails: string, files: CaseFile[], t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<TimelineEvent[]> => {
     try {
         const fullText = aggregateText(caseDetails, files);
         const fullPrompt = t('prompt_generate_timeline', { caseDetailsWithFiles: fullText });
@@ -1044,7 +1141,7 @@ export const transcribeAudioMemo = async (durationSeconds: number, t: (key: stri
     });
 };
 
-export const getResearchResponse = async (query: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<ChatMessage> => {
+export const getResearchResponse = async (query: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<ChatMessage> => {
     try {
         const systemPrompt = t('prompt_research_system');
         const fullPrompt = `${systemPrompt}\n\n${query}`;
@@ -1075,7 +1172,7 @@ export const getResearchResponse = async (query: string, t: (key: string, replac
     }
 };
 
-export const summarizeDocument = async (documentText: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
+export const summarizeDocument = async (documentText: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<string> => {
     try {
         const fullPrompt = t('prompt_summarize_document', { documentText });
         const response = await ai.models.generateContent({
@@ -1094,7 +1191,7 @@ export const summarizeDocument = async (documentText: string, t: (key: string, r
     }
 };
 
-export const answerDocumentQuestion = async (documentText: string, question: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<string> => {
+export const answerDocumentQuestion = async (documentText: string, question: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<string> => {
     try {
         const fullPrompt = t('prompt_answer_document_question', { documentText, question });
         const response = await ai.models.generateContent({
@@ -1135,7 +1232,7 @@ const witnessPrepSchema = {
     required: ["direct", "cross"]
 };
 
-export const generateWitnessPrep = async (caseDetails: string, files: CaseFile[], clientRole: string, clientName: string, participantName: string, participantRole: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-lat'): Promise<CrossExaminationQuestion[]> => {
+export const generateWitnessPrep = async (caseDetails: string, files: CaseFile[], clientRole: string, clientName: string, participantName: string, participantRole: string, t: (key: string, replacements?: { [key: string]: string }) => string, language: string = 'uz-cyrl'): Promise<CrossExaminationQuestion[]> => {
     try {
         const fullText = aggregateText(caseDetails, files);
         const fullPrompt = t('prompt_generate_witness_prep', {
@@ -1204,10 +1301,9 @@ export const generateWitnessPrep = async (caseDetails: string, files: CaseFile[]
 // Helper to get language code for AI model
 const getAiLanguageCode = (language: string): string => {
   switch (language) {
-    case 'uz-lat': return 'uz-Latn'; // Uzbek in Latin script
-    case 'uz-cyr': return 'uz-Cyrl'; // Uzbek in Cyrillic script
+    case 'uz-cyrl': return 'uz-Cyrl'; // Uzbek in Cyrillic script
     case 'ru': return 'ru'; // Russian
     case 'en': return 'en'; // English
-    default: return 'uz-Latn';
+    default: return 'uz-Cyrl';
   }
 };

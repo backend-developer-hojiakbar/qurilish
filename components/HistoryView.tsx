@@ -6,8 +6,7 @@ import { ConfirmationModal } from './ConfirmationModal';
 
 const getLocaleForLanguage = (language: string) => {
     switch (language) {
-        case 'uz-lat': return 'uz-UZ';
-        case 'uz-cyr': return 'uz-Cyrl-UZ';
+        case 'uz-cyrl': return 'uz-Cyrl-UZ';
         case 'ru': return 'ru-RU';
         case 'en': return 'en-US';
         default: return 'en-US';

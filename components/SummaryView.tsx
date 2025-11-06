@@ -3,7 +3,7 @@ import { EmptyState } from './EmptyState';
 import { AnalysisIcon, CopyIcon, CheckIcon, DocumentTextIcon, UsersIcon, DownloadIcon, ShieldCheckIcon, ExclamationIcon, XMarkIcon, CheckCircleIcon, ShieldExclamationIcon, ChevronDownIcon, ChartBarIcon, ChatBubbleLeftRightIcon, BrainIcon } from './icons';
 import type { Case, RiskMatrixEntry } from '../types';
 import { ClientSummaryModal } from './ClientSummaryModal';
-import { generateClientSummary } from '../services/geminiService';
+import { generateClientSummary, translateDebateResult } from '../services/geminiService';
 
 // Add type declarations for libraries loaded from CDN
 declare global {
@@ -216,12 +216,17 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
     }
   };
   
-  const handleExportWord = () => {
+  const handleExportWord = async () => {
     if (!caseData || !result) return;
     setExportingType('word');
 
     try {
-        const { winProbability, probabilityJustification, positiveFactors, negativeFactors, summary: resultSummary, debate } = result;
+        const baseResult = result;
+        const exportResult = (caseData.language && caseData.language !== language)
+          ? await translateDebateResult(baseResult, language)
+          : baseResult;
+
+        const { winProbability, probabilityJustification, positiveFactors, negativeFactors, summary: resultSummary, debate } = exportResult;
         
         const listToHtml = (items: string[]) => `<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`;
         const markdownToHtml = (text: string) => text
@@ -277,11 +282,16 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
     }
   };
 
-  const handleExportPdf = () => {
+  const handleExportPdf = async () => {
     if (!caseData || !result) return;
     setExportingType('pdf');
 
     try {
+        const baseResult = result;
+        const exportResult = (caseData.language && caseData.language !== language)
+          ? await translateDebateResult(baseResult, language)
+          : baseResult;
+
         // Get jsPDF from window object
         const jsPDF = window.jspdf.jsPDF;
         const doc = new jsPDF();
@@ -324,16 +334,16 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
         
         doc.setFontSize(14);
         doc.setTextColor(0, 0, 0);
-        doc.text(`${t('pdf_win_probability')}: ${result.winProbability}%`, 20, yPos);
+        doc.text(`${t('pdf_win_probability')}: ${exportResult.winProbability}%`, 20, yPos);
         yPos += 8;
         
         doc.setFontSize(12);
         doc.setTextColor(100, 100, 100);
-        doc.text(result.probabilityJustification, 20, yPos, { maxWidth: 170 });
+        doc.text(exportResult.probabilityJustification, 20, yPos, { maxWidth: 170 });
         yPos += 15;
         
         // Positive Factors
-        if (result.positiveFactors.length > 0) {
+        if (exportResult.positiveFactors.length > 0) {
             doc.setFontSize(14);
             doc.setTextColor(76, 175, 80); // Green color
             doc.text(t('win_probability_positive_factors'), 20, yPos);
@@ -341,7 +351,7 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
             
             doc.setFontSize(12);
             doc.setTextColor(0, 0, 0);
-            result.positiveFactors.forEach((factor, index) => {
+            exportResult.positiveFactors.forEach((factor, index) => {
                 if (yPos > 280) { // Check if we need a new page
                     doc.addPage();
                     yPos = 20;
@@ -353,7 +363,7 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
         }
         
         // Negative Factors
-        if (result.negativeFactors.length > 0) {
+        if (exportResult.negativeFactors.length > 0) {
             doc.setFontSize(14);
             doc.setTextColor(244, 67, 54); // Red color
             doc.text(t('win_probability_negative_factors'), 20, yPos);
@@ -361,7 +371,7 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
             
             doc.setFontSize(12);
             doc.setTextColor(0, 0, 0);
-            result.negativeFactors.forEach((factor, index) => {
+            exportResult.negativeFactors.forEach((factor, index) => {
                 if (yPos > 280) { // Check if we need a new page
                     doc.addPage();
                     yPos = 20;
@@ -391,7 +401,7 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
         doc.setTextColor(0, 0, 0);
         
         // Process the summary markdown-like text
-        const lines = result.summary.split('\n');
+        const lines = exportResult.summary.split('\n');
         lines.forEach((line, index) => {
             if (yPos > 280) { // Check if we need a new page
                 doc.addPage();
@@ -463,7 +473,7 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
         doc.setFontSize(12);
         doc.setTextColor(0, 0, 0);
         
-        result.debate.forEach((debateItem, index) => {
+        exportResult.debate.forEach((debateItem, index) => {
             if (yPos > 270) { // Check if we need a new page
                 doc.addPage();
                 yPos = 20;

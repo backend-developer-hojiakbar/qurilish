@@ -79,7 +79,7 @@ const SectionCard: React.FC<{
     children: React.ReactNode;
 }> = ({ title, icon, children }) => (
     <div className="polished-pane p-4">
-        <div className="flex items-center justify-between gap-3 mb-3">
+        <div className="flex items-center justify-between gap-3 mb-3">=
             <div className="flex items-center gap-3">
                 <div className="text-[var(--accent-secondary)]">{icon}</div>
                 <h3 className="font-semibold text-lg text-slate-200">{title}</h3>

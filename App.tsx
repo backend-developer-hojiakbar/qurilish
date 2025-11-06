@@ -63,7 +63,7 @@ import { AnalysisIcon, DashboardIcon, HistoryIcon, ResearchIcon, SettingsIcon, D
 const useTranslation = () => {
     const [language, setLanguage] = useState<string>(() => {
         const savedLang = localStorage.getItem('language');
-        return savedLang || 'uz-lat';
+        return savedLang || 'uz-cyrl';
     });
 
     const t = useCallback((key: string, replacements?: { [key: string]: string }) => {
@@ -175,7 +175,7 @@ const App: React.FC = () => {
                         tags: backendCase.tags || [],
                         folder: backendCase.folder,
                         timestamp: backendCase.timestamp,
-                        language: backendCase.language || 'uz-lat', // Default to uz-lat if not set
+                        language: backendCase.language || 'uz-cyrl', // Default to uz-cyrl if not set
                     }));
                     setHistory(convertedCases);
                     setIsBackendConnected(true);

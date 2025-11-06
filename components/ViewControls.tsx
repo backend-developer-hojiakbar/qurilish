@@ -10,8 +10,7 @@ interface ViewControlsProps {
 }
 
 const LANGUAGES = [
-    { code: 'uz-lat', name: 'O‘zbek' },
-    { code: 'uz-cyr', name: 'Ўзбек' },
+    { code: 'uz-cyrl', name: 'Ўзбек' },
     { code: 'ru', name: 'Русский' },
     { code: 'en', name: 'English' },
 ];
