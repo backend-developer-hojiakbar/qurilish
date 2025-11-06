@@ -89,10 +89,57 @@ export const ParticipantEditorModal: React.FC<ParticipantEditorModalProps> = ({ 
     const roleKeys = ["davogar", "javobgar", "sudlanuvchi", "jabrlanuvchi", "guvoh", "boshqa"];
 
     useEffect(() => {
+        const toKey = (val: string): string => {
+            let v = (val || '').toLowerCase().trim();
+            // Strip accidental prefixes/suffixes and client tags
+            v = v.replace(/^client_role_/i, '');
+            v = v.replace(/\bмижоз\b|\bклиент\b|\bclient\b/gi, '').trim();
+            v = v.replace(/[^\p{L}\s'-]/gu, '').trim();
+            const map: Record<string, string> = {
+                // uz-cyrl
+                'даъвогар': 'davogar',
+                'жавобгар': 'javobgar',
+                'судланувчи': 'sudlanuvchi',
+                'жабрланувчи': 'jabrlanuvchi',
+                'гувоҳ': 'guvoh',
+                'бошқа': 'boshqa',
+                // ru
+                'истец': 'davogar',
+                'ответчик': 'javobgar',
+                'подсудимый': 'sudlanuvchi',
+                'потерпевший': 'jabrlanuvchi',
+                'свидетель': 'guvoh',
+                'другое': 'boshqa',
+                // en
+                'plaintiff': 'davogar',
+                'defendant': 'javobgar',
+                'accused': 'sudlanuvchi',
+                'victim': 'jabrlanuvchi',
+                'witness': 'guvoh',
+                'other': 'boshqa',
+                // uz-latin safety
+                "da'vogar": 'davogar',
+                'javobgar': 'javobgar',
+                'sudlanuvchi': 'sudlanuvchi',
+                'jabrlanuvchi': 'jabrlanuvchi',
+                'guvoh': 'guvoh',
+                'boshqa': 'boshqa',
+            };
+            if (map[v]) return map[v];
+            // Fallback: substring detection
+            if (v.includes('даъвогар') || v.includes("da'vogar") || v.includes('plaintiff') || v.includes('истец')) return 'davogar';
+            if (v.includes('жавобгар') || v.includes('javobgar') || v.includes('defendant') || v.includes('ответчик')) return 'javobgar';
+            if (v.includes('судланувчи') || v.includes('sudlanuvchi') || v.includes('accused') || v.includes('подсудимый')) return 'sudlanuvchi';
+            if (v.includes('жабрланувчи') || v.includes('jabrlanuvchi') || v.includes('victim') || v.includes('потерпевший')) return 'jabrlanuvchi';
+            if (v.includes('гувоҳ') || v.includes('guvoh') || v.includes('witness') || v.includes('свидетель')) return 'guvoh';
+            if (v.includes('бошқа') || v.includes('boshqa') || v.includes('other') || v.includes('другое')) return 'boshqa';
+            return 'boshqa';
+        };
+
         const mappedParticipants = initialParticipants.map((p, i) => ({
             id: `ai-${i}-${p.name}`,
             name: p.name,
-            role: t(`client_role_${p.suggestedRole.toLowerCase().replace("'", "")}`),
+            role: t(`client_role_${toKey(p.suggestedRole)}`),
             isAiSuggested: true,
         }));
         setParticipants(mappedParticipants);

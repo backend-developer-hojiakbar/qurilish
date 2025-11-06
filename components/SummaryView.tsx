@@ -204,6 +204,7 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
   const [isGeneratingClientSummary, setIsGeneratingClientSummary] = useState(false);
   
   const result = caseData?.result;
+  const exportRef = useRef<HTMLElement | null>(null);
   const summary = result?.summary;
   const isInvestigationStage = caseData?.courtStage === t('court_stage_tergov_raw');
   const viewTitle = isInvestigationStage ? t('view_investigation_summary_title') : t('view_summary_title');
@@ -264,7 +265,8 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
             </html>
         `;
 
-        const blob = new Blob([html], { type: 'application/msword' });
+        const htmlWithBom = '\ufeff' + html;
+        const blob = new Blob([htmlWithBom], { type: 'application/msword;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
@@ -292,7 +294,43 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
           ? await translateDebateResult(baseResult, language)
           : baseResult;
 
-        // Get jsPDF from window object
+        // If html2canvas is available, capture the visible report for Unicode-safe PDF
+        const h2c: any = (window as any).html2canvas;
+        if (h2c && exportRef.current) {
+            const node = exportRef.current as HTMLElement;
+            // Temporarily inject a print-ready container with localized texts and exportResult
+            // We'll clone current section to ensure what user sees is what they get
+            const clone = node.cloneNode(true) as HTMLElement;
+            clone.style.background = '#ffffff';
+            clone.style.color = '#000000';
+            clone.style.padding = '20px';
+            document.body.appendChild(clone);
+            const canvas = await h2c(clone, { scale: 2, useCORS: true });
+            document.body.removeChild(clone);
+            const imgData = canvas.toDataURL('image/png');
+            const jsPDF = window.jspdf.jsPDF;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = pageWidth;
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+            let y = 0;
+            let remaining = imgHeight;
+            // Add multiple pages if needed
+            while (remaining > 0) {
+                pdf.addImage(imgData, 'PNG', 0, y ? 0 : 0, imgWidth, imgHeight);
+                remaining -= pageHeight;
+                if (remaining > 0) {
+                    pdf.addPage();
+                }
+                y += pageHeight;
+            }
+            const safeCaseTitle = caseData.title.replace(/[^\w\s.-]/g, '').replace(/\s+/g, '_');
+            pdf.save(`${safeCaseTitle}_hisobot.pdf`);
+            return;
+        }
+
+        // Fallback to jsPDF text method
         const jsPDF = window.jspdf.jsPDF;
         const doc = new jsPDF();
         
@@ -594,7 +632,7 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
   }
 
   return (
-    <section>
+    <section ref={exportRef as any}>
        {showClientSummary && result.clientSummary && (
             <ClientSummaryModal 
                 summaryText={result.clientSummary}

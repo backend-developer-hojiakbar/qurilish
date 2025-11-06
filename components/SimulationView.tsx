@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { translateDebateResult } from '../services/geminiService';
 import type { Case } from '../types';
 import { EmptyState } from './EmptyState';
 import { TheaterIcon, LightBulbIcon, ArrowsRightLeftIcon, DownloadIcon, ChatBubbleLeftRightIcon } from './icons';
@@ -59,7 +60,7 @@ const ModuleCard: React.FC<{ title: string, description: string, icon: React.Rea
 );
 
 
-export const SimulationView: React.FC<SimulationViewProps> = ({ caseData, onNewAnalysis, isLoading, onGenerateSimulation, onOpenFeedback, t }) => {
+export const SimulationView: React.FC<SimulationViewProps> = ({ caseData, onNewAnalysis, isLoading, onGenerateSimulation, onOpenFeedback, t, language }) => {
   const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
   const [revealedAnswers, setRevealedAnswers] = useState<Set<number>>(new Set());
   const [isExporting, setIsExporting] = useState(false);
@@ -85,19 +86,23 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ caseData, onNewA
     });
   };
 
-  const handleExportWord = () => {
+  const handleExportWord = async () => {
     if (!caseData || !caseData.result) return;
     setIsExporting(true);
     try {
-        const { courtroomScenario, crossExaminationQuestions, closingArgumentLead, closingArgumentDefender } = caseData.result;
-        const markdownToHtml = (text: string | undefined) => text ? text.replace(/##\s*(.*)/g, '<h2>$1</h2>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/(\r\n|\n|\r)/gm, '<br/>') : '';
+        const baseResult = caseData.result;
+        const exportResult = (caseData.language && language && caseData.language !== language)
+          ? await translateDebateResult(baseResult as any, language)
+          : baseResult;
+        const { courtroomScenario, crossExaminationQuestions, closingArgumentLead, closingArgumentDefender } = exportResult as any;
+        const markdownToHtml = (text: string | undefined) => text ? text.replace(/##\s*(.*)/g, '<h2>$1<\/h2>').replace(/\*\*(.*?)\*\*/g, '<strong>$1<\/strong>').replace(/(\r\n|\n|\r)/gm, '<br/>') : '';
         
         let questionsHtml = '';
         if (crossExaminationQuestions && crossExaminationQuestions.length > 0) {
             questionsHtml = crossExaminationQuestions.map((q, i) => 
                 `<p><strong>${i+1}. ${t('excel_sim_question')}:</strong> ${q.question}</p>
                  <p><em>${t('excel_sim_answer')}:</em> ${q.suggestedAnswer}</p>`
-            ).join('<br/>');
+            ).join('<br/>' );
         }
 
         let html = `
@@ -115,7 +120,8 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ caseData, onNewA
             </html>
         `;
 
-        const blob = new Blob([html], { type: 'application/msword' });
+        const htmlWithBom = '\ufeff' + html;
+        const blob = new Blob([htmlWithBom], { type: 'application/msword;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
