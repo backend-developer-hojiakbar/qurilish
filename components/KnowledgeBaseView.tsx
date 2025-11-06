@@ -92,7 +92,7 @@ const SectionCard: React.FC<{
 );
 
 export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({ caseData, onNewAnalysis, onUpdateCase, isUpdating, onGetDeepDive, isDeepDiveLoading, onArticleSelect, onOpenFeedback, t, language }) => {
-  const [exportingType, setExportingType] = useState<'word' | 'pdf' | null>(null);
+  const [exportingType, setExportingType] = useState<'word' | null>(null);
   const result = caseData?.result;
   const isInvestigationStage = caseData?.courtStage === t('court_stage_tergov_raw');
   
@@ -160,7 +160,17 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({ caseData, 
 
         let html = `
             <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-            <head><meta charset='utf-8'><title>${caseData.title}</title></head>
+            <head>
+                <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+                <meta charset='utf-8'>
+                <title>${caseData.title}</title>
+                <style>
+                    body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; color: #000; }
+                    h1, h2, h3, h4 { color: #111; }
+                    ul { margin: 0 0 10px 20px; }
+                    li { margin: 4px 0; }
+                </style>
+            </head>
             <body>
                 <h1>${t('pdf_kb_full_report_title')}</h1>
                 <h2>${t('pdf_report_for_case', { caseTitle: caseData.title })}</h2>
@@ -191,7 +201,8 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({ caseData, 
             </html>
         `;
 
-        const blob = new Blob([html], { type: 'application/msword' });
+        const htmlWithBom = '\ufeff' + html;
+        const blob = new Blob([htmlWithBom], { type: 'application/msword;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
@@ -208,298 +219,7 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({ caseData, 
     }
   };
 
-  const handleExportPdf = () => {
-    if (!caseData || !result) return;
-    setExportingType('pdf');
-
-    try {
-        // Get jsPDF from window object
-        const jsPDF = window.jspdf.jsPDF;
-        const doc = new jsPDF();
-        
-        // Set document properties
-        doc.setProperties({
-            title: caseData.title,
-            subject: t('pdf_kb_full_report_title'),
-            author: 'Adolat AI'
-        });
-        
-        // Set font and styling
-        doc.setFont('helvetica');
-        doc.setFontSize(22);
-        doc.setTextColor(209, 255, 15); // --accent-primary
-        
-        // Add title
-        doc.text(t('pdf_kb_full_report_title'), 105, 20, { align: 'center' });
-        
-        doc.setFontSize(16);
-        doc.setTextColor(0, 0, 0);
-        doc.text(t('pdf_report_for_case', { caseTitle: caseData.title }), 105, 30, { align: 'center' });
-        
-        // Add date
-        doc.setFontSize(12);
-        doc.setTextColor(136, 153, 179); // --text-secondary
-        doc.text(`${t('pdf_date_prefix')}${new Date().toLocaleDateString()}`, 105, 37, { align: 'center' });
-        
-        // Add separator line
-        doc.setDrawColor(136, 153, 179); // --text-secondary
-        doc.line(20, 42, 190, 42);
-        
-        let yPos = 50;
-        
-        // Win Probability Section
-        doc.setFontSize(16);
-        doc.setTextColor(209, 255, 15); // --accent-primary
-        doc.text(t('win_probability_details'), 20, yPos);
-        yPos += 10;
-        
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        doc.text(`${t('pdf_win_probability')}: ${result.winProbability}% - ${result.probabilityJustification}`, 20, yPos, { maxWidth: 170 });
-        yPos += 10;
-        
-        // Positive Factors
-        if (result.positiveFactors.length > 0) {
-            doc.setFontSize(14);
-            doc.setTextColor(76, 175, 80); // Green color
-            doc.text(t('win_probability_positive_factors'), 20, yPos);
-            yPos += 7;
-            
-            doc.setFontSize(12);
-            doc.setTextColor(0, 0, 0);
-            result.positiveFactors.forEach((factor, index) => {
-                if (yPos > 280) { // Check if we need a new page
-                    doc.addPage();
-                    yPos = 20;
-                }
-                doc.text(`• ${factor}`, 25, yPos, { maxWidth: 165 });
-                yPos += 7;
-            });
-            yPos += 5;
-        }
-        
-        // Negative Factors
-        if (result.negativeFactors.length > 0) {
-            doc.setFontSize(14);
-            doc.setTextColor(244, 67, 54); // Red color
-            doc.text(t('win_probability_negative_factors'), 20, yPos);
-            yPos += 7;
-            
-            doc.setFontSize(12);
-            doc.setTextColor(0, 0, 0);
-            result.negativeFactors.forEach((factor, index) => {
-                if (yPos > 280) { // Check if we need a new page
-                    doc.addPage();
-                    yPos = 20;
-                }
-                doc.text(`• ${factor}`, 25, yPos, { maxWidth: 165 });
-                yPos += 7;
-            });
-            yPos += 5;
-        }
-        
-        // Add separator line
-        if (yPos > 280) {
-            doc.addPage();
-            yPos = 20;
-        }
-        doc.setDrawColor(136, 153, 179); // --text-secondary
-        doc.line(20, yPos, 190, yPos);
-        yPos += 10;
-        
-        // Participants Section
-        doc.setFontSize(16);
-        doc.setTextColor(209, 255, 15); // --accent-primary
-        doc.text(t('kb_participants_title'), 20, yPos);
-        yPos += 10;
-        
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        caseData.participants.forEach((participant, index) => {
-            if (yPos > 280) { // Check if we need a new page
-                doc.addPage();
-                yPos = 20;
-            }
-            const clientTag = participant.name === caseData.clientName ? ` (${t('kb_client_tag')})` : '';
-            doc.text(`${participant.name} - ${participant.role}${clientTag}`, 25, yPos, { maxWidth: 165 });
-            yPos += 7;
-        });
-        yPos += 5;
-        
-        // Add separator line
-        if (yPos > 280) {
-            doc.addPage();
-            yPos = 20;
-        }
-        doc.setDrawColor(136, 153, 179); // --text-secondary
-        doc.line(20, yPos, 190, yPos);
-        yPos += 10;
-        
-        // Key Facts Section
-        doc.setFontSize(16);
-        doc.setTextColor(209, 255, 15); // --accent-primary
-        doc.text(isInvestigationStage ? t('kb_key_evidence') : t('kb_key_facts'), 20, yPos);
-        yPos += 10;
-        
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        knowledgeBase.keyFacts.forEach((fact, index) => {
-            if (yPos > 280) { // Check if we need a new page
-                doc.addPage();
-                yPos = 20;
-            }
-            doc.text(`${fact.fact}: ${fact.relevance}`, 25, yPos, { maxWidth: 165 });
-            yPos += 7;
-        });
-        yPos += 5;
-        
-        // Add separator line
-        if (yPos > 280) {
-            doc.addPage();
-            yPos = 20;
-        }
-        doc.setDrawColor(136, 153, 179); // --text-secondary
-        doc.line(20, yPos, 190, yPos);
-        yPos += 10;
-        
-        // Legal Issues Section
-        doc.setFontSize(16);
-        doc.setTextColor(209, 255, 15); // --accent-primary
-        doc.text(t('kb_legal_issues'), 20, yPos);
-        yPos += 10;
-        
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        knowledgeBase.legalIssues.forEach((issue, index) => {
-            if (yPos > 280) { // Check if we need a new page
-                doc.addPage();
-                yPos = 20;
-            }
-            doc.text(`• ${issue}`, 25, yPos, { maxWidth: 165 });
-            yPos += 7;
-        });
-        yPos += 5;
-        
-        // Add separator line
-        if (yPos > 280) {
-            doc.addPage();
-            yPos = 20;
-        }
-        doc.setDrawColor(136, 153, 179); // --text-secondary
-        doc.line(20, yPos, 190, yPos);
-        yPos += 10;
-        
-        // Applicable Laws Section
-        doc.setFontSize(16);
-        doc.setTextColor(209, 255, 15); // --accent-primary
-        doc.text(isInvestigationStage ? t('kb_potential_charges') : t('kb_applicable_laws'), 20, yPos);
-        yPos += 10;
-        
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        knowledgeBase.applicableLaws.forEach((law, index) => {
-            if (yPos > 280) { // Check if we need a new page
-                doc.addPage();
-                yPos = 20;
-            }
-            doc.text(`${law.article}: ${law.summary}`, 25, yPos, { maxWidth: 165 });
-            yPos += 7;
-        });
-        yPos += 5;
-        
-        // Add separator line
-        if (yPos > 280) {
-            doc.addPage();
-            yPos = 20;
-        }
-        doc.setDrawColor(136, 153, 179); // --text-secondary
-        doc.line(20, yPos, 190, yPos);
-        yPos += 10;
-        
-        // Strengths Section
-        doc.setFontSize(16);
-        doc.setTextColor(76, 175, 80); // Green color
-        doc.text(t('kb_strengths'), 20, yPos);
-        yPos += 10;
-        
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        knowledgeBase.strengths.forEach((strength, index) => {
-            if (yPos > 280) { // Check if we need a new page
-                doc.addPage();
-                yPos = 20;
-            }
-            doc.text(`• ${strength}`, 25, yPos, { maxWidth: 165 });
-            yPos += 7;
-        });
-        yPos += 5;
-        
-        // Add separator line
-        if (yPos > 280) {
-            doc.addPage();
-            yPos = 20;
-        }
-        doc.setDrawColor(136, 153, 179); // --text-secondary
-        doc.line(20, yPos, 190, yPos);
-        yPos += 10;
-        
-        // Weaknesses Section
-        doc.setFontSize(16);
-        doc.setTextColor(244, 67, 54); // Red color
-        doc.text(t('kb_weaknesses'), 20, yPos);
-        yPos += 10;
-        
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        knowledgeBase.weaknesses.forEach((weakness, index) => {
-            if (yPos > 280) { // Check if we need a new page
-                doc.addPage();
-                yPos = 20;
-            }
-            doc.text(`• ${weakness}`, 25, yPos, { maxWidth: 165 });
-            yPos += 7;
-        });
-        yPos += 5;
-        
-        // Deep Dive Analysis Section (if available)
-        if (result.deepDiveAnalysis) {
-            // Add separator line
-            if (yPos > 280) {
-                doc.addPage();
-                yPos = 20;
-            }
-            doc.setDrawColor(136, 153, 179); // --text-secondary
-            doc.line(20, yPos, 190, yPos);
-            yPos += 10;
-            
-            doc.setFontSize(16);
-            doc.setTextColor(209, 255, 15); // --accent-primary
-            doc.text(t('kb_deep_dive_title'), 20, yPos);
-            yPos += 10;
-            
-            doc.setFontSize(12);
-            doc.setTextColor(0, 0, 0);
-            // Simple text wrapping for deep dive analysis
-            const lines = doc.splitTextToSize(result.deepDiveAnalysis, 170);
-            lines.forEach((line: string, index: number) => {
-                if (yPos > 280) { // Check if we need a new page
-                    doc.addPage();
-                    yPos = 20;
-                }
-                doc.text(line, 20, yPos);
-                yPos += 7;
-            });
-        }
-        
-        // Save the PDF
-        const safeCaseTitle = caseData.title.replace(/[^\w\s.-]/g, '').replace(/\s+/g, '_');
-        doc.save(`${safeCaseTitle}_hisobot.pdf`);
-    } catch(e) {
-        console.error("Failed to generate PDF file", e);
-    } finally {
-        setExportingType(null);
-    }
-  };
+  // PDF export removed per user request
 
   return (
     <section className="animate-assemble-in space-y-6">
@@ -508,15 +228,11 @@ export const KnowledgeBaseView: React.FC<KnowledgeBaseViewProps> = ({ caseData, 
                 <ChatBubbleLeftRightIcon className="h-5 w-5" />
                 <span>{t('button_feedback')}</span>
             </button>
-            <button onClick={handleExportPdf} disabled={!!exportingType} className="flex items-center gap-2 polished-pane p-2 rounded-lg text-sm text-[var(--text-secondary)] hover:text-white interactive-hover disabled:opacity-50">
-                <DownloadIcon className="h-5 w-5" />
-                <span>{exportingType === 'pdf' ? t('button_generating') : t('button_export_pdf_kb')}</span>
-                {exportingType === 'pdf' && <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
-            </button>
+            {/* PDF export removed per user request */}
             <button onClick={handleExportWord} disabled={!!exportingType} className="flex items-center gap-2 polished-pane p-2 rounded-lg text-sm text-[var(--text-secondary)] hover:text-white interactive-hover disabled:opacity-50">
                 <DownloadIcon className="h-5 w-5" />
                 <span>{exportingType === 'word' ? t('button_generating') : t('button_export_word_kb')}</span>
-                {exportingType === 'word' && <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
+                {exportingType === 'word' && <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938л3-2.647z"></path></svg>}
             </button>
         </div>
         

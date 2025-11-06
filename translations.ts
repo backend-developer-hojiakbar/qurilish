@@ -382,10 +382,10 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     settings_notifications_placeholder: "Тез кунда қўшилади.",
     
     // PDF & Excel Export
-    pdf_report_for_case: "{{cасеТитле}} иши бўйича",
-    pdf_debate_filename: "АИ_мунозараси_{{cасеТитле}}.пдф",
-    pdf_kb_filename: "Билимлар_базаси_{{cасеТитле}}.пдф",
-    pdf_sim_filename: "Суд_симуляцияси_{{cасеТитле}}.пдф",
+    pdf_report_for_case: "{{caseTitle}} иши бўйича",
+    pdf_debate_filename: "АИ_мунозараси_{{caseTitle}}.пдф",
+    pdf_kb_filename: "Билимлар_базаси_{{caseTitle}}.пдф",
+    pdf_sim_filename: "Суд_симуляцияси_{{caseTitle}}.пдф",
     pdf_kb_title: "Билимлар Базаси Ҳисоботи",
     pdf_sim_title: "Суд Зали Симулятори Ҳисоботи",
     pdf_sim_scenario: "Суд Жараёни Ссенарийси",
@@ -411,7 +411,7 @@ export const translations: { [key: string]: { [key: string]: string } } = {
     pdf_negative_factors_label: "Салбий Омиллар / Рисклар",
     button_export_all_pdf: "Барчасини ПДФда юклаш",
     pdf_kb_full_report_title: "Иш бўйича Тўлиқ Ҳисобот",
-    pdf_kb_full_report_filename: "Толиқ_ҳисобот_{{cасеТитле}}.пдф",
+    pdf_kb_full_report_filename: "Толиқ_ҳисобот_{{caseTitle}}.пдф",
     kb_case_details: "Иш Тафсилотлари",
     kb_participants_title: "Иш Иштирокчилари",
     kb_client_tag: "Мижоз",
