@@ -107,7 +107,17 @@ export const SimulationView: React.FC<SimulationViewProps> = ({ caseData, onNewA
 
         let html = `
             <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-            <head><meta charset='utf-8'><title>${caseData.title} Simulation</title></head>
+            <head>
+                <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+                <meta charset='utf-8'>
+                <title>${caseData.title} Simulation</title>
+                <style>
+                    body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; color: #000; }
+                    h1, h2, h3, h4 { color: #111; }
+                    ul { margin: 0 0 10px 20px; }
+                    li { margin: 4px 0; }
+                </style>
+            </head>
             <body>
                 <h1>${t('pdf_sim_title')}</h1>
                 <h2>${t('pdf_report_for_case', { caseTitle: caseData.title })}</h2>

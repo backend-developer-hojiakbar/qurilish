@@ -199,7 +199,7 @@ export const WinProbabilityGauge: React.FC<{ probability: number, justification:
 
 export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysis, onOpenFeedback, onUpdateCase, t, language }) => {
   const [copied, setCopied] = useState(false);
-  const [exportingType, setExportingType] = useState<'word' | 'pdf' | null>(null);
+  const [exportingType, setExportingType] = useState<'word' | null>(null);
   const [showClientSummary, setShowClientSummary] = useState(false);
   const [isGeneratingClientSummary, setIsGeneratingClientSummary] = useState(false);
   
@@ -238,7 +238,17 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
 
         let html = `
             <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-            <head><meta charset='utf-8'><title>${caseData.title}</title></head>
+            <head>
+                <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+                <meta charset='utf-8'>
+                <title>${caseData.title}</title>
+                <style>
+                    body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; color: #000; }
+                    h1, h2, h3, h4 { color: #111; }
+                    ul { margin: 0 0 10px 20px; }
+                    li { margin: 4px 0; }
+                </style>
+            </head>
             <body>
                 <h1>${t('pdf_report_title')}</h1>
                 <h2>${t('case_prefix')}${caseData.title}</h2>
@@ -284,314 +294,7 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
     }
   };
 
-  const handleExportPdf = async () => {
-    if (!caseData || !result) return;
-    setExportingType('pdf');
-
-    try {
-        const baseResult = result;
-        const exportResult = (caseData.language && caseData.language !== language)
-          ? await translateDebateResult(baseResult, language)
-          : baseResult;
-
-        // If html2canvas is available, capture the visible report for Unicode-safe PDF
-        const h2c: any = (window as any).html2canvas;
-        if (h2c && exportRef.current) {
-            const node = exportRef.current as HTMLElement;
-            // Temporarily inject a print-ready container with localized texts and exportResult
-            // We'll clone current section to ensure what user sees is what they get
-            const clone = node.cloneNode(true) as HTMLElement;
-            clone.style.background = '#ffffff';
-            clone.style.color = '#000000';
-            clone.style.padding = '20px';
-            document.body.appendChild(clone);
-            const canvas = await h2c(clone, { scale: 2, useCORS: true });
-            document.body.removeChild(clone);
-            const imgData = canvas.toDataURL('image/png');
-            const jsPDF = window.jspdf.jsPDF;
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            const imgWidth = pageWidth;
-            const imgHeight = canvas.height * imgWidth / canvas.width;
-            let y = 0;
-            let remaining = imgHeight;
-            // Add multiple pages if needed
-            while (remaining > 0) {
-                pdf.addImage(imgData, 'PNG', 0, y ? 0 : 0, imgWidth, imgHeight);
-                remaining -= pageHeight;
-                if (remaining > 0) {
-                    pdf.addPage();
-                }
-                y += pageHeight;
-            }
-            const safeCaseTitle = caseData.title.replace(/[^\w\s.-]/g, '').replace(/\s+/g, '_');
-            pdf.save(`${safeCaseTitle}_hisobot.pdf`);
-            return;
-        }
-
-        // Fallback to jsPDF text method
-        const jsPDF = window.jspdf.jsPDF;
-        const doc = new jsPDF();
-        
-        // Set document properties
-        doc.setProperties({
-            title: caseData.title,
-            subject: t('pdf_report_title'),
-            author: 'Adolat AI'
-        });
-        
-        // Set font and styling
-        doc.setFont('helvetica');
-        doc.setFontSize(22);
-        doc.setTextColor(209, 255, 15); // --accent-primary
-        
-        // Add title
-        doc.text(t('pdf_report_title'), 105, 20, { align: 'center' });
-        
-        doc.setFontSize(16);
-        doc.setTextColor(0, 0, 0);
-        doc.text(`${t('case_prefix')}${caseData.title}`, 105, 30, { align: 'center' });
-        
-        // Add date
-        doc.setFontSize(12);
-        doc.setTextColor(136, 153, 179); // --text-secondary
-        doc.text(`${t('pdf_date_prefix')}${new Date().toLocaleDateString()}`, 105, 37, { align: 'center' });
-        
-        // Add separator line
-        doc.setDrawColor(136, 153, 179); // --text-secondary
-        doc.line(20, 42, 190, 42);
-        
-        let yPos = 50;
-        
-        // Win Probability Section
-        doc.setFontSize(16);
-        doc.setTextColor(209, 255, 15); // --accent-primary
-        doc.text(t('win_probability_details'), 20, yPos);
-        yPos += 10;
-        
-        doc.setFontSize(14);
-        doc.setTextColor(0, 0, 0);
-        doc.text(`${t('pdf_win_probability')}: ${exportResult.winProbability}%`, 20, yPos);
-        yPos += 8;
-        
-        doc.setFontSize(12);
-        doc.setTextColor(100, 100, 100);
-        doc.text(exportResult.probabilityJustification, 20, yPos, { maxWidth: 170 });
-        yPos += 15;
-        
-        // Positive Factors
-        if (exportResult.positiveFactors.length > 0) {
-            doc.setFontSize(14);
-            doc.setTextColor(76, 175, 80); // Green color
-            doc.text(t('win_probability_positive_factors'), 20, yPos);
-            yPos += 8;
-            
-            doc.setFontSize(12);
-            doc.setTextColor(0, 0, 0);
-            exportResult.positiveFactors.forEach((factor, index) => {
-                if (yPos > 280) { // Check if we need a new page
-                    doc.addPage();
-                    yPos = 20;
-                }
-                doc.text(`• ${factor}`, 25, yPos, { maxWidth: 165 });
-                yPos += 7;
-            });
-            yPos += 10;
-        }
-        
-        // Negative Factors
-        if (exportResult.negativeFactors.length > 0) {
-            doc.setFontSize(14);
-            doc.setTextColor(244, 67, 54); // Red color
-            doc.text(t('win_probability_negative_factors'), 20, yPos);
-            yPos += 8;
-            
-            doc.setFontSize(12);
-            doc.setTextColor(0, 0, 0);
-            exportResult.negativeFactors.forEach((factor, index) => {
-                if (yPos > 280) { // Check if we need a new page
-                    doc.addPage();
-                    yPos = 20;
-                }
-                doc.text(`• ${factor}`, 25, yPos, { maxWidth: 165 });
-                yPos += 7;
-            });
-            yPos += 10;
-        }
-        
-        // Add separator line
-        if (yPos > 280) {
-            doc.addPage();
-            yPos = 20;
-        }
-        doc.setDrawColor(136, 153, 179); // --text-secondary
-        doc.line(20, yPos, 190, yPos);
-        yPos += 10;
-        
-        // Battle Plan Section
-        doc.setFontSize(16);
-        doc.setTextColor(209, 255, 15); // --accent-primary
-        doc.text(t('pdf_battle_plan'), 20, yPos);
-        yPos += 10;
-        
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        
-        // Process the summary markdown-like text
-        const lines = exportResult.summary.split('\n');
-        lines.forEach((line, index) => {
-            if (yPos > 280) { // Check if we need a new page
-                doc.addPage();
-                yPos = 20;
-            }
-            
-            if (line.startsWith('## ')) {
-                // Heading
-                doc.setFontSize(14);
-                doc.setTextColor(209, 255, 15); // --accent-primary
-                doc.text(line.substring(3), 20, yPos, { maxWidth: 170 });
-                yPos += 10;
-                doc.setFontSize(12);
-                doc.setTextColor(0, 0, 0);
-            } else if (line.trim().startsWith('* ')) {
-                // List item
-                doc.text(line.substring(2), 25, yPos, { maxWidth: 165 });
-                yPos += 7;
-            } else if (line.includes('**')) {
-                // Bold text - simplified handling
-                const parts = line.split('**');
-                let xPos = 20;
-                parts.forEach((part, partIndex) => {
-                    if (partIndex % 2 !== 0) {
-                        // Bold part
-                        doc.setFont(undefined, 'bold');
-                        doc.text(part, xPos, yPos);
-                        xPos += doc.getTextWidth(part);
-                        doc.setFont(undefined, 'normal');
-                    } else {
-                        // Normal part
-                        doc.text(part, xPos, yPos);
-                        xPos += doc.getTextWidth(part);
-                    }
-                });
-                yPos += 7;
-            } else if (line.trim() !== '') {
-                // Regular paragraph
-                const wrappedLines = doc.splitTextToSize(line, 170);
-                wrappedLines.forEach((wrappedLine: string) => {
-                    if (yPos > 280) { // Check if we need a new page
-                        doc.addPage();
-                        yPos = 20;
-                    }
-                    doc.text(wrappedLine, 20, yPos);
-                    yPos += 7;
-                });
-            } else {
-                // Empty line
-                yPos += 3;
-            }
-        });
-        
-        // Add separator line
-        if (yPos > 280) {
-            doc.addPage();
-            yPos = 20;
-        }
-        doc.setDrawColor(136, 153, 179); // --text-secondary
-        doc.line(20, yPos, 190, yPos);
-        yPos += 10;
-        
-        // Debate Section
-        doc.setFontSize(16);
-        doc.setTextColor(209, 255, 15); // --accent-primary
-        doc.text(t('pdf_debate_title'), 20, yPos);
-        yPos += 10;
-        
-        doc.setFontSize(12);
-        doc.setTextColor(0, 0, 0);
-        
-        exportResult.debate.forEach((debateItem, index) => {
-            if (yPos > 270) { // Check if we need a new page
-                doc.addPage();
-                yPos = 20;
-            }
-            
-            // Lawyer name
-            const personaKey = debateItem.lawyerName.toLowerCase().replace(/ /g, '_').replace('-', '_');
-            const personaName = isInvestigationStage ? t(`persona_investigator_${personaKey}_name`) : t(`persona_${personaKey}_name`);
-            
-            doc.setFont(undefined, 'bold');
-            doc.text(personaName, 20, yPos);
-            yPos += 8;
-            doc.setFont(undefined, 'normal');
-            
-            // Analysis text
-            const analysisLines = debateItem.analysis.split('\n');
-            analysisLines.forEach((line, lineIndex) => {
-                if (yPos > 280) { // Check if we need a new page
-                    doc.addPage();
-                    yPos = 20;
-                }
-                
-                if (line.startsWith('## ')) {
-                    // Heading
-                    doc.setFontSize(13);
-                    doc.setTextColor(0, 0, 0);
-                    doc.text(line.substring(3), 25, yPos, { maxWidth: 165 });
-                    yPos += 9;
-                    doc.setFontSize(12);
-                } else if (line.trim().startsWith('* ')) {
-                    // List item
-                    doc.text(line.substring(2), 30, yPos, { maxWidth: 160 });
-                    yPos += 7;
-                } else if (line.includes('**')) {
-                    // Bold text - simplified handling
-                    const parts = line.split('**');
-                    let xPos = 25;
-                    parts.forEach((part, partIndex) => {
-                        if (partIndex % 2 !== 0) {
-                            // Bold part
-                            doc.setFont(undefined, 'bold');
-                            doc.text(part, xPos, yPos);
-                            xPos += doc.getTextWidth(part);
-                            doc.setFont(undefined, 'normal');
-                        } else {
-                            // Normal part
-                            doc.text(part, xPos, yPos);
-                            xPos += doc.getTextWidth(part);
-                        }
-                    });
-                    yPos += 7;
-                } else if (line.trim() !== '') {
-                    // Regular paragraph
-                    const wrappedLines = doc.splitTextToSize(line, 165);
-                    wrappedLines.forEach((wrappedLine: string) => {
-                        if (yPos > 280) { // Check if we need a new page
-                            doc.addPage();
-                            yPos = 20;
-                        }
-                        doc.text(wrappedLine, 25, yPos);
-                        yPos += 7;
-                    });
-                } else {
-                    // Empty line
-                    yPos += 3;
-                }
-            });
-            
-            yPos += 5;
-        });
-        
-        // Save the PDF
-        const safeCaseTitle = caseData.title.replace(/[^\w\s.-]/g, '').replace(/\s+/g, '_');
-        doc.save(`${safeCaseTitle}_hisobot.pdf`);
-    } catch(e) {
-        console.error("Failed to generate PDF file", e);
-    } finally {
-        setExportingType(null);
-    }
-  };
+  // PDF export removed per user request
 
   const handleGenerateClientSummary = async () => {
     if (!caseData || !summary) return;
@@ -655,11 +358,7 @@ export const SummaryView: React.FC<SummaryViewProps> = ({ caseData, onNewAnalysi
                 {copied ? <CheckIcon className="h-5 w-5 text-[var(--accent-primary)]" /> : <CopyIcon className="h-5 w-5" />}
                 <span>{copied ? t('button_copied') : t('button_copy')}</span>
             </button>
-            <button onClick={handleExportPdf} disabled={!!exportingType} className="flex items-center gap-2 polished-pane p-2 rounded-lg text-sm text-[var(--text-secondary)] hover:text-white interactive-hover disabled:opacity-50">
-                <DownloadIcon className="h-5 w-5" />
-                <span>{exportingType === 'pdf' ? t('button_generating') : t('button_export_pdf_summary')}</span>
-                {exportingType === 'pdf' && <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
-            </button>
+            {/* PDF export removed per user request */}
             <button onClick={handleExportWord} disabled={!!exportingType} className="flex items-center gap-2 polished-pane p-2 rounded-lg text-sm text-[var(--text-secondary)] hover:text-white interactive-hover disabled:opacity-50">
                 <DownloadIcon className="h-5 w-5" />
                 <span>{exportingType === 'word' ? t('button_generating') : t('button_export_word_summary')}</span>
